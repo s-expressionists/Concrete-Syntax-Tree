@@ -14,7 +14,9 @@
            #:ninth
            #:tenth
            #:nth
-           #:rest)
+           #:rest
+           #:consp
+           #:null)
   (:export #:cst
            #:parent
            #:first
@@ -28,4 +30,6 @@
            #:ninth
            #:tenth
            #:nth
-           #:rest))
+           #:rest
+           #:consp
+           #:null))
