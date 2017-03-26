@@ -15,4 +15,17 @@
            #:tenth
            #:nth
            #:rest)
-  (:export #:cst))
+  (:export #:cst
+           #:parent
+           #:first
+           #:second
+           #:third
+           #:fourth
+           #:fifth
+           #:sixth
+           #:seventh
+           #:eighth
+           #:ninth
+           #:tenth
+           #:nth
+           #:rest))
