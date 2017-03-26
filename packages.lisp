@@ -15,6 +15,7 @@
            #:tenth
            #:nth
            #:rest
+           #:atom
            #:consp
            #:null)
   (:export #:cst
@@ -31,5 +32,6 @@
            #:tenth
            #:nth
            #:rest
+           #:atom
            #:consp
            #:null))
