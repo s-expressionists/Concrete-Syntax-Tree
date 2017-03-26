@@ -8,6 +8,8 @@
 
 (defgeneric null (cst))
 
+(defgeneric atom (cst))
+
 (defclass cst ()
   (;; This slot contains either another CST, namely the parent of this
    ;; one, or, if this is a top-level CST, an indication of the source
@@ -15,6 +17,10 @@
    (%parent :initarg :parent :accessor parent)))
 
 (defmethod null ((cst cst))
+  (declare (ignorable cst))
+  nil)
+
+(defmethod atom ((cst cst))
   (declare (ignorable cst))
   nil)
 
@@ -28,6 +34,13 @@
 
 (defclass expression-cst (cst)
   ())
+
+(defclass atom-cst (expression-cst)
+  ())
+
+(defmethod atom ((cst atom-cst))
+  (declare (ignorable cst))
+  nil)
 
 (defclass cons-cst (expression-cst)
   (;; This slot contains a CST that represents the CAR of the
