@@ -27,11 +27,12 @@
   t)
 
 (defclass expression-cst (cst)
-  (;; If this CST represents an atom, then this slot contains NIL.
-   ;; Otherwise, this slot contains a CST that represents the CAR of
-   ;; the corresponding expression.
+  ())
+
+(defclass cons-cst (expression-cst)
+  (;; This slot contains a CST that represents the CAR of the
+   ;; corresponding expression.
    (%first :initform nil :initarg :first :reader first)
-   ;; If this CST represents an atom, then this slot contains NIL.
-   ;; Otherwise, this slot contains a CST that represents the CDR of
-   ;; the corresponding expression.
+   ;; This slot contains a CST that represents the CDR of the
+   ;; corresponding expression.
    (%rest :initform nil :initarg :rest :reader rest)))
