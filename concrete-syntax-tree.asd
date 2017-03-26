@@ -17,4 +17,5 @@
   :serial t
   :components
   ((:file "packages")
-   (:file "cst")))
+   (:file "cst")
+   (:file "conditions")))
