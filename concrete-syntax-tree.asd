@@ -18,4 +18,5 @@
   :components
   ((:file "packages")
    (:file "cst")
+   (:file "cst-from-expression")
    (:file "conditions")))
