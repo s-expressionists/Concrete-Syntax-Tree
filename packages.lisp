@@ -34,4 +34,5 @@
            #:rest
            #:atom
            #:consp
-           #:null))
+           #:null
+           #:cst-from-expression))
