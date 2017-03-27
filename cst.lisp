@@ -6,6 +6,8 @@
 
 (defgeneric rest (cst))
 
+;;; Return true if and only if CST is an instance of NULL-CST.  Notice
+;;; that this is not the same as a CST representing the atom NIL.
 (defgeneric null (cst))
 
 ;;; Return true if and only if CST represents an atomic expression.
