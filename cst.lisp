@@ -47,7 +47,7 @@
   t)
 
 (defclass expression-cst (cst)
-  ())
+  ((%raw :initarg :raw :reader raw)))
 
 ;;; This class is used to represent expressions that are atoms.  It is
 ;;; not used to represent the end of a chain of CSTs.
