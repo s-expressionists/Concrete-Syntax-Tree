@@ -46,6 +46,8 @@
   (declare (ignorable cst))
   t)
 
+;;; An instance of this class is used to represent a Common Lisp
+;;; expression.
 (defclass expression-cst (cst)
   ((%raw :initarg :raw :reader raw)))
 
