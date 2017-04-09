@@ -2,10 +2,6 @@
 
 (defgeneric parent (cst))
 
-(defgeneric first (cst))
-
-(defgeneric rest (cst))
-
 ;;; Return true if and only if CST is an instance of NULL-CST.  Notice
 ;;; that this is not the same as a CST representing the atom NIL.
 (defgeneric null (cst))
@@ -46,6 +42,10 @@
   (declare (ignorable cst))
   t)
 
+;;; Given an EXPRESSION-CST, return the underlying Common Lisp
+;;; expression.
+(defgeneric raw (expression-cst))
+
 ;;; An instance of this class is used to represent a Common Lisp
 ;;; expression.
 (defclass expression-cst (cst)
@@ -57,17 +57,5 @@
   ())
 
 (defmethod atom ((cst atom-cst))
-  (declare (ignorable cst))
-  t)
-
-(defclass cons-cst (expression-cst)
-  (;; This slot contains a CST that represents the CAR of the
-   ;; corresponding expression.
-   (%first :initform nil :initarg :first :reader first)
-   ;; This slot contains a CST that represents the CDR of the
-   ;; corresponding expression.
-   (%rest :initform nil :initarg :rest :reader rest)))
-
-(defmethod consp ((cst cons-cst))
   (declare (ignorable cst))
   t)
