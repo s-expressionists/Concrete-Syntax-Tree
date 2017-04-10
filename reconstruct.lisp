@@ -47,3 +47,21 @@
                  (traverse (rest cst)))))
       (traverse cst))
     table))
+
+;;; Given an expression E and a hash table H1 mapping CONS cells to
+;;; CSTs, return a new EQL hash table H2 that contains the subset of
+;;; the mappings of H1 with keys in E.
+(defun referenced-cons-table (expression cons-table)
+  (let ((table (make-hash-table :test #'eql))
+        (seen (make-hash-table :test #'eq)))
+    (labels ((traverse (expression)
+               (when (and (cl:consp expression)
+                          (not (gethash expression seen)))
+                 (setf (gethash expression seen) t)
+                 (let ((original-cst (gethash expression cons-table)))
+                   (unless (null original-cst)
+                     (setf (gethash expression table) original-cst)))
+                 (traverse (car expression))
+                 (traverse (cdr expression)))))
+      (traverse expression))
+    table))
