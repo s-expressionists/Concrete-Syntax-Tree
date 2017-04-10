@@ -17,6 +17,7 @@
   :serial t
   :components
   ((:file "packages")
+   (:file "generic-functions")
    (:file "cst")
    (:file "cons-cst")
    (:file "cst-from-expression")
