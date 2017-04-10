@@ -3,7 +3,10 @@
 (defclass cst ()
   (;; This slot contains either another CST, namely the parent of this
    ;; one, or NIL if this is a top-level CST.
-   (%parent :initarg :parent :accessor parent)))
+   (%parent :initarg :parent :accessor parent)
+   ;; This slot contains client-supplied information about the origin
+   ;; of this CST.
+   (%source :initarg :source :accessor source)))
 
 (defmethod null ((cst cst))
   (declare (ignorable cst))
