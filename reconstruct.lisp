@@ -65,3 +65,18 @@
                  (traverse (cdr expression)))))
       (traverse expression))
     table))
+
+(defun add-atoms (cst table)
+  (let ((seen (make-hash-table :test #'eq)))
+    (labels ((traverse (cst inside-p)
+               (if (consp cst)
+                   (unless (gethash cst seen)
+                     (let ((new-inside-p (or (gethash (raw cst) table)
+                                             inside-p)))
+                       (traverse (first cst) new-inside-p)
+                       (traverse (rest cst) new-inside-p)))
+                   (if inside-p
+                       (when (not (nth-value 1 (gethash (raw cst) table)))
+                         (setf (gethash (raw cst) table) cst))
+                       (setf (gethash (raw cst) table) cst)))))
+      (traverse cst nil))))
