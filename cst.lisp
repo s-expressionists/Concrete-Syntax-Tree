@@ -26,10 +26,6 @@
   (declare (ignorable cst))
   t)
 
-;;; Given an EXPRESSION-CST, return the underlying Common Lisp
-;;; expression.
-(defgeneric raw (expression-cst))
-
 ;;; An instance of this class is used to represent a Common Lisp
 ;;; expression.
 (defclass expression-cst (cst)

@@ -1,9 +1,5 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defgeneric first (cst))
-
-(defgeneric rest (cst))
-
 (defclass cons-cst (expression-cst)
   (;; This slot contains a CST that represents the CAR of the
    ;; corresponding expression.
