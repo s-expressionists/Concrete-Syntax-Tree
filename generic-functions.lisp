@@ -1,5 +1,9 @@
 (cl:in-package #:concrete-syntax-tree)
 
+;;; Given a CST, return the location of the source for it.  The source
+;;; location is represented by a client-defined object.
+(defgeneric source (cst))
+
 ;;; Return the parent of CST.  If CST does not have a parent, then NIL
 ;;; is returned instead.
 (defgeneric parent (cst))
