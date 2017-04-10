@@ -2,8 +2,7 @@
 
 (defclass cst ()
   (;; This slot contains either another CST, namely the parent of this
-   ;; one, or, if this is a top-level CST, an indication of the source
-   ;; document (a file or an editor buffer or something similar).
+   ;; one, or NIL if this is a top-level CST.
    (%parent :initarg :parent :accessor parent)))
 
 (defmethod null ((cst cst))
