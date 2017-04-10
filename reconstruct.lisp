@@ -80,3 +80,30 @@
                          (setf (gethash (raw cst) table) cst))
                        (setf (gethash (raw cst) table) cst)))))
       (traverse cst nil))))
+
+(defun build-cst (expression table)
+  (let ((cons-table (make-hash-table :test #'eq)))
+    (labels ((traverse (expression)
+               (multiple-value-bind (value found-p)
+                   (gethash expression table)
+                 (if found-p
+                     value
+                     (if (cl:consp expression)
+                         (multiple-value-bind (existing found-p)
+                             (gethash expression cons-table)
+                           (if found-p
+                               existing
+                               (let ((cst (make-instance 'cons-cst
+                                            :raw expression
+                                            :source nil)))
+                                 (setf (gethash expression cons-table) cst)
+                                 (let ((first (traverse (car expression)))
+                                       (rest (traverse (cdr expression))))
+                                   (reinitialize-instance cst
+                                                          :first first
+                                                          :rest rest))
+                                 cst)))
+                         (make-instance 'atom-cst
+                           :raw expression
+                           :source nil))))))
+      (traverse expression))))
