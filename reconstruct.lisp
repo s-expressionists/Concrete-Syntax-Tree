@@ -31,3 +31,18 @@
 ;;; Finally, we build T' recursively by traversing E.  When a mapping
 ;;; in H2 is found, we return it.  Otherwise we create a new concrete
 ;;; syntax tree for it.
+
+;;; Given a CST, return a hash table mapping every CONS of the
+;;; underlying raw expression to a corresponding CST.  Notice that a
+;;; CONS cells can be the raw version of several CSTs, so the mapping
+;;; is not unique.  In this case, we just pick one of the
+;;; corresponding CSTs.
+(defun cons-table (cst)
+  (let ((table (make-hash-table :test #'eq)))
+    (labels ((traverse (cst)
+               (when (consp cst)
+                 (setf (gethash (raw cst) table) cst)
+                 (traverse (first cst))
+                 (traverse (rest cst)))))
+      (traverse cst))
+    table))
