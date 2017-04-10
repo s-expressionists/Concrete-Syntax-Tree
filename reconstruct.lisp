@@ -35,12 +35,13 @@
 ;;; Given a CST, return a hash table mapping every CONS of the
 ;;; underlying raw expression to a corresponding CST.  Notice that a
 ;;; CONS cells can be the raw version of several CSTs, so the mapping
-;;; is not unique.  In this case, we just pick one of the
-;;; corresponding CSTs.
+;;; is not unique.  In this case, we just pick the first corresponding
+;;; CST we encounter.  By doing it this way, we also avoid infinite
+;;; computations when the expression contains cycles.
 (defun cons-table (cst)
   (let ((table (make-hash-table :test #'eq)))
     (labels ((traverse (cst)
-               (when (consp cst)
+               (when (and (consp cst) (null (gethash (raw cst) table)))
                  (setf (gethash (raw cst) table) cst)
                  (traverse (first cst))
                  (traverse (rest cst)))))
