@@ -66,6 +66,11 @@
       (traverse expression))
     table))
 
+;;; Given a CST and a table containing mappings of some of the CONSes
+;;; in the CST, add the atoms of the CST as mappings to the table.
+;;; Mappings are added so that, when there are two or more EQL atoms
+;;; in the CST, then priority is given to one of the atoms that is
+;;; defined OUTSIDE one of the CONSes already in the table.
 (defun add-atoms (cst table)
   (let ((seen (make-hash-table :test #'eq)))
     (labels ((traverse (cst inside-p)
@@ -81,6 +86,10 @@
                        (setf (gethash (raw cst) table) cst)))))
       (traverse cst nil))))
 
+;;; Given an expression and a hash table mapping expressions to CSTs,
+;;; build a CST from the expression in such a way that if an
+;;; expression is encountered that has a mapping in the table, then
+;;; the corresponding CST in the table is used.
 (defun build-cst (expression table)
   (let ((cons-table (make-hash-table :test #'eq)))
     (labels ((traverse (expression)
@@ -107,3 +116,13 @@
                            :raw expression
                            :source nil))))))
       (traverse expression))))
+
+;;; Given a CST and an expression that is presumably some transformed
+;;; version of the raw version of the CST, create a new CST that tries
+;;; to reuse as much as possible of the given CST, so as to preserve
+;;; source information.
+(defun rebuild (expression cst)
+  (let* ((cons-table (cons-table cst))
+         (referenced-cons-table (referenced-cons-table expression cons-table)))
+    (add-atoms cst referenced-cons-table)
+    (build-cst expression referenced-cons-table)))
