@@ -121,7 +121,7 @@
 ;;; version of the raw version of the CST, create a new CST that tries
 ;;; to reuse as much as possible of the given CST, so as to preserve
 ;;; source information.
-(defun rebuild (expression cst)
+(defun reconstruct (expression cst)
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (add-atoms cst referenced-cons-table)
