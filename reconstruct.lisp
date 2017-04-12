@@ -59,7 +59,7 @@
                           (not (gethash expression seen)))
                  (setf (gethash expression seen) t)
                  (let ((original-cst (gethash expression cons-table)))
-                   (unless (null original-cst)
+                   (unless (cl:null original-cst)
                      (setf (gethash expression table) original-cst)))
                  (traverse (car expression))
                  (traverse (cdr expression)))))
