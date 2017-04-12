@@ -13,8 +13,8 @@
    (%document :initarg :document :reader document)
    ;; Lines in source code are numbered starting at 0.  
    (%start-line-number :initarg :start-line-number :reader start-line-number)
-   ;; A height of 0 indicates that the source of this code starts and
-   ;; ends on the same line.
+   ;; This slot contains the number of lines that this source code
+   ;; spans.
    (%height :initarg height :reader height)
    ;; Columns in source code are numbered starting at 0.  
    (%start-column-number :initarg :start-column-number :reader start-column-number)
