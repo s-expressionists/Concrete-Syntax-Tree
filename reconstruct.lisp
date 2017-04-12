@@ -80,10 +80,11 @@
                                              inside-p)))
                        (traverse (first cst) new-inside-p)
                        (traverse (rest cst) new-inside-p)))
-                   (if inside-p
-                       (when (not (nth-value 1 (gethash (raw cst) table)))
-                         (setf (gethash (raw cst) table) cst))
-                       (setf (gethash (raw cst) table) cst)))))
+                   (when (atom cst)
+                     (if inside-p
+                         (when (not (nth-value 1 (gethash (raw cst) table)))
+                           (setf (gethash (raw cst) table) cst))
+                         (setf (gethash (raw cst) table) cst))))))
       (traverse cst nil))))
 
 ;;; Given an expression and a hash table mapping expressions to CSTs,
