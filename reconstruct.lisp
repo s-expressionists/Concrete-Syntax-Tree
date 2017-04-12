@@ -41,7 +41,7 @@
 (defun cons-table (cst)
   (let ((table (make-hash-table :test #'eq)))
     (labels ((traverse (cst)
-               (when (and (consp cst) (null (gethash (raw cst) table)))
+               (when (and (consp cst) (cl:null (gethash (raw cst) table)))
                  (setf (gethash (raw cst) table) cst)
                  (traverse (first cst))
                  (traverse (rest cst)))))
