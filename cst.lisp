@@ -6,7 +6,7 @@
    (%parent :initarg :parent :accessor parent)
    ;; This slot contains client-supplied information about the origin
    ;; of this CST.
-   (%source :initarg :source :accessor source)))
+   (%source :initform nil :initarg :source :accessor source)))
 
 (defmethod null ((cst cst))
   (declare (ignorable cst))
