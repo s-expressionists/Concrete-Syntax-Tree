@@ -36,4 +36,5 @@
            #:atom
            #:consp
            #:null
-           #:cst-from-expression))
+           #:cst-from-expression
+           #:reconstruct))
