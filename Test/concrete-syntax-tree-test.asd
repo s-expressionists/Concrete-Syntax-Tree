@@ -4,4 +4,5 @@
   :depends-on (:concrete-syntax-tree)
   :components
   ((:file "packages")
-   (:file "random-expression")))
+   (:file "random-expression")
+   (:file "cst-from-expression")))
