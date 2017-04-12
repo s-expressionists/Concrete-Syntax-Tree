@@ -3,4 +3,5 @@
 (defsystem concrete-syntax-tree-test
   :depends-on (:concrete-syntax-tree)
   :components
-  ((:file "packages")))
+  ((:file "packages")
+   (:file "random-expression")))
