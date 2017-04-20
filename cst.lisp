@@ -20,6 +20,10 @@
   (declare (ignorable cst))
   nil)
 
+(defmethod raw (cst)
+  (error 'expression-cst-required
+         :cst cst))
+
 ;;; This class is used as a terminator of a chain of CSTs.  It does
 ;;; NOT represent NIL in other situations.
 (defclass null-cst (cst) ())
