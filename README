@@ -1,0 +1,26 @@
+This library is intended to solve the problem of source tracking for
+Common Lisp code.
+
+By "source tracking", we mean that code elements that have a known
+origin in the form of a position in a file or in an editor buffer are
+associated with some kind of information about this origin.
+
+Since the exact nature of such origin information depends on the
+Common Lisp implementation and the purpose of wanting to track that
+origin, we do not impose a particular structure of this information.
+Instead, we provide utilities for manipulating source code in the form
+of what we call concrete syntax trees (CSTs for short) that preserve
+this information about the origin.
+
+For example, we provide code utilities for canonicalizing
+declarations, parsing lambda lists, separating declarations and
+documentation strings and code bodies, checking whether a form is a
+proper list, etc.  All these utilities manipulate the code in the form
+of a CST, and provide CSTs as a result of the manipulation that
+propagates the origin information as much as possible.
+
+In particular, we provide an "intelligent macroexpander".  This
+function takes an original CST and the result of macroexpanding the
+RAW code version of that CST, and returns a new CST representing the
+expanded code in such a way that as much as possible of the origin
+information is preserved.
