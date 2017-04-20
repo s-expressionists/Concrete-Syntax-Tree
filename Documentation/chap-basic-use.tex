@@ -47,6 +47,13 @@ concrete syntax trees that represent \commonlisp{} expressions.
 The value of this initialization argument is the raw \commonlisp{}
 expression that this concrete syntax tree represents.
 
+\Defgeneric {raw} {expression-cst}
+
+This generic function returns the raw \commonlisp{} expression that is
+represented by \texttt{expression-cst} as provide by the
+initialization argument \texttt{:raw} when \texttt{expression-cst} was
+created.
+
 \Defclass {cons-cst}
 
 This class is a subclass of the class \texttt{expression-cst}.
