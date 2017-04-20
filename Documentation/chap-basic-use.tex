@@ -27,15 +27,15 @@ argument is not provided) is \texttt{nil}.
 
 \Defgeneric {parent} {cst}
 
-This generic function returns the parent of \texttt{cst} as provide by
-the initialization argument \texttt{:parent} when \texttt{cst} was
+This generic function returns the parent of \textit{cst} as provide by
+the initialization argument \texttt{:parent} when \textit{cst} was
 created.
 
 \Defgeneric {source} {cst}
 
-This generic function returns the origin information of \texttt{cst}
+This generic function returns the origin information of \textit{cst}
 as provide by the initialization argument \texttt{:source} when
-\texttt{cst} was created.
+\textit{cst} was created.
 
 \Defclass {expression-cst}
 
@@ -50,8 +50,8 @@ expression that this concrete syntax tree represents.
 \Defgeneric {raw} {expression-cst}
 
 This generic function returns the raw \commonlisp{} expression that is
-represented by \texttt{expression-cst} as provide by the
-initialization argument \texttt{:raw} when \texttt{expression-cst} was
+represented by \textit{expression-cst} as provide by the
+initialization argument \texttt{:raw} when \textit{expression-cst} was
 created.
 
 \Defclass {cons-cst}
