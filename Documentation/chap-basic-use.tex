@@ -3,6 +3,8 @@
 In this chapter, we describe the basic functionality that \sysname{}
 provides for manipulating concrete syntax trees.
 
+\section{Protocol}
+
 \Defclass {cst}
 
 This class is the base class for all concrete syntax trees.
@@ -99,3 +101,23 @@ the \texttt{cdr} of the raw \commonlisp{} expression represented by
 This generic function returns \emph{true} if and only if \textit{cst}
 is an instance of the class \texttt{cons-cst}.  Otherwise, it returns
 \emph{false}.
+
+\section{Additional API functions}
+
+\Defgeneric {second} {cons-cst}
+
+\Defgeneric {third} {cons-cst}
+
+\Defgeneric {fourth} {cons-cst}
+
+\Defgeneric {fifth} {cons-cst}
+
+\Defgeneric {sixth} {cons-cst}
+
+\Defgeneric {seventh} {cons-cst}
+
+\Defgeneric {eighth} {cons-cst}
+
+\Defgeneric {ninth} {cons-cst}
+
+\Defgeneric {tenth} {cons-cst}
