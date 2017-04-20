@@ -1,0 +1,52 @@
+\chapter{Basic use}
+
+In this chapter, we describe the basic functionality that \sysname{}
+provides for manipulating concrete syntax trees.
+
+\Defclass {cst}
+
+This class is the base class for all concrete syntax trees.
+
+\Definitarg {:parent}
+
+This initialization argument is accepted by all subclasses of concrete
+syntax trees.  If the syntax tree is a top-level syntax tree, then
+\texttt{nil} should be provided as the value for this initialization
+argument.  Otherwise, the value should be the concrete syntax tree
+that is the parent of this one.
+
+\Definitarg {:source}
+
+This initialization argument is accepted by all subclasses of concrete
+syntax trees.  The value of this initialization argument is a
+client-specific object that indicates the origin of the source code
+represented by this concrete syntax tree.  A value of \texttt{nil}
+indicates that the origin of the source code represented by this concrete
+syntax tree is unknown.  The default value (if this initialization
+argument is not provided) is \texttt{nil}.
+
+\Defgeneric {parent} {cst}
+
+This generic function returns the parent of \texttt{cst} as provide by
+the initialization argument \texttt{:parent} when \texttt{cst} was
+created.
+
+\Defgeneric {source} {cst}
+
+This generic function returns the origin information of \texttt{cst}
+as provide by the initialization argument \texttt{:source} when
+\texttt{cst} was created.
+
+\Defclass {expression-cst}
+
+This class is a subclass of the class \texttt{cst}.  It is used for
+concrete syntax trees that represent \commonlisp{} expressions.
+
+\Definitarg {:raw}
+
+The value of this initialization argument is the raw \commonlisp{}
+expression that this concrete syntax tree represents.
+
+\Defclass {cons-cst}
+
+This class is a subclass of the class \texttt{expression-cst}.
