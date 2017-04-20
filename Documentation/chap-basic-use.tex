@@ -57,3 +57,27 @@ created.
 \Defclass {cons-cst}
 
 This class is a subclass of the class \texttt{expression-cst}.
+
+\Definitarg {:first}
+
+The value of this initialization argument is the concrete syntax tree
+that represents the \texttt{car} of the raw \commonlisp{} expression
+represented by this concrete syntax tree.
+
+\Definitarg {:rest}
+
+The value of this initialization argument is the concrete syntax tree
+that represents the \texttt{cdr} of the raw \commonlisp{} expression
+represented by this concrete syntax tree.
+
+\Defgeneric {first} {cons-cst}
+
+This generic function returns the concrete syntax tree that represents
+the \texttt{car} of the raw \commonlisp{} expression represented by
+\textit{cons-cst}.
+
+\Defgeneric {rest} {cons-cst}
+
+This generic function returns the concrete syntax tree that represents
+the \texttt{cdr} of the raw \commonlisp{} expression represented by
+\textit{cons-cst}.
