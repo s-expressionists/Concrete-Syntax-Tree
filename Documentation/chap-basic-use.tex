@@ -37,6 +37,18 @@ This generic function returns the origin information of \textit{cst}
 as provide by the initialization argument \texttt{:source} when
 \textit{cst} was created.
 
+\Defclass {null-cst}
+
+This class represents the end of a list of concrete syntax trees.  It
+does \emph{not} represent the \commonlisp{} symbol \texttt{nil} in
+other situations.
+
+\Defgeneric {null} {cst}
+
+This generic function returns \emph{true} if and only if \textit{cst}
+is an instance of the class \texttt{null-cst}.  Otherwise, it returns
+\emph{false}.
+
 \Defclass {expression-cst}
 
 This class is a subclass of the class \texttt{cst}.  It is used for
@@ -81,3 +93,9 @@ the \texttt{car} of the raw \commonlisp{} expression represented by
 This generic function returns the concrete syntax tree that represents
 the \texttt{cdr} of the raw \commonlisp{} expression represented by
 \textit{cons-cst}.
+
+\Defgeneric {consp} {cst}
+
+This generic function returns \emph{true} if and only if \textit{cst}
+is an instance of the class \texttt{cons-cst}.  Otherwise, it returns
+\emph{false}.
