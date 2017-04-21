@@ -4,11 +4,11 @@
   ())
 
 ;;; This condition is signaled whenever an instance of the class
-;;; CST-EXPRESSION was required, but something else was given.
+;;; EXPRESSION-CST was required, but something else was given.
 (define-condition expression-cst-required (cst-error)
   ((%cst :initarg :cst :reader cst)))
 
 ;;; This condition is signaled whenever an instance of the class
-;;; CST-CONS was required, but something else was given.
+;;; CONS-CST was required, but something else was given.
 (define-condition cons-cst-required (cst-error)
   ((%cst :initarg :cst :reader cst)))
