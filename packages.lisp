@@ -38,4 +38,5 @@
            #:null
            #:raw
            #:cst-from-expression
+           #:canonicalize-declaration-specifier
            #:reconstruct))
