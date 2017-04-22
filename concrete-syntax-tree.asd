@@ -22,4 +22,5 @@
    (:file "cons-cst")
    (:file "cst-from-expression")
    (:file "reconstruct")
+   (:file "declarations")
    (:file "conditions")))
