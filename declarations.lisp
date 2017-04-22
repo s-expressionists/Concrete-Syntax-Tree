@@ -14,4 +14,4 @@
      declaration-data)
   (loop for data = declaration-data then (rest data)
         until (null data)
-        collect (list declaration-identifier data)))
+        collect (list declaration-identifier-cst data)))
