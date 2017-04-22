@@ -14,9 +14,14 @@
 
 (defgeneric cons (first rest))
 
+(defun raw-or-nil (cst)
+  (if (typep cst 'null-cst)
+      nil
+      (raw cst)))
+
 (defmethod cons (first rest)
   (make-instance 'cons-cst
-    :raw (cl:cons (raw first) (raw rest))
+    :raw (cl:cons (raw-or-nil first) (raw-or-nil rest))
     :first first
     :rest rest))
 
