@@ -18,6 +18,7 @@
            #:atom
            #:consp
            #:cons
+           #:list
            #:null)
   (:export #:cst
            #:parent
@@ -37,6 +38,7 @@
            #:atom
            #:consp
            #:cons
+           #:list
            #:null
            #:raw
            #:cst-from-expression
