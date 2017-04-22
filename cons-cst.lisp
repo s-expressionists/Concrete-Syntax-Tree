@@ -16,6 +16,7 @@
 
 (defmethod cons (first rest)
   (make-instance 'cons-cst
+    :raw (cl:cons (raw first) (raw rest))
     :first first
     :rest rest))
 
