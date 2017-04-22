@@ -18,3 +18,8 @@
   (make-instance 'cons-cst
     :first first
     :rest rest))
+
+(defun list (&rest csts)
+  (loop for result = (make-instance 'null-cst) then (cons cst result)
+        for cst in (reverse csts)
+        finally (return result)))
