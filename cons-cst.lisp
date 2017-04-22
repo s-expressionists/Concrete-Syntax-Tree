@@ -11,3 +11,10 @@
 (defmethod consp ((cst cons-cst))
   (declare (ignorable cst))
   t)
+
+(defgeneric cons (first rest))
+
+(defmethod cons (first rest)
+  (make-instance 'cons-cst
+    :first first
+    :rest rest))
