@@ -20,10 +20,13 @@
       (raw cst)))
 
 (defmethod cons (first rest)
-  (make-instance 'cons-cst
-    :raw (cl:cons (raw-or-nil first) (raw-or-nil rest))
-    :first first
-    :rest rest))
+  (let ((result (make-instance 'cons-cst
+                  :raw (cl:cons (raw-or-nil first) (raw-or-nil rest))
+                  :first first
+                  :rest rest)))
+    (setf (parent first) result)
+    (setf (parent rest) result)
+    result))
 
 (defun list (&rest csts)
   (loop for result = (make-instance 'null-cst) then (cons cst result)
