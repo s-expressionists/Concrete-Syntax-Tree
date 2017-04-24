@@ -24,9 +24,8 @@
         declaration-data)
      (map-prefix declaration-identifier-cst declaration-data)))
 
-(defmethod  canonicalize-declaration-specifier
-    (system
-     (declaration-identifier (eql 'optimize))
-     declaration-identifier-cst
-     declaration-data)
-  (map-prefix declaration-identifier-cst declaration-data))
+(progn
+  . #.(loop for declaration-identifier in
+            '(declaration dynamic-extent ignore ignorable
+              inline notinline optimize special)
+            collect `(define-simple-canonicalize-method ,declaration-identifier)))
