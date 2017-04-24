@@ -16,6 +16,14 @@
         until (null remaining)
         collect (list prefix (first remaining))))
 
+(defmacro define-simple-canonicalize-method (declaration-identifier)
+  `(defmethod  canonicalize-declaration-specifier
+       (system
+        (declaration-identifier (eql ',declaration-identifier))
+        declaration-identifier-cst
+        declaration-data)
+     (map-prefix declaration-identifier-cst declaration-data)))
+
 (defmethod  canonicalize-declaration-specifier
     (system
      (declaration-identifier (eql 'optimize))
