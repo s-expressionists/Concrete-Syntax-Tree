@@ -29,3 +29,23 @@
             '(declaration dynamic-extent ignore ignorable
               inline notinline optimize special)
             collect `(define-simple-canonicalize-method ,declaration-identifier)))
+
+(defmethod  canonicalize-declaration-specifier
+    (system
+     (declaration-identifier (eql 'ftype))
+     declaration-identifier-cst
+     declaration-data)
+  (loop with type = (first declaration-data)
+        for remaining = (rest declaration-data) then (rest remaining)
+        until (null remaining)
+        collect (list declaration-identifier-cst type (first remaining))))
+
+(defmethod  canonicalize-declaration-specifier
+    (system
+     (declaration-identifier (eql 'type))
+     declaration-identifier-cst
+     declaration-data)
+  (loop with type = (first declaration-data)
+        for remaining = (rest declaration-data) then (rest remaining)
+        until (null remaining)
+        collect (list declaration-identifier-cst type (first remaining))))
