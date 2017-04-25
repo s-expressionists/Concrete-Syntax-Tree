@@ -45,3 +45,11 @@
 ;;; declarations and a list of the forms in the body.  Each return
 ;;; value is an ordinary Common Lisp list, but the elements are CSTs.
 (defgeneric separate-ordinary-body (body))
+
+;;; Given a body in the form of a CST that may contain both
+;;; declarations and a documentation string, return three values, a
+;;; list of the declarations, a documentation string (or NIL if no
+;;; documentation string is present in the body) and a list of the
+;;; forms in the body.  Each return value is an ordinary Common Lisp
+;;; list, but the elements are CSTs.
+(defgeneric separate-function-body (body))
