@@ -39,3 +39,9 @@
 ;;; Given a CST representing a proper list, return an ordinary Common
 ;;; Lisp list of the CSTs that are elements of that CST.
 (defgeneric listify (cst))
+
+;;; Given a body in the form of a CST that may contain declarations
+;;; but not a documentation string, return two values, a list of the
+;;; declarations and a list of the forms in the body.  Each return
+;;; value is an ordinary Common Lisp list, but the elements are CSTs.
+(defgeneric separate-ordinary-body (body))
