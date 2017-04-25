@@ -18,6 +18,7 @@
   :components
   ((:file "packages")
    (:file "generic-functions")
+   (:file "listify")
    (:file "cst")
    (:file "cons-cst")
    (:file "cst-from-expression")
