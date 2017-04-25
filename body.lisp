@@ -1,0 +1,11 @@
+(cl:in-package #:concrete-syntax-tree)
+
+(defmethod separate-ordinary-body ((body cons-cst))
+  (loop with declarations = '()
+        for remaining = body then (rest remaining)
+        until (or (typep remaining 'null-cst)
+                  (atom (first remaining))
+                  (not (eq (raw (first (first remaining))) 'declare)))
+        do (push (first remaining) declarations)
+        finally (return (values (reverse declarations)
+                                (listify remaining)))))

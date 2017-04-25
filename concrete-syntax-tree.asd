@@ -24,4 +24,5 @@
    (:file "cst-from-expression")
    (:file "reconstruct")
    (:file "declarations")
+   (:file "body")
    (:file "conditions")))
