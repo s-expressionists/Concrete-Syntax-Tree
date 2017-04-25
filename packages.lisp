@@ -42,6 +42,7 @@
            #:null
            #:raw
            #:listify
+           #:separate-ordinary-body
            #:cst-from-expression
            #:canonicalize-declaration-specifier
            #:reconstruct))
