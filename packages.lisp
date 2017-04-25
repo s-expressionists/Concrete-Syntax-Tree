@@ -41,6 +41,7 @@
            #:list
            #:null
            #:raw
+           #:listify
            #:cst-from-expression
            #:canonicalize-declaration-specifier
            #:reconstruct))
