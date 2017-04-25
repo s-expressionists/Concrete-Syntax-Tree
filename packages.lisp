@@ -43,6 +43,7 @@
            #:raw
            #:listify
            #:separate-ordinary-body
+           #:separate-function-body
            #:cst-from-expression
            #:canonicalize-declaration-specifier
            #:reconstruct))
