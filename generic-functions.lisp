@@ -35,3 +35,7 @@
 ;;; type is given, including an ATOM-CST representing NIL, then an
 ;;; error is signaled.
 (defgeneric rest (cons-cst))
+
+;;; Given a CST representing a proper list, return an ordinary Common
+;;; Lisp list of the CSTs that are elements of that CST.
+(defgeneric listify (cst))
