@@ -39,3 +39,6 @@
                                   (cond ((null remaining) :proper)
                                         ((atom remaining) :dotted)
                                         (t :circulat)))))))
+
+(defun proper-list-p (cst)
+  (eq (nth-value 1 (list-structure cst)) :proper))
