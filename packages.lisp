@@ -45,6 +45,7 @@
            #:separate-ordinary-body
            #:separate-function-body
            #:list-structure
+           #:proper-list-p
            #:cst-from-expression
            #:canonicalize-declaration-specifier
            #:reconstruct))
