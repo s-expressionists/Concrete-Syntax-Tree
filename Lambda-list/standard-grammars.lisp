@@ -32,3 +32,15 @@
      (? rest-parameter)
      (? key-parameters)
      (? aux-parameters))))
+
+(defparameter generic-function-optional-parameters
+  '((optional-parameters <-
+     keyword-optional
+     (* generic-function-optional-parameter))))
+
+(defparameter generic-function-lambda-list
+  '((lambda-list <-
+     (? required-parameters)
+     (? optional-parameters)
+     (? rest-parameter)
+     (? key-parameters))))
