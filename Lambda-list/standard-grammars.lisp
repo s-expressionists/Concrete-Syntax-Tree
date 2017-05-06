@@ -20,9 +20,15 @@
      (* key-parameter)
      (? key-allow-other-keys))))
 
+(defparameter aux-parameters
+  '((aux-parameters <-
+     keyword-aux
+     (* aux-parameter))))
+
 (defparameter ordinary-lambda-list
   '((lambda-list <-
      (? required-parameters)
      (? optional-parameters)
      (? rest-parameter)
-     (? key-parameters))))
+     (? key-parameters)
+     (? aux-parameters))))
