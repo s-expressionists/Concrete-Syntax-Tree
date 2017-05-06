@@ -44,3 +44,15 @@
      (? optional-parameters)
      (? rest-parameter)
      (? key-parameters))))
+
+(defparameter specialized-required-parameters
+  '((required-parameters <-
+     (* specialized-required-parameter))))
+
+(defparameter specialized-lambda-list
+  '((lambda-list <-
+     (? required-parameters)
+     (? optional-parameters)
+     (? rest-parameter)
+     (? key-parameters)
+     (? aux-parameters))))
