@@ -1,8 +1,8 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defparameter required-parameters
+(defparameter ordinary-required-parameters
   '((required-parameters <-
-     (* required-parameter))))
+     (* ordinary-required-parameter))))
 
 (defparameter ordinay-optional-parameters
   '((optional-parameters <-
