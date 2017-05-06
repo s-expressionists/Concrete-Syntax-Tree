@@ -4,10 +4,10 @@
   '((required-parameters <-
      (* required-parameter))))
 
-(defparameter optional-parameters
+(defparameter ordinay-optional-parameters
   '((optional-parameters <-
      keyword-optional
-     (* optional-parameter))))
+     (* ordinary-optional-parameter))))
 
 (defparameter rest-parameter
   '((rest-parameter <-
