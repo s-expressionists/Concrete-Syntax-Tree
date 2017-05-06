@@ -56,3 +56,13 @@
      (? rest-parameter)
      (? key-parameters)
      (? aux-parameters))))
+
+(defparameter environment-parameter
+  '((environment-parameter <-
+     keyword-environment
+     variable)))
+
+(defparameter whole-parameter
+  '((whole-parameter <-
+     keyword-whole
+     variable)))
