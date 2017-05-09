@@ -28,4 +28,5 @@
           do (setf (gethash (left-hand-side rule) non-nullable) t)
              (loop for element in (right-hand-side rule)
                    do (loop for symbol in (extract-symbols element)
-                            do (setf (gethash symbol non-nullable) t))))))
+                            do (setf (gethash symbol non-nullable) t))))
+    non-nullable))
