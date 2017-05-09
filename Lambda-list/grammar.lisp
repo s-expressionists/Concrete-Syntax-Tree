@@ -20,4 +20,4 @@
   (if (symbolp right-hand-side-element)
       (list right-hand-side-element)
       (loop for element in (cdr right-hand-side-element)
-            append (extract-symbol element))))
+            append (extract-symbols element))))
