@@ -15,3 +15,9 @@
                 collect (make-instance 'rule
                           :left-hand-side (car rule)
                           :right-hand-side (cddr rule)))))
+
+(defun extract-symbols (right-hand-side-element)
+  (if (symbolp right-hand-side-element)
+      (list right-hand-side-element)
+      (loop for element in (cdr right-hand-side-element)
+            append (extract-symbol element))))
