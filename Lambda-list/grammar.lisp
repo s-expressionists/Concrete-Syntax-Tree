@@ -35,3 +35,18 @@
   (or (and (symbolp right-hand-side-element)
            (gethash right-hand-side-element nullable-symbols))
       (member (car right-hand-side-element) '(? *) :test #'eq)))
+
+(defun compute-nullable-symbols (grammar)
+  (let ((nullable-symbols (make-hash-table :test #'eq)))
+    (loop with modified-p = t
+          while modified-p
+          do (setf modified-p nil)
+             (loop for rule in (rules grammar)
+                   do (unless (gethash (left-hand-side rule) nullable-symbols)
+                        (when (every (lambda (x)
+                                       (nullable-p x nullable-symbols))
+                                     (right-hand-side rule))
+                          (setf (gethash (left-hand-side rule) nullable-symbols)
+                                t)
+                          (setf modified-p t)))))
+    nullable-symbols))
