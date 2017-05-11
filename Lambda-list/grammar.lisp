@@ -28,12 +28,12 @@
            (gethash right-hand-side-element nullable-symbols))
       (member (car right-hand-side-element) '(? *) :test #'eq)))
 
-(defun compute-nullable-symbols (grammar)
+(defun compute-nullable-symbols (rules)
   (let ((nullable-symbols (make-hash-table :test #'eq)))
     (loop with modified-p = t
           while modified-p
           do (setf modified-p nil)
-             (loop for rule in (rules grammar)
+             (loop for rule in rules
                    do (unless (gethash (left-hand-side rule) nullable-symbols)
                         (when (every (lambda (x)
                                        (nullable-p x nullable-symbols))
