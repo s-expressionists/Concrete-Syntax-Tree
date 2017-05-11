@@ -50,4 +50,5 @@
                                    :right-hand-side (cddr rule)))))
     (reinitialize-instance
      object
-     :rules new-rules)))
+     :rules new-rules
+     :nullable-symbols (compute-nullable-symbols new-rules))))
