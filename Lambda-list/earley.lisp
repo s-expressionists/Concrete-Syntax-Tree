@@ -7,6 +7,7 @@
 (defclass earley-item ()
   ((%rule :initarg :rule :reader rule)
    (%dot-position :initarg :dot-position :reader dot-position)
+   (%origin :initarg :origin :reader origin)
    (%parse-trees :initarg :parse-trees :reader parse-trees)))
 
 (defclass earley-state ()
