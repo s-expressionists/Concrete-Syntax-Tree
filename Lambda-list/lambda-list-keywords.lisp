@@ -16,3 +16,15 @@
 #+sbcl
 (defmethod all-lambda-list-keywords append ((client sbcl))
   '(sb-int:&more))
+
+(defgeneric allowed-lambda-list-keywords (client lambda-list)
+  (:method-combination append))
+
+(defmethod allowed-lambda-list-keywords append
+    (client (lambda-list ordinary-lambda-list))
+  '(&optional
+    &key
+    &allow-other-keys
+    &rest
+    &body
+    &aux))
