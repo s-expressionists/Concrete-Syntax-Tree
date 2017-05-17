@@ -45,3 +45,9 @@
                              :parse-tree input))
         :dot-position (1+ (dot-position item)))
       nil))
+
+(defclass parser ()
+  ((%all-states :initarg :states :reader all-states)
+   (%all-input :initarg :input :reader all-input)
+   (%remaining-states :initarg :states :reader remaining-states)
+   (%remaining-input :initarg :input :reader remaining-input)))
