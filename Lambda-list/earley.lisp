@@ -59,6 +59,19 @@
                           :parse-trees (cons symbol (parse-trees item)))))
                (possibly-add-item new state))))
 
+(defgeneric predictor-action (symbol grammar state))
+
+(defmethod predictor-action
+    ((symbol grammar-symbol) (grammar grammar) (state earley-state))
+  (loop for rule in (rules grammar)
+        when (subtypep (left-hand-side rule) symbol)
+          do (let ((new (make-instance 'earley-item
+                          :rule rule
+                          :dot-position 0
+                          :origin state
+                          :parse-trees '())))
+               (possibly-add-item new state))))
+
 (defclass parser ()
   ((%all-states :initarg :states :reader all-states)
    (%all-input :initarg :input :reader all-input)
