@@ -46,6 +46,19 @@
         :dot-position (1+ (dot-position item)))
       nil))
 
+(defgeneric completer-action (symbol origin state))
+
+(defmethod completer-action
+    ((symbol grammar-symbol) (origin earley-state) (state earley-state))
+  (loop for item in (items origin)
+        when (subtypep symbol (left-hand-side item))
+          do (let ((new (make-instance 'earley-item
+                          :rule (rule item)
+                          :dot-position (1+ (dot-position item))
+                          :origin (origin item)
+                          :parse-trees (cons symbol (parse-trees item)))))
+               (possibly-add-item new state))))
+
 (defclass parser ()
   ((%all-states :initarg :states :reader all-states)
    (%all-input :initarg :input :reader all-input)
