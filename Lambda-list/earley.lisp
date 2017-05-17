@@ -80,3 +80,33 @@
    (%all-input :initarg :input :reader all-input)
    (%remaining-states :initarg :states :reader remaining-states)
    (%remaining-input :initarg :input :reader remaining-input)))
+
+(defgeneric process-current-state (parser))
+
+(defmethod process-current-state ((parser parser))
+  (let ((states (remaining-states parser))
+        (client (client parser))
+        (lambda-list (lambda-list parser))
+        (remaining-input (remaining-input parser)))
+    (loop with state = (car states)
+          for remaining-items = (items state) then (cdr remaining-items)
+          until (null remaining-items)
+          do (let* ((item (car remaining-items))
+                    (pos (dot-position item))
+                    (rule (rule item))
+                    (lhs (left-hand-side rule))
+                    (rhs (right-hand-side rule)))
+               (if (= pos (length rhs))
+                   (completer-action lhs (origin item) state)
+                   (let* ((terminal (cl:nth pos rhs))
+                          (scan-result
+                            (if (null remaining-input)
+                                nil
+                                (scanner-action client
+                                                item
+                                                lambda-list
+                                                terminal
+                                                (car remaining-input)))))
+                     (unless (null scan-result)
+                       (let ((next-state (cadr states)))
+                         (possibly-add-item scan-result next-state)))))))))
