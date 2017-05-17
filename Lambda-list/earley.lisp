@@ -73,7 +73,8 @@
                (possibly-add-item new state))))
 
 (defclass parser ()
-  ((%all-states :initarg :states :reader all-states)
+  ((%grammar :initarg :states :reader grammar)
+   (%all-states :initarg :states :reader all-states)
    (%all-input :initarg :input :reader all-input)
    (%remaining-states :initarg :states :reader remaining-states)
    (%remaining-input :initarg :input :reader remaining-input)))
