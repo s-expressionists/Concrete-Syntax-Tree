@@ -78,8 +78,8 @@
    (%grammar :initarg :grammar :reader grammar)
    (%all-states :initarg :states :reader all-states)
    (%all-input :initarg :input :reader all-input)
-   (%remaining-states :initarg :states :reader remaining-states)
-   (%remaining-input :initarg :input :reader remaining-input)))
+   (%remaining-states :initarg :states :accessor remaining-states)
+   (%remaining-input :initarg :input :accessor remaining-input)))
 
 (defmethod initialize-instance :after ((object parser) &key)
   (reinitialize-instance
