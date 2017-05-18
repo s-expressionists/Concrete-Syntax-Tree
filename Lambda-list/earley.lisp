@@ -40,6 +40,7 @@
   (if (symbolp input)
       (make-instance 'earley-item
         :rule (rule item)
+        :origin (origin item)
         :parse-trees (cl:cons (make-instance 'ordinary-required-parameter
                                 :parse-tree input)
                               (parse-trees item))
