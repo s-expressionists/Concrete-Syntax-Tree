@@ -49,9 +49,9 @@
 
 (defgeneric completer-action (symbol origin state))
 
-(defmethod completer-action (symbol origin state)
-  (declare (ignore symbol state origin))
-  nil)
+;; (defmethod completer-action (symbol origin state)
+;;   (declare (ignore symbol state origin))
+;;   nil)
 
 (defmethod completer-action
     ((symbol grammar-symbol) (origin earley-state) (state earley-state))
@@ -109,11 +109,11 @@
                     (rhs (right-hand-side rule)))
                (if (= pos (length rhs))
                    (let* ((lhs-class (find-class lhs))
-                          (proto (closer-mop:class-prototype lhs-class)))
+                          (proto (make-instance lhs-class)))
                      (completer-action proto (origin item) state))
                    (let* ((terminal (cl:nth pos rhs))
                           (terminal-class (find-class terminal))
-                          (proto (closer-mop:class-prototype terminal-class))
+                          (proto (make-instance terminal-class))
                           (scan-result
                             (if (cl:null remaining-input)
                                 nil
