@@ -119,10 +119,15 @@
                        (let ((next-state (cadr states)))
                          (possibly-add-item scan-result next-state)))))))))
 
+(defgeneric parse-step (parser))
+
+(defmethod parse-step ((parser parser))
+  (process-current-state parser)
+  (cl:pop (remaining-input parser))
+  (cl:pop (remaining-states parser)))
+
 (defgeneric parse (parser))
 
 (defmethod parse ((parser parser))
-  (loop do (process-current-state parser)
-           (cl:pop (remaining-input parser))
-           (cl:pop (remaining-states parser))
+  (loop do (parse-step parser)
         until (null (remaining-input parser))))
