@@ -33,15 +33,15 @@
 (defclass grammar-symbol ()
   ((%parse-tree :initarg :parse-tree :reader parse-tree)))
 
-(defclass simple-variable (grammar-symbol) ())
+(defclass ordinary-required-parameter (grammar-symbol) ())
 
 (defmethod scanner-action
-    (client item lambda-list (terminal simple-variable) input)
+    (client item lambda-list (terminal ordinary-required-parameter) input)
   (if (symbolp input)
       (make-instance 'earley-item
         :rule (rule item)
         :parse-trees (cons (parse-trees item)
-                           (make-instance 'simple-variable
+                           (make-instance 'ordinary-required-parameter
                              :parse-tree input))
         :dot-position (1+ (dot-position item)))
       nil))
