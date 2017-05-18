@@ -49,6 +49,10 @@
 
 (defgeneric completer-action (symbol origin state))
 
+(defmethod completer-action (symbol origin state)
+  (declare (ignore symbol state origin))
+  nil)
+
 (defmethod completer-action
     ((symbol grammar-symbol) (origin earley-state) (state earley-state))
   (loop for item in (items origin)
