@@ -81,6 +81,12 @@
    (%remaining-states :initarg :states :reader remaining-states)
    (%remaining-input :initarg :input :reader remaining-input)))
 
+(defmethod initialize-instance :after ((object parser) &key)
+  (reinitialize-instance
+   object
+   :states (loop repeat (1+ (length (all-input object)))
+                 collect (make-instance 'earley-state))))
+
 (defgeneric process-current-state (parser))
 
 (defmethod process-current-state ((parser parser))
