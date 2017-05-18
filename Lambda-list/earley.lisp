@@ -116,3 +116,9 @@
                      (unless (null scan-result)
                        (let ((next-state (cadr states)))
                          (possibly-add-item scan-result next-state)))))))))
+
+(defgeneric parse (parser))
+
+(defmethod parse ((parser parser))
+  (loop do (process-current-state parser)
+        until (null (remaining-input parser))))
