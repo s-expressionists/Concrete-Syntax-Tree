@@ -73,7 +73,7 @@
                (possibly-add-item new state))))
 
 (defclass parser ()
-  ((%client :initarg :states :reader client)
+  ((%client :initarg :client :reader client)
    (%lambda-list :initarg :lambda-list :reader lambda-list)
    (%grammar :initarg :states :reader grammar)
    (%all-states :initarg :states :reader all-states)
