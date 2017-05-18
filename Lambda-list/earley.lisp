@@ -25,7 +25,7 @@
 (defmethod possibly-add-item ((item earley-item) (state earley-state))
   (unless (find item (items state) :test #'item-equal)
     (setf (items state)
-          (nconc (items state) (list item)))))
+          (nconc (items state) (cl:list item)))))
 
 (defgeneric scanner-action
     (client item lambda-list terminal input))
@@ -40,9 +40,9 @@
   (if (symbolp input)
       (make-instance 'earley-item
         :rule (rule item)
-        :parse-trees (cons (parse-trees item)
-                           (make-instance 'ordinary-required-parameter
-                             :parse-tree input))
+        :parse-trees (cl:cons (make-instance 'ordinary-required-parameter
+                                :parse-tree input)
+                              (parse-trees item))
         :dot-position (1+ (dot-position item)))
       nil))
 
@@ -56,7 +56,7 @@
                           :rule (rule item)
                           :dot-position (1+ (dot-position item))
                           :origin (origin item)
-                          :parse-trees (cons symbol (parse-trees item)))))
+                          :parse-trees (cl:cons symbol (parse-trees item)))))
                (possibly-add-item new state))))
 
 (defgeneric predictor-action (symbol grammar state))
@@ -75,7 +75,7 @@
 (defclass parser ()
   ((%client :initarg :client :reader client)
    (%lambda-list :initarg :lambda-list :reader lambda-list)
-   (%grammar :initarg :states :reader grammar)
+   (%grammar :initarg :grammar :reader grammar)
    (%all-states :initarg :states :reader all-states)
    (%all-input :initarg :input :reader all-input)
    (%remaining-states :initarg :states :reader remaining-states)
@@ -96,7 +96,7 @@
         (remaining-input (remaining-input parser)))
     (loop with state = (car states)
           for remaining-items = (items state) then (cdr remaining-items)
-          until (null remaining-items)
+          until (cl:null remaining-items)
           do (let* ((item (car remaining-items))
                     (pos (dot-position item))
                     (rule (rule item))
@@ -105,15 +105,17 @@
                (if (= pos (length rhs))
                    (completer-action lhs (origin item) state)
                    (let* ((terminal (cl:nth pos rhs))
+                          (terminal-class (find-class terminal))
+                          (proto (closer-mop:class-prototype terminal-class))
                           (scan-result
-                            (if (null remaining-input)
+                            (if (cl:null remaining-input)
                                 nil
                                 (scanner-action client
                                                 item
                                                 lambda-list
-                                                terminal
+                                                proto
                                                 (car remaining-input)))))
-                     (unless (null scan-result)
+                     (unless (cl:null scan-result)
                        (let ((next-state (cadr states)))
                          (possibly-add-item scan-result next-state)))))))))
 
@@ -121,4 +123,6 @@
 
 (defmethod parse ((parser parser))
   (loop do (process-current-state parser)
+           (cl:pop (remaining-input parser))
+           (cl:pop (remaining-states parser))
         until (null (remaining-input parser))))
