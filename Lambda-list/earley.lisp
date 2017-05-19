@@ -30,11 +30,6 @@
 (defgeneric scanner-action
     (client item lambda-list terminal input))
 
-(defclass grammar-symbol ()
-  ((%parse-tree :initarg :parse-tree :reader parse-tree)))
-
-(defclass ordinary-required-parameter (grammar-symbol) ())
-
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-required-parameter) input)
   (if (symbolp input)

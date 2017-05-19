@@ -6,6 +6,7 @@
   ((:file "client")
    (:file "lambda-list-types")
    (:file "lambda-list-keywords")
+   (:file "grammar-symbols")
    (:file "grammar")
    (:file "standard-grammars")
    (:file "earley")))
