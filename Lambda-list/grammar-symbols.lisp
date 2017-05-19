@@ -37,6 +37,20 @@
 
 (defclass whole-parameter (parameter) ())
 
+(defclass lambda-list-keyword (grammar-symbol) ())
+
+(defclass keyword-optional (lambda-list-keyword) ())
+
+(defclass keyword-rest (lambda-list-keyword) ())
+
+(defclass keyword-key (lambda-list-keyword) ())
+
+(defclass keyword-aux (lambda-list-keyword) ())
+
+(defclass keyword-environment (lambda-list-keyword) ())
+
+(defclass keyword-whole (lambda-list-keyword) ())
+
 (defclass lambda-list-type (grammar-symbol) ())
 
 (defclass ordinary-lambda-list (lambda-list-type) ())
