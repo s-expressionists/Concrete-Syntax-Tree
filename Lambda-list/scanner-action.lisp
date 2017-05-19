@@ -5,12 +5,13 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-required-parameter) input)
-  (if (symbolp input)
-      (make-instance 'earley-item
-        :rule (rule item)
-        :origin (origin item)
-        :parse-trees (cl:cons (make-instance 'ordinary-required-parameter
-                                :parse-tree input)
-                              (parse-trees item))
-        :dot-position (1+ (dot-position item)))
-      nil))
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
+    (if (and (symbolp input) (not (member input allowed-keywords)))
+        (make-instance 'earley-item
+          :rule (rule item)
+          :origin (origin item)
+          :parse-trees (cl:cons (make-instance 'ordinary-required-parameter
+                                  :parse-tree input)
+                        (parse-trees item))
+          :dot-position (1+ (dot-position item)))
+        nil)))
