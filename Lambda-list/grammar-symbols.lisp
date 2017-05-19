@@ -58,3 +58,5 @@
 (defclass define-modify-macro-lambda-list (lambda-list-type) ())
 
 (defclass define-method-combination-lambda-list (lambda-list-type) ())
+
+(defclass target (grammar-symbol) ())
