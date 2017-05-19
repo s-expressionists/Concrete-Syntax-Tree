@@ -10,4 +10,5 @@
    (:file "grammar")
    (:file "standard-grammars")
    (:file "earley-item")
+   (:file "earley-state")
    (:file "earley")))
