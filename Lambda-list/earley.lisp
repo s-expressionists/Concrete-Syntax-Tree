@@ -1,9 +1,5 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defclass rule ()
-  ((%left-hand-side :initarg :left-hand-side :reader left-hand-side)
-   (%right-hand-side :initarg :right-hand-side :reader right-hand-side)))
-
 (defclass earley-item ()
   ((%rule :initarg :rule :reader rule)
    (%dot-position :initarg :dot-position :reader dot-position)

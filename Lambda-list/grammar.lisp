@@ -1,9 +1,5 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defclass grammar ()
-  ((%rules :initarg :rules :reader rules)
-   (%nullable-symbols :initarg :nullable-symbols :reader nullable-symbols)))
-
 (defclass rule ()
   ((&left-hand-slide :initarg :left-hand-side :reader left-hand-side)
    (&right-hand-slide :initarg :right-hand-side :reader right-hand-side)))
@@ -13,6 +9,10 @@
       (list right-hand-side-element)
       (loop for element in (cdr right-hand-side-element)
             append (extract-symbols element))))
+
+(defclass grammar ()
+  ((%rules :initarg :rules :reader rules)
+   (%nullable-symbols :initarg :nullable-symbols :reader nullable-symbols)))
 
 (defun compute-all-symbols (grammar)
   (let ((symbols (make-hash-table :test #'eq)))
