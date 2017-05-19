@@ -36,3 +36,25 @@
 (defclass environment-parameter (paremeter) ())
 
 (defclass whole-parameter (parameter) ())
+
+(defclass lambda-list-type (grammar-symbol) ())
+
+(defclass ordinary-lambda-list (lambda-list-type) ())
+
+(defclass generic-function-lambda-list (lambda-list-type) ())
+
+(defclass specialized-lambda-list (lambda-list-type) ())
+
+(defclass macro-lambda-list (lambda-list-type) ())
+
+(defclass destructuring-lambda-list (lambda-list-type) ())
+
+(defclass boa-lambda-list (lambda-list-type) ())
+
+(defclass defsetf-lambda-list (lambda-list-type) ())
+
+(defclass deftype-lambda-list (lambda-list-type) ())
+
+(defclass define-modify-macro-lambda-list (lambda-list-type) ())
+
+(defclass define-method-combination-lambda-list (lambda-list-type) ())
