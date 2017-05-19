@@ -9,4 +9,5 @@
    (:file "grammar-symbols")
    (:file "grammar")
    (:file "standard-grammars")
+   (:file "earley-item")
    (:file "earley")))
