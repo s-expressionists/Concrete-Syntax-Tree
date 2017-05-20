@@ -90,9 +90,9 @@
                                                 lambda-list
                                                 proto
                                                 (car remaining-input)))))
-                     (unless (cl:null scan-result)
-                       (let ((next-state (cadr states)))
-                         (possibly-add-item scan-result next-state)))))))))
+                     (loop with next-state = (cadr states)
+                           for item in scan-result
+                           do (possibly-add-item item next-state))))))))
 
 (defgeneric parse-step (parser))
 
