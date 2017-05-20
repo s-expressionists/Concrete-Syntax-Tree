@@ -21,7 +21,7 @@
         '())))
 
 (defmethod scanner-action
-    (client item lambda-list (terminal cons) input)
+    (client item lambda-list (terminal cl:cons) input)
   (let ((result (scanner-action client item lambda-list (cadr terminal) input)))
     (cond ((string-equal (symbol-name (car terminal)) "?")
            result)
