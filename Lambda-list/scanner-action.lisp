@@ -21,6 +21,47 @@
         '())))
 
 (defmethod scanner-action
+    (client item lambda-list (terminal ordinary-optional-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
+    (cond ((and (symbolp input) (not (member input allowed-keywords)))
+           (cl:list (advance-dot-position
+                     item
+                     (make-instance 'ordinary-optional-parameter
+                       :name input
+                       :form nil
+                       :supplied-p (gensym)))))
+          ((cl:consp input)
+           (cond ((cl:null (cdr input))
+                  (cl:list (advance-dot-position
+                            item
+                            (make-instance 'ordinary-optional-parameter
+                              :name (car input)
+                              :form nil
+                              :supplied-p (gensym)))))
+                 ((cl:atom (cdr input))
+                  '())
+                 ((cl:null (cddr input))
+                  (cl:list (advance-dot-position
+                            item
+                            (make-instance 'ordinary-optional-parameter
+                              :name (car input)
+                              :form (cadr input)
+                              :supplied-p (gensym)))))
+                 ((cl:atom (cddr input))
+                  '())
+                 ((cl:null (cdddr input))
+                  (cl:list (advance-dot-position
+                            item
+                            (make-instance 'ordinary-optional-parameter
+                              :name (car input)
+                              :form (cadr input)
+                              :supplied-p (caddr input)))))
+                 (t
+                  '())))
+          (t
+           '()))))
+
+(defmethod scanner-action
     (client item lambda-list (terminal cl:cons) input)
   (let ((result (scanner-action client item lambda-list (cadr terminal) input)))
     (cond ((string-equal (symbol-name (car terminal)) "?")
