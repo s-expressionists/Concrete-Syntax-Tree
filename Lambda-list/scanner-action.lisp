@@ -33,7 +33,9 @@
 
 (define-keyword-scanner-action keyword-optional &optional)
 (define-keyword-scanner-action keyword-rest &rest)
+(define-keyword-scanner-action keyword-body &rest)
 (define-keyword-scanner-action keyword-key &key)
+(define-keyword-scanner-action keyword-key &allow-other-keys)
 (define-keyword-scanner-action keyword-aux &aux)
 (define-keyword-scanner-action keyword-environment &environment)
 (define-keyword-scanner-action keyword-whole &whole)
