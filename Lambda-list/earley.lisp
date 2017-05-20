@@ -21,14 +21,19 @@
 
 (defmethod predictor-action
     ((symbol grammar-symbol) (grammar grammar) (state earley-state))
-  (loop for rule in (rules grammar)
+  (loop with nullable-symbols = (nullable-symbols grammar)
+        for rule in (rules grammar)
         when (subtypep (left-hand-side rule) symbol)
-          do (let ((new (make-instance 'earley-item
-                          :rule rule
-                          :dot-position 0
-                          :origin state
-                          :parse-trees '())))
-               (possibly-add-item new state))))
+          do (loop for i from 0
+                   until (= i (length (right-hand-side rule)))
+                   while (nullable-p (elt (right-hand-side rule) i)
+                                     nullable-symbols)
+                   do  (let ((new (make-instance 'earley-item
+                                    :rule rule
+                                    :dot-position i
+                                    :origin state
+                                    :parse-trees '())))
+                         (possibly-add-item new state)))))
 
 (defclass parser ()
   ((%client :initarg :client :reader client)
