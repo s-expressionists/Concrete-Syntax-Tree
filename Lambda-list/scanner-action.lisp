@@ -32,3 +32,8 @@
          nil)))
 
 (define-keyword-scanner-action keyword-optional &optional)
+(define-keyword-scanner-action keyword-rest &rest)
+(define-keyword-scanner-action keyword-key &key)
+(define-keyword-scanner-action keyword-aux &aux)
+(define-keyword-scanner-action keyword-environment &environment)
+(define-keyword-scanner-action keyword-whole &whole)
