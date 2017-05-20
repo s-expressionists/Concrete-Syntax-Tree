@@ -31,12 +31,4 @@
             :parse-tree input))
          nil)))
 
-(defmethod scanner-action
-    (client item lambda-list (terminal keyword-optional) input)
-  (declare (ignore client lambda-list))
-  (if (eq input '&optional)
-      (advance-dot-position
-       item
-       (make-instance 'keyword-optional
-         :parse-tree input))
-      nil))
+(define-keyword-scanner-action keyword-optional &optional)
