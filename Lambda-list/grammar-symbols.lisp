@@ -43,7 +43,11 @@
 
 (defclass keyword-rest (lambda-list-keyword) ())
 
+(defclass keyword-body (lambda-list-keyword) ())
+
 (defclass keyword-key (lambda-list-keyword) ())
+
+(defclass keyword-allow-other-keys (lambda-list-keyword) ())
 
 (defclass keyword-aux (lambda-list-keyword) ())
 
