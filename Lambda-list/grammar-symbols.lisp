@@ -7,7 +7,10 @@
 
 (defclass ordinary-required-parameters (parameter-group) ())
 
-(defclass ordinary-optional-parameters (parameter-group) ())
+(defclass ordinary-optional-parameters (parameter-group)
+  ((%name :initarg :name :reader name)
+   (%form :initarg :form :reader form)
+   (%supplied-p :initarg :supplied-p :reader supplied-p)))
 
 (defclass rest-parameter (parameter-group) ())
 
