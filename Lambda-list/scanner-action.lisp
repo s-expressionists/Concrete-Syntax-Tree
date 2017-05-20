@@ -20,6 +20,21 @@
                     :parse-tree input)))
         '())))
 
+(defmethod scanner-action
+    (client item lambda-list (terminal cons) input)
+  (let ((result (scanner-action client item lambda-list (cadr terminal) input)))
+    (cond ((string-equal (symbol-name (car terminal)) "?")
+           result)
+          ((string-equal (symbol-name (car terminal)) "*")
+           (append result
+                   (loop for item in result
+                         collect (make-instance 'earley-item
+                                   :rule (rule item)
+                                   :origin (origin item)
+                                   :parse-trees (parse-trees item)
+                                   :dot-position (1- (dot-position item))))))
+          (t (error "Unknown operator: ~s" (car terminal))))))
+
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)
