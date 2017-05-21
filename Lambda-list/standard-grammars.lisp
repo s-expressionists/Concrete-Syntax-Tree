@@ -1,11 +1,11 @@
 (cl:in-package #:concrete-syntax-tree)
 
 (defparameter ordinary-required-parameters
-  '((required-parameters <-
+  '((ordinary-required-parameters <-
      (* ordinary-required-parameter))))
 
 (defparameter ordinay-optional-parameters
-  '((optional-parameters <-
+  '((ordinary-optional-parameters <-
      keyword-optional
      (* ordinary-optional-parameter))))
 
@@ -14,10 +14,10 @@
      keyword-rest
      simple-variable)))
 
-(defparameter key-parameters
-  '((key-parameters <-
+(defparameter ordinary-key-parameters
+  '((ordinary-key-parameters <-
      keyword-key
-     (* key-parameter)
+     (* ordinary-key-parameter)
      (? key-allow-other-keys))))
 
 (defparameter aux-parameters
@@ -27,23 +27,23 @@
 
 (defparameter ordinary-lambda-list
   '((lambda-list <-
-     (? required-parameters)
-     (? optional-parameters)
+     (? ordinary-required-parameters)
+     (? ordinary-optional-parameters)
      (? rest-parameter)
-     (? key-parameters)
+     (? ordinary-key-parameters)
      (? aux-parameters))))
 
 (defparameter generic-function-optional-parameters
-  '((optional-parameters <-
+  '((generic-function-optional-parameters <-
      keyword-optional
      (* generic-function-optional-parameter))))
 
 (defparameter generic-function-lambda-list
   '((lambda-list <-
-     (? required-parameters)
-     (? optional-parameters)
+     (? ordinary-required-parameters)
+     (? generic-function-optional-parameters)
      (? rest-parameter)
-     (? key-parameters))))
+     (? generic-function-key-parameters))))
 
 (defparameter specialized-required-parameters
   '((required-parameters <-
