@@ -38,6 +38,12 @@
      keyword-optional
      (* generic-function-optional-parameter))))
 
+(defparameter generic-function-key-parameters
+  '((generic-function-key-parameters <-
+     keyword-key
+     (* generic-function-key-parameter)
+     (? key-allow-other-keys))))
+
 (defparameter generic-function-lambda-list
   '((lambda-list <-
      (? ordinary-required-parameters)
