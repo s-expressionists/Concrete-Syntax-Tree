@@ -12,7 +12,7 @@
 (defparameter rest-parameter
   '((rest-parameter <-
      keyword-rest
-     variable)))
+     simple-variable)))
 
 (defparameter key-parameters
   '((key-parameters <-
@@ -60,9 +60,9 @@
 (defparameter environment-parameter
   '((environment-parameter <-
      keyword-environment
-     variable)))
+     simple-variable)))
 
 (defparameter whole-parameter
   '((whole-parameter <-
      keyword-whole
-     variable)))
+     simple-variable)))
