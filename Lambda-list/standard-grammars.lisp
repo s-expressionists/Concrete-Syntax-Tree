@@ -57,7 +57,7 @@
 
 (defparameter *specialized-lambda-list*
   '((specialized-lambda-list <-
-     required-parameters
+     specialized-required-parameters
      (? optional-parameters)
      (? rest-parameter)
      (? key-parameters)
