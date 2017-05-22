@@ -54,7 +54,7 @@
                  :origin (car states)
                  :dot-position 0
                  :rule target-rule)))
-    (push item (car states))
+    (push item (items (car states)))
     (reinitialize-instance
      object
      :states states
