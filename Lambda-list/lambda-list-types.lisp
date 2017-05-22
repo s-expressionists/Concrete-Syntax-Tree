@@ -2,4 +2,4 @@
 
 (defclass lambda-list () ())
 
-(defclass ordinary-lambda-list (lambda-list) ())
+(defclass lambda-list-type-ordinary (lambda-list) ())

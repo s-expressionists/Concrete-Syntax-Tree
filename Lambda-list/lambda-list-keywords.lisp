@@ -21,7 +21,7 @@
   (:method-combination append))
 
 (defmethod allowed-lambda-list-keywords append
-    (client (lambda-list ordinary-lambda-list))
+    (client (lambda-list lambda-list-type-ordinary))
   '(&optional
     &key
     &allow-other-keys
