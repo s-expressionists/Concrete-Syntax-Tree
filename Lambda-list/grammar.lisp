@@ -1,8 +1,8 @@
 (cl:in-package #:concrete-syntax-tree)
 
 (defclass rule ()
-  ((&left-hand-slide :initarg :left-hand-side :reader left-hand-side)
-   (&right-hand-slide :initarg :right-hand-side :reader right-hand-side)))
+  ((&left-hand-side :initarg :left-hand-side :reader left-hand-side)
+   (&right-hand-side :initarg :right-hand-side :reader right-hand-side)))
 
 (defmethod print-object ((object rule) stream)
   (print-unreadable-object (object stream :type t)
