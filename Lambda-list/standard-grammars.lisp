@@ -27,7 +27,7 @@
 
 (defparameter *ordinary-lambda-list*
   '((ordinary-lambda-list <-
-     (? ordinary-required-parameters)
+     ordinary-required-parameters
      (? ordinary-optional-parameters)
      (? rest-parameter)
      (? ordinary-key-parameters)
@@ -46,7 +46,7 @@
 
 (defparameter *generic-function-lambda-list*
   '((generic-function-lambda-list <-
-     (? ordinary-required-parameters)
+     ordinary-required-parameters
      (? generic-function-optional-parameters)
      (? rest-parameter)
      (? generic-function-key-parameters))))
@@ -57,7 +57,7 @@
 
 (defparameter *specialized-lambda-list*
   '((specialized-lambda-list <-
-     (? required-parameters)
+     required-parameters
      (? optional-parameters)
      (? rest-parameter)
      (? key-parameters)
