@@ -23,7 +23,7 @@
     ((symbol grammar-symbol) (grammar grammar) (state earley-state))
   (loop with nullable-symbols = (nullable-symbols grammar)
         for rule in (rules grammar)
-        when (subtypep (left-hand-side rule) symbol)
+        when (typep symbol (left-hand-side rule))
           do (loop for i from 0
                    until (= i (length (right-hand-side rule)))
                    while (nullable-p (elt (right-hand-side rule) i)
@@ -94,7 +94,7 @@
                      (loop with next-state = (cadr states)
                            for item in scan-result
                            do (possibly-add-item item next-state))
-                     (predictor-action terminal-class grammar state)))))))
+                     (predictor-action proto grammar state)))))))
 
 (defgeneric parse-step (parser))
 
