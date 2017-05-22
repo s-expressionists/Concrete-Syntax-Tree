@@ -26,7 +26,7 @@
      (* aux-parameter))))
 
 (defparameter *ordinary-lambda-list*
-  '((lambda-list <-
+  '((ordinary-lambda-list <-
      (? ordinary-required-parameters)
      (? ordinary-optional-parameters)
      (? rest-parameter)
@@ -45,7 +45,7 @@
      (? key-allow-other-keys))))
 
 (defparameter *generic-function-lambda-list*
-  '((lambda-list <-
+  '((generic-function-lambda-list <-
      (? ordinary-required-parameters)
      (? generic-function-optional-parameters)
      (? rest-parameter)
@@ -56,7 +56,7 @@
      (* specialized-required-parameter))))
 
 (defparameter *specialized-lambda-list*
-  '((lambda-list <-
+  '((specialized-lambda-list <-
      (? required-parameters)
      (? optional-parameters)
      (? rest-parameter)
