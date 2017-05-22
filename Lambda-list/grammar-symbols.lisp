@@ -11,7 +11,9 @@
 
 (defclass rest-parameter (parameter-group) ())
 
-(defclass key-parameters (parameter-group) ())
+(defclass ordinary-key-parameters (parameter-group) ())
+
+(defclass generic-function-key-parameters (parameter-group) ())
 
 (defclass aux-parameters (parameter-group) ())
 
@@ -28,7 +30,9 @@
    (%form :initarg :form :reader form)
    (%supplied-p :initarg :supplied-p :reader supplied-p)))
 
-(defclass key-parameter (parameter) ())
+(defclass ordinary-key-parameter (parameter) ())
+
+(defclass generic-function-key-parameter (parameter) ())
 
 (defclass aux-parameter (parameter) ())
 
