@@ -67,7 +67,8 @@
         (client (client parser))
         (lambda-list (lambda-list parser))
         (remaining-input (remaining-input parser)))
-    (loop with state = (car states)
+    (loop with grammar = (grammar parser)
+          with state = (car states)
           for remaining-items = (items state) then (cdr remaining-items)
           until (cl:null remaining-items)
           do (let* ((item (car remaining-items))
@@ -92,7 +93,8 @@
                                                 (car remaining-input)))))
                      (loop with next-state = (cadr states)
                            for item in scan-result
-                           do (possibly-add-item item next-state))))))))
+                           do (possibly-add-item item next-state))
+                     (predictor-action terminal-class grammar state)))))))
 
 (defgeneric parse-step (parser))
 
