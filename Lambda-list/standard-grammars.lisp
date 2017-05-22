@@ -87,3 +87,12 @@
 	  *specialized-lambda-list*
 	  *environment-parameter*
 	  *whole-parameter*))
+
+(defparameter *ordinary-lambda-list-grammar*
+  (cl:cons '(target <- ordinary-lambda-list) *standard-grammar*))
+
+(defparameter *generic-function-lambda-list-grammar*
+  (cl:cons '(target <- generic-function-lambda-list) *standard-grammar*))
+
+(defparameter *specialized-lambda-list-grammar*
+  (cl:cons '(target <- specialized-lambda-list) *standard-grammar*))
