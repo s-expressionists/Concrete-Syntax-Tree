@@ -52,7 +52,7 @@
      (? generic-function-key-parameters))))
 
 (defparameter *specialized-required-parameters*
-  '((required-parameters <-
+  '((specialized-required-parameters <-
      (* specialized-required-parameter))))
 
 (defparameter *specialized-lambda-list*
