@@ -4,6 +4,13 @@
   ((&left-hand-slide :initarg :left-hand-side :reader left-hand-side)
    (&right-hand-slide :initarg :right-hand-side :reader right-hand-side)))
 
+(defmethod print-object ((object rule) stream)
+  (print-unreadable-object (object stream :type t)
+    (format stream "~s <- " (left-hand-side object))
+    (loop for symbol in (right-hand-side object)
+          do (format stream "~s " symbol))
+    (terpri stream)))
+
 (defun extract-symbols (right-hand-side-element)
   (if (symbolp right-hand-side-element)
       (list right-hand-side-element)
