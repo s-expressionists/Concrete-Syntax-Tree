@@ -1,7 +1,9 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defgeneric scanner-action
-    (client item lambda-list terminal input))
+(defgeneric scanner-action (client item lambda-list terminal input))
+
+(defmethod scanner-action (client item lambda-list terminal input)
+  '())
 
 (defun advance-dot-position (item parse-tree)
   (make-instance 'earley-item
