@@ -72,3 +72,18 @@
   '((whole-parameter <-
      keyword-whole
      simple-variable)))
+
+(defparameter *standard-grammar*
+  (append *ordinary-required-parameters*
+	  *ordinay-optional-parameters*
+	  *rest-parameter*
+	  *ordinary-key-parameters*
+	  *aux-parameters*
+	  *ordinary-lambda-list*
+	  *generic-function-optional-parameters*
+	  *generic-function-key-parameters*
+	  *generic-function-lambda-list*
+	  *specialized-required-parameters*
+	  *specialized-lambda-list*
+	  *environment-parameter*
+	  *whole-parameter*))
