@@ -99,7 +99,9 @@
                                 (scanner-action client
                                                 item
                                                 lambda-list
-                                                proto
+                                                (if (cl:consp terminal)
+                                                    terminal
+                                                    proto)
                                                 (car remaining-input)))))
                      (loop with next-state = (cadr states)
                            for item in scan-result
