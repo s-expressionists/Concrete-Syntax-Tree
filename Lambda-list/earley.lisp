@@ -9,7 +9,13 @@
 (defmethod completer-action
     ((symbol grammar-symbol) (origin earley-state) (state earley-state))
   (loop for item in (items origin)
-        when (typep symbol (left-hand-side (rule item)))
+        for rule = (rule item)
+        for length = (length (right-hand-side rule))
+        for dot-position = (dot-position item)
+        when (and (< dot-position length)
+                  (let* ((element (elt (right-hand-side rule) dot-position))
+                         (type (if (cl:consp element) (cadr element) element)))
+                    (typep symbol type)))
           do (let ((new (make-instance 'earley-item
                           :rule (rule item)
                           :dot-position (1+ (dot-position item))
