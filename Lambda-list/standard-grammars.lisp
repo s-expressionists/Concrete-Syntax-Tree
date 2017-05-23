@@ -4,7 +4,7 @@
   '((ordinary-required-parameters <-
      (* ordinary-required-parameter))))
 
-(defparameter *ordinay-optional-parameters*
+(defparameter *ordinary-optional-parameters*
   '((ordinary-optional-parameters <-
      keyword-optional
      (* ordinary-optional-parameter))))
@@ -75,7 +75,7 @@
 
 (defparameter *standard-grammar*
   (append *ordinary-required-parameters*
-	  *ordinay-optional-parameters*
+	  *ordinary-optional-parameters*
 	  *rest-parameter*
 	  *ordinary-key-parameters*
 	  *aux-parameters*
