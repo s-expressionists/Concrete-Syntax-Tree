@@ -65,7 +65,10 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal cl:cons) input)
-  (let ((result (scanner-action client item lambda-list (cadr terminal) input)))
+  (let* ((new-terminal (cadr terminal))
+         (terminal-class (find-class new-terminal))
+         (proto (make-instance terminal-class))
+         (result (scanner-action client item lambda-list proto input)))
     (cond ((string-equal (symbol-name (car terminal)) "?")
            result)
           ((string-equal (symbol-name (car terminal)) "*")
