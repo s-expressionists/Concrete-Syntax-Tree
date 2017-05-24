@@ -35,7 +35,8 @@
                                         :rule rule
                                         :dot-position i
                                         :origin state
-                                        :parse-trees '())))
+                                        :parse-trees
+                                        (cl:cons symbol (parse-trees item)))))
                              (possibly-add-item new state)))))
 
 (defgeneric predictor-action (symbol grammar state))
