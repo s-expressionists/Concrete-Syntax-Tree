@@ -1,7 +1,7 @@
 (cl:in-package #:concrete-syntax-tree)
 
 (defclass grammar-symbol ()
-  ((%parse-tree :initarg :parse-tree :reader parse-tree)))
+  ((%children :initarg :children :reader children)))
 
 (defclass parameter-group (grammar-symbol) ())
 

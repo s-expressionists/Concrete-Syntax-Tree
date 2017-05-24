@@ -108,7 +108,7 @@
                (if (= pos (length rhs))
                    (let* ((lhs-class (find-class lhs))
                           (proto (make-instance lhs-class
-                                   :parse-tree (reverse (parse-trees item)))))
+                                   :children (reverse (parse-trees item)))))
                      (completer-action proto grammar (origin item) state))
                    (let* ((terminal (cl:nth pos rhs))
                           (terminal-class
