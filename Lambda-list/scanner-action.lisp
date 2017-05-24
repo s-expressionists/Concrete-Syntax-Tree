@@ -19,7 +19,7 @@
         (cl:list (advance-dot-position
                   item
                   (make-instance 'ordinary-required-parameter
-                    :children input)))
+                    :name input)))
         '())))
 
 (defmethod scanner-action
@@ -89,7 +89,7 @@
          (cl:list (advance-dot-position
                    item
                    (make-instance ',keyword-class-name
-                     :children input)))
+                     :name input)))
          '())))
 
 (define-keyword-scanner-action keyword-optional &optional)
