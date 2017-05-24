@@ -1,9 +1,10 @@
 (cl:in-package #:concrete-syntax-tree)
 
 (defclass grammar-symbol ()
-  ((%children :initarg :children :reader children)))
+  ())
 
-(defclass parameter-group (grammar-symbol) ())
+(defclass parameter-group (grammar-symbol)
+  ((%children :initarg :children :reader children)))
 
 (defclass ordinary-required-parameters (parameter-group) ())
 
@@ -21,13 +22,13 @@
 
 (defclass specialized-required-parameters (parameter-group) ())
 
-(defclass parameter (grammar-symbol) ())
+(defclass parameter (grammar-symbol)
+  ((%name :initarg :name :reader name)))
 
 (defclass ordinary-required-parameter (parameter) ())
 
 (defclass ordinary-optional-parameter (parameter)
-  ((%name :initarg :name :reader name)
-   (%form :initarg :form :reader form)
+  ((%form :initarg :form :reader form)
    (%supplied-p :initarg :supplied-p :reader supplied-p)))
 
 (defclass ordinary-key-parameter (parameter) ())
@@ -44,7 +45,8 @@
 
 (defclass whole-parameter (parameter) ())
 
-(defclass lambda-list-keyword (grammar-symbol) ())
+(defclass lambda-list-keyword (grammar-symbol)
+  ((%name :initarg :name :reader name)))
 
 (defclass keyword-optional (lambda-list-keyword) ())
 
@@ -62,7 +64,8 @@
 
 (defclass keyword-whole (lambda-list-keyword) ())
 
-(defclass lambda-list-type (grammar-symbol) ())
+(defclass lambda-list-type (grammar-symbol)
+  ((%children :initarg :children :reader children)))
 
 (defclass ordinary-lambda-list (lambda-list-type) ())
 
@@ -84,4 +87,5 @@
 
 (defclass define-method-combination-lambda-list (lambda-list-type) ())
 
-(defclass target (grammar-symbol) ())
+(defclass target (grammar-symbol)
+  ((%children :initarg :children :reader children)))
