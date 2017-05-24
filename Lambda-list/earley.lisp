@@ -1,14 +1,18 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defgeneric completer-action (symbol origin state))
+(defgeneric completer-action (symbol grammar origin state))
 
 ;; (defmethod completer-action (symbol origin state)
 ;;   (declare (ignore symbol state origin))
 ;;   nil)
 
 (defmethod completer-action
-    ((symbol grammar-symbol) (origin earley-state) (state earley-state))
-  (loop for item in (items origin)
+    ((symbol grammar-symbol)
+     (grammar grammar)
+     (origin earley-state)
+     (state earley-state))
+  (loop with nullable-symbols = (nullable-symbols grammar)
+        for item in (items origin)
         for rule = (rule item)
         for length = (length (right-hand-side rule))
         for dot-position = (dot-position item)
@@ -16,12 +20,23 @@
                   (let* ((element (elt (right-hand-side rule) dot-position))
                          (type (if (cl:consp element) (cadr element) element)))
                     (typep symbol type)))
-          do (let ((new (make-instance 'earley-item
-                          :rule (rule item)
-                          :dot-position (1+ (dot-position item))
-                          :origin (origin item)
-                          :parse-trees (cl:cons symbol (parse-trees item)))))
-               (possibly-add-item new state))))
+          do (loop for i from dot-position
+                   until (= i (length (right-hand-side rule)))
+                   while (nullable-p (elt (right-hand-side rule) i)
+                                     nullable-symbols)
+                   do (let ((new (make-instance 'earley-item
+                                   :rule (rule item)
+                                   :dot-position (1+ i)
+                                   :origin (origin item)
+                                   :parse-trees
+                                   (cl:cons symbol (parse-trees item)))))
+                        (possibly-add-item new state))
+                   finally (let ((new (make-instance 'earley-item
+                                        :rule rule
+                                        :dot-position i
+                                        :origin state
+                                        :parse-trees '())))
+                             (possibly-add-item new state)))))
 
 (defgeneric predictor-action (symbol grammar state))
 
@@ -92,7 +107,7 @@
                (if (= pos (length rhs))
                    (let* ((lhs-class (find-class lhs))
                           (proto (make-instance lhs-class)))
-                     (completer-action proto (origin item) state))
+                     (completer-action proto grammar (origin item) state))
                    (let* ((terminal (cl:nth pos rhs))
                           (terminal-class
                             (find-class (if (cl:consp terminal)
