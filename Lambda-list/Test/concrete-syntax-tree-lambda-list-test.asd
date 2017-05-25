@@ -3,4 +3,6 @@
 (defsystem #:concrete-syntax-tree-lambda-list-test
   :depends-on (#:concrete-syntax-tree-lambda-list)
   :components
-  ((:file "packages")))
+  ((:file "packages")
+   (:file "test")))
+
