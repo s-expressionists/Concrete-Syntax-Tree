@@ -31,7 +31,10 @@
   ((%form :initarg :form :reader form)
    (%supplied-p :initarg :supplied-p :reader supplied-p)))
 
-(defclass ordinary-key-parameter (parameter) ())
+(defclass ordinary-key-parameter (parameter)
+  ((%form :initarg :form :reader form)
+   (%keyword :initarg :keyword :reader keyword)
+   (%supplied-p :initarg :supplied-p :reader supplied-p)))
 
 (defclass generic-function-key-parameter (parameter) ())
 
