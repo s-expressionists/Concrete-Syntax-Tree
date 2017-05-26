@@ -17,7 +17,5 @@
              :input '(a b)
              :lambda-list (make-instance 'cst::lambda-list-type-ordinary)
              :client nil)))
-    (cst::parse-step p)
-    (cst::parse-step p)
-    (cst::parse-step p)
+    (cst::parse p)
     (assert-success p)))
