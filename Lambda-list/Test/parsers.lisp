@@ -82,3 +82,10 @@
                :form (cadr parameter)
                :keyword (cadar parameter)
                :supplied-p (caddr parameter))))))
+
+(defun parse-ordinary-key-parameters (remaining-input)
+  (loop for input = remaining-input then (cdr input)
+        until (or (null input)
+                  (member (car input) lambda-list-keywords :test #'eq))
+        collect (parse-ordinary-key-parameter (car input))))
+
