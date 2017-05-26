@@ -4,5 +4,5 @@
   :depends-on (#:concrete-syntax-tree-lambda-list)
   :components
   ((:file "packages")
+   (:file "compare-parse-trees")
    (:file "test")))
-
