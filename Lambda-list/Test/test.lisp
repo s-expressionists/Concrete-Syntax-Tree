@@ -18,6 +18,4 @@
     (cst::parse-step p)
     (cst::parse-step p)
     (cst::parse-step p)
-    (let ((initial-state (car (cst::all-states p)))
-          (final-state (car (cl:last (cst::all-states p)))))
-      (list initial-state final-state))))
+    (assert-success p)))
