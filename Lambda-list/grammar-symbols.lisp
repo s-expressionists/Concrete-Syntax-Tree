@@ -6,19 +6,22 @@
 (defclass parameter-group (grammar-symbol)
   ((%children :initarg :children :reader children)))
 
+(defclass explicit-parameter-group (parameter-group)
+  ((%keyword :initarg :keyword :reader keyword)))
+
 (defclass ordinary-required-parameters (parameter-group) ())
 
-(defclass ordinary-optional-parameters (parameter-group) ())
+(defclass ordinary-optional-parameters (explicit-parameter-group) ())
 
-(defclass rest-parameter (parameter-group) ())
+(defclass rest-parameter (explicit-parameter-group) ())
 
-(defclass ordinary-key-parameters (parameter-group) ())
+(defclass ordinary-key-parameters (explicit-parameter-group) ())
 
-(defclass generic-function-key-parameters (parameter-group) ())
+(defclass generic-function-key-parameters (explicit-parameter-group) ())
 
-(defclass aux-parameters (parameter-group) ())
+(defclass aux-parameters (explicit-parameter-group) ())
 
-(defclass generic-function-optional-parameters (parameter-group) ())
+(defclass generic-function-optional-parameters (explicit-parameter-group) ())
 
 (defclass specialized-required-parameters (parameter-group) ())
 
