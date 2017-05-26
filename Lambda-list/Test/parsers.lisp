@@ -10,3 +10,20 @@
           until (or (null input)
                     (member (car input) lambda-list-keywords :test #'eq))
           collect (parse-ordinary-required-parameter (car input)))))
+
+(defun parse-ordinary-optional-parameter (parameter)
+  (cond ((symbolp parameter)
+         (make-instance 'cst::ordinary-optional-parameter
+           :name parameter
+           :form nil
+           :supplied-p (gensym)))
+        ((null (cdr parameter))
+         (make-instance 'cst::ordinary-optional-parameter
+           :name (car parameter)
+           :form (cadr parameter)
+           :supplied-p (gensym)))
+        (t
+         (make-instance 'cst::ordinary-optional-parameter
+           :name (car parameter)
+           :form (cadr parameter)
+           :supplied-p (caddr parameter)))))
