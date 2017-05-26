@@ -38,3 +38,47 @@
         until (or (null input)
                   (member (car input) lambda-list-keywords :test #'eq))
         collect (parse-ordinary-optional-parameter (car input))))
+
+(defun parse-ordinary-key-parameter (parameter)
+  (cond ((symbolp parameter)
+         (make-instance 'cst::ordinary-key-parameter
+           :name parameter
+           :form nil
+           :keyword (intern (symbol-name parameter) :keyword)
+           :supplied-p (gensym)))
+        ((null (cdr parameter))
+         (if (symbolp (car parameter))
+             (make-instance 'cst::ordinary-key-parameter
+               :name (car parameter)
+               :form nil
+               :keyword (intern (symbol-name (car parameter)) :keyword)
+               :supplied-p (gensym))
+             (make-instance 'cst::ordinary-key-parameter
+               :name (caar parameter)
+               :form nil
+               :keyword (cadar parameter)
+               :supplied-p (gensym))))
+        ((null (cddr parameter))
+         (if (symbolp (car parameter))
+             (make-instance 'cst::ordinary-key-parameter
+               :name (car parameter)
+               :form (cadr parameter)
+               :keyword (intern (symbol-name (car parameter)) :keyword)
+               :supplied-p (gensym))
+             (make-instance 'cst::ordinary-key-parameter
+               :name (caar parameter)
+               :form (cadr parameter)
+               :keyword (cadar parameter)
+               :supplied-p (gensym))))
+        (t
+         (if (symbolp (car parameter))
+             (make-instance 'cst::ordinary-key-parameter
+               :name (car parameter)
+               :form (cadr parameter)
+               :keyword (intern (symbol-name (car parameter)) :keyword)
+               :supplied-p (caddr parameter))
+             (make-instance 'cst::ordinary-key-parameter
+               :name (caar parameter)
+               :form (cadr parameter)
+               :keyword (cadar parameter)
+               :supplied-p (caddr parameter))))))
