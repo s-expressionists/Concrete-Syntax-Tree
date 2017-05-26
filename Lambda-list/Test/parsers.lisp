@@ -4,12 +4,10 @@
   (make-instance 'cst::ordinary-required-parameter :name parameter))
 
 (defun parse-ordinary-required-parameters (remaining-input)
-  (make-instance 'cst::ordinary-required-parameters
-    :children 
-    (loop for input = remaining-input then (cdr input)
-          until (or (null input)
-                    (member (car input) lambda-list-keywords :test #'eq))
-          collect (parse-ordinary-required-parameter (car input)))))
+  (loop for input = remaining-input then (cdr input)
+        until (or (null input)
+                  (member (car input) lambda-list-keywords :test #'eq))
+        collect (parse-ordinary-required-parameter (car input))))
 
 (defun parse-ordinary-optional-parameter (parameter)
   (cond ((symbolp parameter)
