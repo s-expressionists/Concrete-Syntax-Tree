@@ -5,4 +5,5 @@
   :components
   ((:file "packages")
    (:file "compare-parse-trees")
+   (:file "parsers")
    (:file "test")))
