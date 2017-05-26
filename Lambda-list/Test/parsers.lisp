@@ -20,6 +20,11 @@
         ((null (cdr parameter))
          (make-instance 'cst::ordinary-optional-parameter
            :name (car parameter)
+           :form nil
+           :supplied-p (gensym)))
+        ((null (cddr parameter))
+         (make-instance 'cst::ordinary-optional-parameter
+           :name (car parameter)
            :form (cadr parameter)
            :supplied-p (gensym)))
         (t
