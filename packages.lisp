@@ -19,7 +19,8 @@
            #:consp
            #:cons
            #:list
-           #:null)
+           #:null
+           #:keyword)
   (:export #:cst
            #:parent
            #:source
