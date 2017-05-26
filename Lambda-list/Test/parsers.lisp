@@ -87,3 +87,7 @@
                   (member (car input) lambda-list-keywords :test #'eq))
         collect (parse-ordinary-key-parameter (car input))))
 
+(defun position-of-first-keyword (lambda-list)
+  (position-if (lambda (element)
+                 (member element lambda-list-keywords))
+               lambda-list))
