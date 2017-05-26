@@ -141,5 +141,5 @@
 (defgeneric parse (parser))
 
 (defmethod parse ((parser parser))
-  (loop do (parse-step parser)
-        until (null (remaining-input parser))))
+  (loop repeat (1+ (length (all-input parser)))
+        do (parse-step parser)))
