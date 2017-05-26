@@ -32,3 +32,9 @@
            :name (car parameter)
            :form (cadr parameter)
            :supplied-p (caddr parameter)))))
+
+(defun parse-ordinary-optional-parameters (remaining-input)
+  (loop for input = remaining-input then (cdr input)
+        until (or (null input)
+                  (member (car input) lambda-list-keywords :test #'eq))
+        collect (parse-ordinary-optional-parameter (car input))))
