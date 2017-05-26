@@ -3,7 +3,7 @@
 (defun parse-ordinary-required-parameter (parameter)
   (make-instance 'cst::ordinary-required-parameter :name parameter))
 
-(defun parse-ordinary-required-parameters (remaining-input)
+(defun parse-ordinary-required-parameter-group (remaining-input)
   (loop for input = remaining-input then (cdr input)
         until (or (null input)
                   (member (car input) lambda-list-keywords :test #'eq))
@@ -31,7 +31,7 @@
            :form (cadr parameter)
            :supplied-p (caddr parameter)))))
 
-(defun parse-ordinary-optional-parameters (remaining-input)
+(defun parse-ordinary-optional-parameter-group (remaining-input)
   (loop for input = remaining-input then (cdr input)
         until (or (null input)
                   (member (car input) lambda-list-keywords :test #'eq))
@@ -81,7 +81,7 @@
                :keyword (cadar parameter)
                :supplied-p (caddr parameter))))))
 
-(defun parse-ordinary-key-parameters (remaining-input)
+(defun parse-ordinary-key-parameter-group (remaining-input)
   (loop for input = remaining-input then (cdr input)
         until (or (null input)
                   (member (car input) lambda-list-keywords :test #'eq))

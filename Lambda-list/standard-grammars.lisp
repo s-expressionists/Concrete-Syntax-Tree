@@ -1,67 +1,67 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defparameter *ordinary-required-parameters*
-  '((ordinary-required-parameters <-
+(defparameter *ordinary-required-parameter-group*
+  '((ordinary-required-parameter-group <-
      (* ordinary-required-parameter))))
 
-(defparameter *ordinary-optional-parameters*
-  '((ordinary-optional-parameters <-
+(defparameter *ordinary-optional-parameter-group*
+  '((ordinary-optional-parameter-group <-
      keyword-optional
      (* ordinary-optional-parameter))))
 
-(defparameter *rest-parameter*
-  '((rest-parameter <-
+(defparameter *ordinary-rest-parameter-group*
+  '((ordinary-rest-parameter-group <-
      keyword-rest
      simple-variable)))
 
-(defparameter *ordinary-key-parameters*
-  '((ordinary-key-parameters <-
+(defparameter *ordinary-key-parameter-group*
+  '((ordinary-key-parameter-group <-
      keyword-key
      (* ordinary-key-parameter)
      (? key-allow-other-keys))))
 
-(defparameter *aux-parameters*
-  '((aux-parameters <-
+(defparameter *aux-parameter-group*
+  '((aux-parameter-group <-
      keyword-aux
      (* aux-parameter))))
 
 (defparameter *ordinary-lambda-list*
   '((ordinary-lambda-list <-
-     ordinary-required-parameters
-     (? ordinary-optional-parameters)
-     (? rest-parameter)
-     (? ordinary-key-parameters)
-     (? aux-parameters))))
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
 
-(defparameter *generic-function-optional-parameters*
-  '((generic-function-optional-parameters <-
+(defparameter *generic-function-optional-parameter-group*
+  '((generic-function-optional-parameter-group <-
      keyword-optional
      (* generic-function-optional-parameter))))
 
-(defparameter *generic-function-key-parameters*
-  '((generic-function-key-parameters <-
+(defparameter *generic-function-key-parameter-group*
+  '((generic-function-key-parameter-group <-
      keyword-key
      (* generic-function-key-parameter)
      (? key-allow-other-keys))))
 
 (defparameter *generic-function-lambda-list*
   '((generic-function-lambda-list <-
-     ordinary-required-parameters
-     (? generic-function-optional-parameters)
-     (? rest-parameter)
-     (? generic-function-key-parameters))))
+     ordinary-required-parameter-group
+     (? generic-function-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? generic-function-key-parameter-group))))
 
-(defparameter *specialized-required-parameters*
-  '((specialized-required-parameters <-
+(defparameter *specialized-required-parameter-group*
+  '((specialized-required-parameter-group <-
      (* specialized-required-parameter))))
 
 (defparameter *specialized-lambda-list*
   '((specialized-lambda-list <-
-     specialized-required-parameters
+     specialized-required-parameter-group
      (? optional-parameters)
-     (? rest-parameter)
+     (? ordinary-rest-parameter-group)
      (? key-parameters)
-     (? aux-parameters))))
+     (? aux-parameter-group))))
 
 (defparameter *environment-parameter*
   '((environment-parameter <-
@@ -74,16 +74,16 @@
      simple-variable)))
 
 (defparameter *standard-grammar*
-  (append *ordinary-required-parameters*
-	  *ordinary-optional-parameters*
-	  *rest-parameter*
-	  *ordinary-key-parameters*
-	  *aux-parameters*
+  (append *ordinary-required-parameter-group*
+	  *ordinary-optional-parameter-group*
+	  *ordinary-rest-parameter-group*
+	  *ordinary-key-parameter-group*
+	  *aux-parameter-group*
 	  *ordinary-lambda-list*
-	  *generic-function-optional-parameters*
-	  *generic-function-key-parameters*
+	  *generic-function-optional-parameter-group*
+	  *generic-function-key-parameter-group*
 	  *generic-function-lambda-list*
-	  *specialized-required-parameters*
+	  *specialized-required-parameter-group*
 	  *specialized-lambda-list*
 	  *environment-parameter*
 	  *whole-parameter*))
