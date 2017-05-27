@@ -55,6 +55,14 @@
    ;; keyword is present, or NIL if it is absent.
    (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
 
+(defmethod initialize-instance :after
+    ((paremeter-group ordinary-key-parameter-group) &key children)
+  (when (eq (car (last children)) '&allow-other-keys)
+    (reinitialize-instance parameter-group
+                           :keyword (car children)
+                           :parameters (cdr (butlast children))
+                           :allow-other-keys (car (last children)))))
+
 (defclass generic-function-key-parameter-group (explicit-parameter-group)
   ())
 
