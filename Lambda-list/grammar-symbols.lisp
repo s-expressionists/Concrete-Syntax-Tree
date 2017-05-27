@@ -44,19 +44,26 @@
                          :keyword (car children)
                          :parameters (cdr children)))
 
-(defclass ordinary-required-parameter-group (implicit-parameter-group) ())
+(defclass ordinary-required-parameter-group (implicit-parameter-group)
+  ())
 
-(defclass ordinary-optional-parameter-group (explicit-parameter-group) ())
+(defclass ordinary-optional-parameter-group (explicit-parameter-group)
+  ())
 
-(defclass ordinary-key-parameter-group (explicit-parameter-group) ())
+(defclass ordinary-key-parameter-group (explicit-parameter-group)
+  ())
 
-(defclass generic-function-key-parameter-group (explicit-parameter-group) ())
+(defclass generic-function-key-parameter-group (explicit-parameter-group)
+  ())
 
-(defclass aux-parameter-group (explicit-parameter-group) ())
+(defclass aux-parameter-group (explicit-parameter-group)
+  ())
 
-(defclass generic-function-optional-parameter-group (explicit-parameter-group) ())
+(defclass generic-function-optional-parameter-group (explicit-parameter-group)
+  ())
 
-(defclass specialized-required-parameter-group (implicit-parameter-group) ())
+(defclass specialized-required-parameter-group (implicit-parameter-group)
+  ())
 
 ;;; This class is the root class of parameter groups that take a
 ;;; keyword and a single parameter, such as &WHOLE, &ENVIRONMENT,
@@ -65,20 +72,25 @@
   ((%keyword :initarg :keyword :reader keyword)
    (%parameter :initarg :parameter :reader parameter)))
 
-;;; When an instance of a singleton parameter is created, we want to
-;;; separate the keyword from the parameter itself.
+;;; When an instance of a singleton parameter group is created, we
+;;; want to separate the keyword from the parameter itself.
 (defmethod initialize-instance :after
     ((parameter singleton-parameter-group) &key children)
   (reinitialize-instance parameter
                          :keyword (car children)
                          :parameter (cadr children)))
 
-(defclass ordinary-rest-parameter-group (singleton-parameter-group) ())
+(defclass ordinary-rest-parameter-group (singleton-parameter-group)
+  ())
 
+;;; This class is the root of all classes that correspond to
+;;; individual parameters.  Instance of (subclasses of) this class are
+;;; handled by the scanner.
 (defclass parameter (grammar-symbol)
   ((%name :initarg :name :reader name)))
 
-(defclass ordinary-required-parameter (parameter) ())
+(defclass ordinary-required-parameter (parameter)
+  ())
 
 (defclass ordinary-optional-parameter (parameter)
   ((%form :initarg :form :reader form)
@@ -93,7 +105,11 @@
 
 (defclass aux-parameter (parameter) ())
 
-(defclass generic-function-optional-parameter (parameter) ())
+;;; A generic-function optional parameter differs from an ordinary
+;;; optional parameter in that it can have neither a form to determine
+;;; a default value, nor an associated supplied-p parameter.
+(defclass generic-function-optional-parameter (parameter)
+  ())
 
 (defclass specialized-required-parameter (parameter) ())
 
