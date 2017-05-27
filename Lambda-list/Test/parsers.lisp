@@ -107,3 +107,34 @@
                           (setf remaining (subseq remaining (1+ pos)))
                        finally (push remaining result)
                                (return (reverse result))))))))
+
+(defun parse-ordinary-lambda-list (lambda-list)
+  (let ((groups (split-lambda-list lambda-list))
+        (result '()))
+    (push (make-instance 'cst::ordinary-required-parameter-group
+            :parameters (mapcar #'parse-ordinary-required-parameter
+                         (car groups)))
+          result)
+    (pop groups)
+    (when (and (not (null groups)) (eq (caar groups) '&optional))
+      (push (make-instance 'cst::ordinary-optional-parameter-group
+              :keyword (caar groups)
+              :parameters (mapcar #'parse-ordinary-optional-parameter
+                           (cdar groups)))
+            result)
+      (pop groups))
+    (when (and (not (null groups)) (eq (caar groups) '&rest))
+      (push (make-instance 'cst::ordinary-rest-parameter-group
+              :keyword (caar groups)
+              :parameter (cadar groups))
+            result)
+      (pop groups))
+    (when (and (not (null groups)) (eq (caar groups) '&key))
+      (push (make-instance 'cst::ordinary-key-parameter-group
+              :keyword (caar groups)
+              :parameters (mapcar #'parse-ordinary-key-parameter
+                           (cdar groups)))
+            result)
+      (pop groups))
+    (make-instance 'cst::ordinary-lambda-list
+      :children (reverse result))))
