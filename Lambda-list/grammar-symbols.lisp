@@ -51,7 +51,9 @@
   ())
 
 (defclass ordinary-key-parameter-group (explicit-parameter-group)
-  ())
+  (;; This slot can be either &ALLOW-OTHER-KEYS, if that lambda-list
+   ;; keyword is present, or NIL if it is absent.
+   (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
 
 (defclass generic-function-key-parameter-group (explicit-parameter-group)
   ())
