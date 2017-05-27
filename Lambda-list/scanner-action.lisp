@@ -81,6 +81,22 @@
                                    :dot-position (1- (dot-position item))))))
           (t (error "Unknown operator: ~s" (car terminal))))))
 
+(defmethod scanner-action
+    (client item lambda-list (terminal generic-function-optional-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
+    (cond ((and (symbolp input) (not (member input allowed-keywords)))
+           (cl:list (advance-dot-position
+                     item
+                     (make-instance 'generic-function-optional-parameter
+                       :name input))))
+          ((and (cl:consp input) (cl:null (cdr input)))
+           (cl:list (advance-dot-position
+                     item
+                     (make-instance 'generic-function-optional-parameter
+                       :name (car input)))))
+          (t
+           '()))))
+
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)
