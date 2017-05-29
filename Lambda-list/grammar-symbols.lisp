@@ -56,7 +56,7 @@
    (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
 
 (defmethod initialize-instance :after
-    ((paremeter-group ordinary-key-parameter-group) &key children)
+    ((parameter-group ordinary-key-parameter-group) &key children)
   (when (eq (car (last children)) '&allow-other-keys)
     (reinitialize-instance parameter-group
                            :keyword (car children)
@@ -123,7 +123,7 @@
 
 (defclass specialized-required-parameter (parameter) ())
 
-(defclass environment-parameter (paremeter) ())
+(defclass environment-parameter (parameter) ())
 
 (defclass whole-parameter (parameter) ())
 
