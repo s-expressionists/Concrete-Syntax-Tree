@@ -21,3 +21,6 @@
     (cst::parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
+
+(defun test ()
+  (assert (test1)))
