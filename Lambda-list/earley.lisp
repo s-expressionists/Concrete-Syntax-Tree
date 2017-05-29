@@ -56,13 +56,12 @@
                                     :origin state
                                     :parse-trees '())))
                          (possibly-add-item new state))
-                   finally (unless (= i (length (right-hand-side rule)))
-                             (let ((new (make-instance 'earley-item
-                                          :rule rule
-                                          :dot-position i
-                                          :origin state
-                                          :parse-trees '())))
-                               (possibly-add-item new state))))))
+                   finally (let ((new (make-instance 'earley-item
+                                        :rule rule
+                                        :dot-position i
+                                        :origin state
+                                        :parse-trees '())))
+                             (possibly-add-item new state)))))
 
 (defclass parser ()
   ((%client :initarg :client :reader client)
