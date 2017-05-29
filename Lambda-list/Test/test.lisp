@@ -12,10 +12,12 @@
     (car (cst::parse-trees item))))
 
 (defun test1 ()
-  (let ((p (make-instance 'cst::parser
-             :rules cst::*ordinary-lambda-list-grammar*
-             :input '(a b)
-             :lambda-list (make-instance 'cst::lambda-list-type-ordinary)
-             :client nil)))
+  (let* ((lambda-list '(a b))
+         (p (make-instance 'cst::parser
+              :rules cst::*ordinary-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list (make-instance 'cst::lambda-list-type-ordinary)
+              :client nil)))
     (cst::parse p)
-    (assert-success p)))
+    (let ((result (assert-success p)))
+      (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
