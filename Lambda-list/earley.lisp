@@ -77,6 +77,17 @@
      :states states
      :grammar grammar)))
 
+(defun all-items (rule origin parse-trees dot-position)
+  (loop with right-hand-side = (right-hand-side rule)
+        with length = (length right-hand-side)
+        for i from dot-position
+        collect (make-instance 'earley-item
+                  :rule rule
+                  :origin origin
+                  :parse-trees parse-trees
+                  :dot-position i)
+        while (and (< i length) (nullable-p (elt right-hand-side i)))))
+
 (defgeneric process-current-state (parser))
 
 (defmethod process-current-state ((parser parser))
@@ -116,7 +127,13 @@
                                                 (car remaining-input)))))
                      (loop with next-state = (cadr states)
                            for item in scan-result
-                           do (possibly-add-item item next-state))
+                           for items = (cl:cons item
+                                                (all-items (rule item)
+                                                           (origin item)
+                                                           (parse-trees item)
+                                                           (dot-position item)))
+                           do (loop for item in items
+                                    do (possibly-add-item item next-state)))
                      (predictor-action proto grammar state)))))))
 
 (defgeneric parse-step (parser))
