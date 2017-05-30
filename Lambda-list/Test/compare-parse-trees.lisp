@@ -23,7 +23,7 @@
 (defmethod compare-parse-trees
     ((tree1 cst::explicit-parameter-group)
      (tree2 cst::explicit-parameter-group))
-  (and (eq (cst::keyword tree1) (cst::keyword tree2))
+  (and (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
        (compare-lists (cst::parameters tree1) (cst::parameters tree2))))
 
 (defmethod compare-parse-trees
