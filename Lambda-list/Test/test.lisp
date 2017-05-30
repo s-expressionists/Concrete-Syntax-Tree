@@ -18,6 +18,16 @@
     (assert (not (null item)))
     (car (cst::parse-trees item))))
 
+(defun test-ordinary (lambda-list)
+  (let* ((p (make-instance 'cst::parser
+              :rules cst::*ordinary-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list (make-instance 'cst::lambda-list-type-ordinary)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
+
 (defun test1 ()
   (let* ((lambda-list '(a b))
          (p (make-instance 'cst::parser
