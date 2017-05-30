@@ -20,24 +20,17 @@
                   (let* ((element (elt (right-hand-side rule) dot-position))
                          (type (if (cl:consp element) (cadr element) element)))
                     (typep symbol type)))
-          do (loop for i from dot-position
-                   until (= i (length (right-hand-side rule)))
-                   while (nullable-p (elt (right-hand-side rule) i)
-                                     nullable-symbols)
+          do (loop for i from (1+ dot-position)
                    do (let ((new (make-instance 'earley-item
                                    :rule (rule item)
-                                   :dot-position (1+ i)
+                                   :dot-position i
                                    :origin (origin item)
                                    :parse-trees
                                    (cl:cons symbol (parse-trees item)))))
                         (possibly-add-item new state))
-                   finally (let ((new (make-instance 'earley-item
-                                        :rule rule
-                                        :dot-position i
-                                        :origin state
-                                        :parse-trees
-                                        (cl:cons symbol (parse-trees item)))))
-                             (possibly-add-item new state)))))
+                   while (and (< i (length (right-hand-side rule)))
+                              (nullable-p (elt (right-hand-side rule) i)
+                                          nullable-symbols)))))
 
 (defgeneric predictor-action (symbol grammar state))
 
