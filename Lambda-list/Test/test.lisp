@@ -51,6 +51,17 @@
     (let ((result (assert-success p)))
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
 
+(defun test4 ()
+  (let* ((lambda-list '(&optional))
+         (p (make-instance 'cst::parser
+              :rules cst::*ordinary-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list (make-instance 'cst::lambda-list-type-ordinary)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
+
 (defun test ()
   (assert (test1))
   (assert (test2))
