@@ -100,20 +100,23 @@
     (pop groups)
     (when (and (not (null groups)) (eq (caar groups) '&optional))
       (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (caar groups)
+              :children (cl:cons (make-instance 'cst::keyword-optional
+                                   :name (caar groups))
                          (mapcar #'parse-ordinary-optional-parameter
                                  (cdar groups))))
             result)
       (pop groups))
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:cons (caar groups)
+              :children (cl:cons (make-instance 'cst::keyword-rest
+                                   :name (caar groups))
                          (cadar groups)))
             result)
       (pop groups))
     (when (and (not (null groups)) (eq (caar groups) '&key))
       (push (make-instance 'cst::ordinary-key-parameter-group
-              :children  (cl:cons (caar groups)
+              :children  (cl:cons (make-instance 'cst::keyword-key
+                                    :name (caar groups))
                           (mapcar #'parse-ordinary-key-parameter
                                   (cdar groups))))
             result)
