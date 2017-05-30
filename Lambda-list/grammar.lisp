@@ -18,8 +18,7 @@
             append (extract-symbols element))))
 
 (defclass grammar ()
-  ((%rules :initarg :rules :reader rules)
-   (%nullable-symbols :initarg :nullable-symbols :reader nullable-symbols)))
+  ((%rules :initarg :rules :reader rules)))
 
 (defun compute-all-symbols (grammar)
   (let ((symbols (make-hash-table :test #'eq)))
@@ -34,21 +33,6 @@
   (and (cl:consp right-hand-side-element)
        (member (car right-hand-side-element) '(? *) :test #'eq)))
 
-(defun compute-nullable-symbols (rules)
-  (let ((nullable-symbols (make-hash-table :test #'eq)))
-    (loop with modified-p = t
-          while modified-p
-          do (setf modified-p nil)
-             (loop for rule in rules
-                   do (unless (gethash (left-hand-side rule) nullable-symbols)
-                        (when (every (lambda (x)
-                                       (nullable-p x nullable-symbols))
-                                     (right-hand-side rule))
-                          (setf (gethash (left-hand-side rule) nullable-symbols)
-                                t)
-                          (setf modified-p t)))))
-    nullable-symbols))
-
 (defmethod initialize-instance :after ((object grammar) &key rules)
   (let ((new-rules (loop for rule in rules
                          collect (make-instance 'rule
@@ -56,5 +40,4 @@
                                    :right-hand-side (cddr rule)))))
     (reinitialize-instance
      object
-     :rules new-rules
-     :nullable-symbols (compute-nullable-symbols new-rules))))
+     :rules new-rules)))

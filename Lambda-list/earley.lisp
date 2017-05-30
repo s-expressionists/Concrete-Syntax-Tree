@@ -11,8 +11,7 @@
      (grammar grammar)
      (origin earley-state)
      (state earley-state))
-  (loop with nullable-symbols = (nullable-symbols grammar)
-        for item in (items origin)
+  (loop for item in (items origin)
         for rule = (rule item)
         for length = (length (right-hand-side rule))
         for dot-position = (dot-position item)
@@ -35,8 +34,7 @@
 
 (defmethod predictor-action
     ((symbol grammar-symbol) (grammar grammar) (state earley-state))
-  (loop with nullable-symbols = (nullable-symbols grammar)
-        for rule in (rules grammar)
+  (loop for rule in (rules grammar)
         when (typep symbol (left-hand-side rule))
           do (loop for i from 0
                    until (= i (length (right-hand-side rule)))
