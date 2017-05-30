@@ -65,4 +65,5 @@
 (defun test ()
   (assert (test1))
   (assert (test2))
-  (assert (test3)))
+  (assert (test3))
+  (assert (test4)))
