@@ -29,8 +29,7 @@
                                    (cl:cons symbol (parse-trees item)))))
                         (possibly-add-item new state))
                    while (and (< i (length (right-hand-side rule)))
-                              (nullable-p (elt (right-hand-side rule) i)
-                                          nullable-symbols)))))
+                              (nullable-p (elt (right-hand-side rule) i))))))
 
 (defgeneric predictor-action (symbol grammar state))
 
@@ -41,8 +40,7 @@
         when (typep symbol (left-hand-side rule))
           do (loop for i from 0
                    until (= i (length (right-hand-side rule)))
-                   while (nullable-p (elt (right-hand-side rule) i)
-                                     nullable-symbols)
+                   while (nullable-p (elt (right-hand-side rule) i))
                    do  (let ((new (make-instance 'earley-item
                                     :rule rule
                                     :dot-position i

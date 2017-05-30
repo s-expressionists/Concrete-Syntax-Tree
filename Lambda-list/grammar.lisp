@@ -30,10 +30,9 @@
                             do (setf (gethash symbol symbols) t))))
     symbols))
 
-(defun nullable-p (right-hand-side-element nullable-symbols)
-  (if (symbolp right-hand-side-element)
-      (gethash right-hand-side-element nullable-symbols)
-      (member (car right-hand-side-element) '(? *) :test #'eq)))
+(defun nullable-p (right-hand-side-element)
+  (and (cl:consp right-hand-side-element)
+       (member (car right-hand-side-element) '(? *) :test #'eq)))
 
 (defun compute-nullable-symbols (rules)
   (let ((nullable-symbols (make-hash-table :test #'eq)))
