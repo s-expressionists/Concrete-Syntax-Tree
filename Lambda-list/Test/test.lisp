@@ -39,4 +39,5 @@
   (assert (test-ordinary '(&optional (a (f x)) b)))
   (assert (test-ordinary '(&optional (a (f x) supplied-p))))
   (assert (test-ordinary '(a &optional)))
-  (assert (test-ordinary '(a &optional b))))
+  (assert (test-ordinary '(a &optional b)))
+  (assert (test-ordinary '(a &optional (b (f x))))))
