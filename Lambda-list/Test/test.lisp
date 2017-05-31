@@ -28,24 +28,9 @@
     (let ((result (assert-success p)))
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
 
-(defun test1 ()
-  (test-ordinary '(a b)))
-
-(defun test2 ()
-  (test-ordinary '(a)))
-
-(defun test3 ()
-  (test-ordinary '()))
-
-(defun test4 ()
-  (test-ordinary '(&optional)))
-
-(defun test5 ()
-  (test-ordinary '(&optional a)))
-
 (defun test ()
-  (assert (test1))
-  (assert (test2))
-  (assert (test3))
-  (assert (test4))
-  (assert (test5)))
+  (assert (test-ordinary '()))
+  (assert (test-ordinary '(a)))
+  (assert (test-ordinary '(a b)))
+  (assert (test-ordinary '(&optional)))
+  (assert (test-ordinary '(&optional a))))
