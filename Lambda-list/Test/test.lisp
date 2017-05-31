@@ -35,4 +35,5 @@
   (assert (test-ordinary '(&optional)))
   (assert (test-ordinary '(&optional a)))
   (assert (test-ordinary '(&optional a b)))
-  (assert (test-ordinary '(&optional (a (f x))))))
+  (assert (test-ordinary '(&optional (a (f x)))))
+  (assert (test-ordinary '(&optional (a (f x)) b))))
