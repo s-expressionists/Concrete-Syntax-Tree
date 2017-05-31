@@ -33,4 +33,5 @@
   (assert (test-ordinary '(a)))
   (assert (test-ordinary '(a b)))
   (assert (test-ordinary '(&optional)))
-  (assert (test-ordinary '(&optional a))))
+  (assert (test-ordinary '(&optional a)))
+  (assert (test-ordinary '(&optional a b))))
