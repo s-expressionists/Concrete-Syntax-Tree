@@ -27,6 +27,12 @@
        (compare-lists (cst::parameters tree1) (cst::parameters tree2))))
 
 (defmethod compare-parse-trees
+    ((tree1 cst::singleton-parameter-group)
+     (tree2 cst::singleton-parameter-group))
+  (and (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
+       (eq (cst::name (cst::parameter tree1)) (cst::name (cst::parameter tree2)))))
+
+(defmethod compare-parse-trees
     ((tree1 cst::simple-variable)
      (tree2 cst::simple-variable))
   (eq (cst::name tree1) (cst::name tree2)))
@@ -39,6 +45,3 @@
        (or (and (null (symbol-package (cst::supplied-p tree1)))
                 (null (symbol-package (cst::supplied-p tree2))))
            (eq (cst::supplied-p tree1) (cst::supplied-p tree2)))))
-
-
-
