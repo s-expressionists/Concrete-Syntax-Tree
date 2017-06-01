@@ -48,3 +48,13 @@
        (or (and (null (symbol-package (cst::supplied-p tree1)))
                 (null (symbol-package (cst::supplied-p tree2))))
            (eq (cst::supplied-p tree1) (cst::supplied-p tree2)))))
+
+(defmethod compare-parse-trees
+    ((tree1 cst::ordinary-key-parameter)
+     (tree2 cst::ordinary-key-parameter))
+  (and (eq (cst::name tree1) (cst::name tree2))
+       (eq (cst::keyword tree1) (cst::keyword tree2))
+       (equal (cst::form tree1) (cst::form tree2))
+       (or (and (null (symbol-package (cst::supplied-p tree1)))
+                (null (symbol-package (cst::supplied-p tree2))))
+           (eq (cst::supplied-p tree1) (cst::supplied-p tree2)))))
