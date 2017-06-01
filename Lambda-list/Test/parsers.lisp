@@ -108,9 +108,11 @@
       (pop groups))
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-rest
-                                   :name (caar groups))
-                         (cadar groups)))
+              :children (cl:list
+                         (make-instance 'cst::keyword-rest
+                           :name (caar groups))
+                         (make-instance 'cst::simple-variable
+                           :name (cadar groups))))
             result)
       (pop groups))
     (when (and (not (null groups)) (eq (caar groups) '&key))
