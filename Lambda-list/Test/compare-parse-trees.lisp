@@ -18,18 +18,21 @@
 (defmethod compare-parse-trees
     ((tree1 cst::implicit-parameter-group)
      (tree2 cst::implicit-parameter-group))
-  (compare-lists (cst::parameters tree1) (cst::parameters tree2)))
+  (and (eq (class-of tree1) (class-of tree2))
+       (compare-lists (cst::parameters tree1) (cst::parameters tree2))))
 
 (defmethod compare-parse-trees
     ((tree1 cst::explicit-parameter-group)
      (tree2 cst::explicit-parameter-group))
-  (and (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
+  (and (eq (class-of tree1) (class-of tree2))
+       (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
        (compare-lists (cst::parameters tree1) (cst::parameters tree2))))
 
 (defmethod compare-parse-trees
     ((tree1 cst::singleton-parameter-group)
      (tree2 cst::singleton-parameter-group))
-  (and (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
+  (and (eq (class-of tree1) (class-of tree2))
+       (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
        (eq (cst::name (cst::parameter tree1)) (cst::name (cst::parameter tree2)))))
 
 (defmethod compare-parse-trees
