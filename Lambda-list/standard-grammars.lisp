@@ -18,7 +18,7 @@
   '((ordinary-key-parameter-group <-
      keyword-key
      (* ordinary-key-parameter)
-     (? key-allow-other-keys))))
+     (? keyword-allow-other-keys))))
 
 (defparameter *aux-parameter-group*
   '((aux-parameter-group <-
@@ -42,7 +42,7 @@
   '((generic-function-key-parameter-group <-
      keyword-key
      (* generic-function-key-parameter)
-     (? key-allow-other-keys))))
+     (? keyword-allow-other-keys))))
 
 (defparameter *generic-function-lambda-list*
   '((generic-function-lambda-list <-
