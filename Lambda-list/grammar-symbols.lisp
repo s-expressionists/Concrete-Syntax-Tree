@@ -99,7 +99,7 @@
 (defclass parameter (grammar-symbol)
   ((%name :initarg :name :reader name)))
 
-(defclass ordinary-required-parameter (parameter)
+(defclass simple-variable (parameter)
   ())
 
 (defclass ordinary-optional-parameter (parameter)

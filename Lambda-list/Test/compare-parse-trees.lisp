@@ -27,8 +27,8 @@
        (compare-lists (cst::parameters tree1) (cst::parameters tree2))))
 
 (defmethod compare-parse-trees
-    ((tree1 cst::ordinary-required-parameter)
-     (tree2 cst::ordinary-required-parameter))
+    ((tree1 cst::simple-variable)
+     (tree2 cst::simple-variable))
   (eq (cst::name tree1) (cst::name tree2)))
 
 (defmethod compare-parse-trees

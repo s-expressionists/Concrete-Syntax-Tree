@@ -2,7 +2,7 @@
 
 (defparameter *ordinary-required-parameter-group*
   '((ordinary-required-parameter-group <-
-     (* ordinary-required-parameter))))
+     (* simple-variable))))
 
 (defparameter *ordinary-optional-parameter-group*
   '((ordinary-optional-parameter-group <-

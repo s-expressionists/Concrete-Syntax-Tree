@@ -1,7 +1,7 @@
 (cl:in-package #:concrete-syntax-tree-lambda-list-test)
 
-(defun parse-ordinary-required-parameter (parameter)
-  (make-instance 'cst::ordinary-required-parameter :name parameter))
+(defun parse-simple-variable (parameter)
+  (make-instance 'cst::simple-variable :name parameter))
 
 (defun parse-ordinary-optional-parameter (parameter)
   (cond ((symbolp parameter)
@@ -94,7 +94,7 @@
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
     (push (make-instance 'cst::ordinary-required-parameter-group
-            :children (mapcar #'parse-ordinary-required-parameter
+            :children (mapcar #'parse-simple-variable
                        (car groups)))
           result)
     (pop groups)
