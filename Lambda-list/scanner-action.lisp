@@ -24,44 +24,40 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-optional-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
+        (correct-syntax-p t)
+        name form supplied-p)
     (cond ((and (symbolp input) (not (member input allowed-keywords)))
-           (cl:list (advance-dot-position
-                     item
-                     (make-instance 'ordinary-optional-parameter
-                       :name input
-                       :form nil
-                       :supplied-p (gensym)))))
+           (setf name input)
+           (setf form nil)
+           (setf supplied-p (gensym)))
           ((cl:consp input)
+           (if (symbolp (car input))
+               (setf name (car input))
+               (setf correct-syntax-p nil))
            (cond ((cl:null (cdr input))
-                  (cl:list (advance-dot-position
-                            item
-                            (make-instance 'ordinary-optional-parameter
-                              :name (car input)
-                              :form nil
-                              :supplied-p (gensym)))))
+                  (setf form nil)
+                  (setf supplied-p (gensym)))
                  ((cl:atom (cdr input))
-                  '())
-                 ((cl:null (cddr input))
-                  (cl:list (advance-dot-position
-                            item
-                            (make-instance 'ordinary-optional-parameter
-                              :name (car input)
-                              :form (cadr input)
-                              :supplied-p (gensym)))))
-                 ((cl:atom (cddr input))
-                  '())
-                 ((cl:null (cdddr input))
-                  (cl:list (advance-dot-position
-                            item
-                            (make-instance 'ordinary-optional-parameter
-                              :name (car input)
-                              :form (cadr input)
-                              :supplied-p (caddr input)))))
+                  (setf correct-syntax-p nil))
                  (t
-                  '())))
+                  (setf form (cadr input))
+                  (cond ((cl:null (cddr input))
+                         (setf supplied-p (gensym)))
+                        ((cl:atom (cddr input))
+                         (setf correct-syntax-p nil))
+                        (t
+                         (if (symbolp (caddr input))
+                             (setf supplied-p  (caddr input))
+                             (setf correct-syntax-p nil)))))))
           (t
-           '()))))
+           (setf correct-syntax-p nil)))
+    (if correct-syntax-p
+        (cl:list (advance-dot-position
+                  item
+                  (make-instance 'ordinary-optional-parameter
+                    :name name :form form :supplied-p supplied-p)))
+        '())))
 
 (defmethod scanner-action
     (client item lambda-list (terminal cl:cons) input)
