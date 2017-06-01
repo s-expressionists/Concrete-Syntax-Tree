@@ -60,6 +60,57 @@
         '())))
 
 (defmethod scanner-action
+    (client item lambda-list (terminal ordinary-key-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
+        (correct-syntax-p t)
+        name keyword form supplied-p)
+    (cond ((and (symbolp input) (not (member input allowed-keywords)))
+           (setf name input)
+           (setf keyword (intern (symbol-name input) '#:keyword))
+           (setf form nil)
+           (setf supplied-p (gensym)))
+          ((cl:consp input)
+           (cond ((symbolp (car input))
+                  (setf name (car input))
+                  (setf keyword (intern (symbol-name (car input)) '#:keyword)))
+                 ((cl:consp (car input))
+                  (if (and (symbolp (caar input))
+                           (cl:consp (cdar input))
+                           (cl:null (cddar input))
+                           (symbolp (cadar input)))
+                      (setf name (cadar input)
+                            keyword (caar input))
+                      (setf correct-syntax-p nil)))
+                 (t
+                  (setf correct-syntax-p nil)))
+           (cond ((cl:null (cdr input))
+                  (setf form nil)
+                  (setf supplied-p (gensym)))
+                 ((cl:atom (cdr input))
+                  (setf correct-syntax-p nil))
+                 (t
+                  (setf form (cadr input))
+                  (cond ((cl:null (cddr input))
+                         (setf supplied-p (gensym)))
+                        ((cl:atom (cddr input))
+                         (setf correct-syntax-p nil))
+                        (t
+                         (if (symbolp (caddr input))
+                             (setf supplied-p  (caddr input))
+                             (setf correct-syntax-p nil)))))))
+          (t
+           (setf correct-syntax-p nil)))
+    (if correct-syntax-p
+        (cl:list (advance-dot-position
+                  item
+                  (make-instance 'ordinary-key-parameter
+                    :name name
+                    :keyword keyword
+                    :form form
+                    :supplied-p supplied-p)))
+        '())))
+
+(defmethod scanner-action
     (client item lambda-list (terminal cl:cons) input)
   (let* ((new-terminal (cadr terminal))
          (terminal-class (find-class new-terminal))
