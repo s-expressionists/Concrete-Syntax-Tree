@@ -52,4 +52,5 @@
   (assert (test-ordinary '(&key a b)))
   (assert (test-ordinary '(&key (a (f x)))))
   (assert (test-ordinary '(&key (a (f x) supplied-p))))
-  (assert (test-ordinary '(a &key))))
+  (assert (test-ordinary '(a &key)))
+  (assert (test-ordinary '(a &key b))))
