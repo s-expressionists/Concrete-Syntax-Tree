@@ -40,9 +40,9 @@
                :keyword (intern (symbol-name (car parameter)) :keyword)
                :supplied-p (gensym))
              (make-instance 'cst::ordinary-key-parameter
-               :name (caar parameter)
+               :name (cadar parameter)
                :form nil
-               :keyword (cadar parameter)
+               :keyword (caar parameter)
                :supplied-p (gensym))))
         ((null (cddr parameter))
          (if (symbolp (car parameter))
@@ -52,9 +52,9 @@
                :keyword (intern (symbol-name (car parameter)) :keyword)
                :supplied-p (gensym))
              (make-instance 'cst::ordinary-key-parameter
-               :name (caar parameter)
+               :name (cadar parameter)
                :form (cadr parameter)
-               :keyword (cadar parameter)
+               :keyword (caar parameter)
                :supplied-p (gensym))))
         (t
          (if (symbolp (car parameter))
@@ -64,9 +64,9 @@
                :keyword (intern (symbol-name (car parameter)) :keyword)
                :supplied-p (caddr parameter))
              (make-instance 'cst::ordinary-key-parameter
-               :name (caar parameter)
+               :name (cadar parameter)
                :form (cadr parameter)
-               :keyword (cadar parameter)
+               :keyword (caar parameter)
                :supplied-p (caddr parameter))))))
 
 (defun position-of-first-keyword (lambda-list)
