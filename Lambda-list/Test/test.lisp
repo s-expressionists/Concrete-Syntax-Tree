@@ -48,4 +48,5 @@
   (assert (test-ordinary '(&optional a (b) &rest c)))
   (assert (test-ordinary '(a &optional b &rest c)))
   (assert (test-ordinary '(&key)))
-  (assert (test-ordinary '(&key a))))
+  (assert (test-ordinary '(&key a)))
+  (assert (test-ordinary '(&key a b))))
