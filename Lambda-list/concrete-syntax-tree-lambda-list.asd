@@ -5,8 +5,8 @@
   :components
   ((:file "client")
    (:file "lambda-list-types")
-   (:file "lambda-list-keywords")
    (:file "grammar-symbols")
+   (:file "lambda-list-keywords")
    (:file "grammar")
    (:file "standard-grammars")
    (:file "earley-item")
