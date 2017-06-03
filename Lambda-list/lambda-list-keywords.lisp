@@ -26,5 +26,11 @@
     &key
     &allow-other-keys
     &rest
-    &body
     &aux))
+
+(defmethod allowed-lambda-list-keywords append
+    (client (lambda-list generic-function-lambda-list))
+  '(&optional
+    &key
+    &allow-other-keys
+    &rest))
