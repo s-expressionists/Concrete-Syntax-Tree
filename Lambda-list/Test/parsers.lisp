@@ -73,6 +73,20 @@
   (make-instance 'cst::generic-function-optional-parameter
     :name (if (symbolp parameter) parameter (car parameter))))
 
+(defun parse-generic-function-key-parameter (parameter)
+  (cond ((symbolp parameter)
+         (make-instance 'cst::ordinary-key-parameter
+           :name parameter
+           :keyword (intern (symbol-name parameter) :keyword)))
+        ((symbolp (car parameter))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (car parameter)
+           :keyword (intern (symbol-name (car parameter)) :keyword)))
+        (t
+         (make-instance 'cst::ordinary-key-parameter
+           :name (cadar parameter)
+           :keyword (caar parameter)))))
+
 (defun position-of-first-keyword (lambda-list)
   (position-if (lambda (element)
                  (member element lambda-list-keywords))
