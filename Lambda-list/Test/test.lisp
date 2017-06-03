@@ -39,7 +39,7 @@
     (let ((result (assert-success p)))
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
 
-(defun test ()
+(defun test-ordinary-lambda-lists ()
   (assert (test-ordinary '()))
   (assert (test-ordinary '(a)))
   (assert (test-ordinary '(a b)))
@@ -69,3 +69,6 @@
   (assert (test-ordinary '(b &key ((:a a) (f x) supplied-p))))
   (assert (test-ordinary '(b &optional c &key ((:a a) (f x) supplied-p))))
   (assert (test-ordinary '(&key &allow-other-keys))))
+
+(defun test ()
+  (test-ordinary-lambda-lists))
