@@ -116,12 +116,18 @@
             result)
       (pop groups))
     (when (and (not (null groups)) (eq (caar groups) '&key))
-      (push (make-instance 'cst::ordinary-key-parameter-group
-              :children  (cl:cons (make-instance 'cst::keyword-key
-                                    :name (caar groups))
-                          (mapcar #'parse-ordinary-key-parameter
-                                  (cdar groups))))
-            result)
+      (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
+            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
+        (push (make-instance 'cst::ordinary-key-parameter-group
+                :children (append
+                           (cl:list keyword)
+                           parameters
+                           (if (cl:null (cdr groups))
+                               '()
+                               (cl:list
+                                (make-instance 'cst::keyword-allow-other-keys
+                                  :name (cadar groups))))))
+            result))
       (pop groups))
     (make-instance 'cst::ordinary-lambda-list
       :children (reverse result))))
