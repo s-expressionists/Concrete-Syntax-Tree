@@ -72,7 +72,7 @@
   (assert (test-ordinary '(&key &allow-other-keys))))
 
 (defun test-generic-function-lambda-lists ()
-  ())
+  (assert (test-generic-function '(a))))
 
 (defun test ()
   (test-ordinary-lambda-lists)
