@@ -22,7 +22,7 @@
   (let* ((p (make-instance 'cst::parser
               :rules cst::*ordinary-lambda-list-grammar*
               :input lambda-list
-              :lambda-list (make-instance 'cst::lambda-list-type-ordinary)
+              :lambda-list (make-instance 'cst::ordinary-lambda-list)
               :client nil)))
     (cst::parse p)
     (let ((result (assert-success p)))
