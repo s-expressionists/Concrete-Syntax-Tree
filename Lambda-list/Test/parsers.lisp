@@ -149,3 +149,45 @@
       (pop groups))
     (make-instance 'cst::ordinary-lambda-list
       :children (reverse result))))
+(defun parse-generic-function-lambda-list (lambda-list)
+  (let ((groups (split-lambda-list lambda-list))
+        (result '()))
+    (push (make-instance 'cst::ordinary-required-parameter-group
+            :children (mapcar #'parse-simple-variable
+                       (car groups)))
+          result)
+    (pop groups)
+    (when (and (not (null groups)) (eq (caar groups) '&optional))
+      (push (make-instance 'cst::generic-function-optional-parameter-group
+              :children (cl:cons (make-instance 'cst::keyword-optional
+                                   :name (caar groups))
+                         (mapcar #'parse-generic-function-optional-parameter
+                                 (cdar groups))))
+            result)
+      (pop groups))
+    (when (and (not (null groups)) (eq (caar groups) '&rest))
+      (push (make-instance 'cst::ordinary-rest-parameter-group
+              :children (cl:list
+                         (make-instance 'cst::keyword-rest
+                           :name (caar groups))
+                         (make-instance 'cst::simple-variable
+                           :name (cadar groups))))
+            result)
+      (pop groups))
+    (when (and (not (null groups)) (eq (caar groups) '&key))
+      (let ((parameters (mapcar #'parse-generic-function-key-parameter
+                                (cdar groups)))
+            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
+        (push (make-instance 'cst::generic-function-key-parameter-group
+                :children (append
+                           (cl:list keyword)
+                           parameters
+                           (if (cl:null (cdr groups))
+                               '()
+                               (cl:list
+                                (make-instance 'cst::keyword-allow-other-keys
+                                  :name (cadar groups))))))
+            result))
+      (pop groups))
+    (make-instance 'cst::generic-function-lambda-list
+      :children (reverse result))))
