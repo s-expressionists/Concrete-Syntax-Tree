@@ -111,7 +111,8 @@
    (%keyword :initarg :keyword :reader keyword)
    (%supplied-p :initarg :supplied-p :reader supplied-p)))
 
-(defclass generic-function-key-parameter (parameter) ())
+(defclass generic-function-key-parameter (parameter)
+  ((%keyword :initarg :keyword :reader keyword)))
 
 (defclass aux-parameter (parameter) ())
 
