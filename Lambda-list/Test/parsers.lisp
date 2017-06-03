@@ -75,15 +75,15 @@
 
 (defun parse-generic-function-key-parameter (parameter)
   (cond ((symbolp parameter)
-         (make-instance 'cst::ordinary-key-parameter
+         (make-instance 'cst::generic-function-key-parameter
            :name parameter
            :keyword (intern (symbol-name parameter) :keyword)))
         ((symbolp (car parameter))
-         (make-instance 'cst::ordinary-key-parameter
+         (make-instance 'cst::generic-function-key-parameter
            :name (car parameter)
            :keyword (intern (symbol-name (car parameter)) :keyword)))
         (t
-         (make-instance 'cst::ordinary-key-parameter
+         (make-instance 'cst::generic-function-key-parameter
            :name (cadar parameter)
            :keyword (caar parameter)))))
 
@@ -149,6 +149,7 @@
       (pop groups))
     (make-instance 'cst::ordinary-lambda-list
       :children (reverse result))))
+
 (defun parse-generic-function-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
