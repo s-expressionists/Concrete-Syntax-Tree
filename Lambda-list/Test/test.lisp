@@ -28,6 +28,17 @@
     (let ((result (assert-success p)))
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
 
+(defun test-generic-function (lambda-list)
+  (let* ((p (make-instance 'cst::parser
+              :rules cst::*generic-function-lambda-list*
+              :input lambda-list
+              :lambda-list
+              (make-instance 'cst::generic-function-lambda-list)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
+
 (defun test ()
   (assert (test-ordinary '()))
   (assert (test-ordinary '(a)))
