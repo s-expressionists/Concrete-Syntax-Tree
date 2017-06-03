@@ -56,4 +56,5 @@
   (assert (test-ordinary '(a &key)))
   (assert (test-ordinary '(a &key b)))
   (assert (test-ordinary '(b &key ((:a a) (f x) supplied-p))))
-  (assert (test-ordinary '(b &optional c &key ((:a a) (f x) supplied-p)))))
+  (assert (test-ordinary '(b &optional c &key ((:a a) (f x) supplied-p))))
+  (assert (test-ordinary '(&key &allow-other-keys))))
