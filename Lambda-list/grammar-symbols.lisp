@@ -57,7 +57,6 @@
 
 (defmethod initialize-instance :after
     ((parameter-group ordinary-key-parameter-group) &key children)
-  (format *trace-output* "children ~s~%" children)
   (when (typep (car (last children)) 'keyword-allow-other-keys)
     (reinitialize-instance parameter-group
                            :keyword (car children)
