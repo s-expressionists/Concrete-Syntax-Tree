@@ -4,8 +4,14 @@
   (if (cl:atom shape)
       (typep list shape)
       (and ;; FIXME, add test that list is a proper list
+       (cl:consp list)
        (= (length list) (length shape))
        (every #'shapep list shape))))
+
+(defun path (list path)
+  (if (cl:null path)
+      list
+      (path (cl:nth (car path) list) (cdr path))))
 
 (defgeneric scanner-action (client item lambda-list terminal input))
 
@@ -34,29 +40,22 @@
   (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
         (correct-syntax-p t)
         name form supplied-p)
-    (cond ((and (symbolp input) (not (member input allowed-keywords)))
+    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
            (setf name input)
            (setf form nil)
            (setf supplied-p (gensym)))
-          ((cl:consp input)
-           (if (symbolp (car input))
-               (setf name (car input))
-               (setf correct-syntax-p nil))
-           (cond ((cl:null (cdr input))
-                  (setf form nil)
-                  (setf supplied-p (gensym)))
-                 ((cl:atom (cdr input))
-                  (setf correct-syntax-p nil))
-                 (t
-                  (setf form (cadr input))
-                  (cond ((cl:null (cddr input))
-                         (setf supplied-p (gensym)))
-                        ((cl:atom (cddr input))
-                         (setf correct-syntax-p nil))
-                        (t
-                         (if (symbolp (caddr input))
-                             (setf supplied-p  (caddr input))
-                             (setf correct-syntax-p nil)))))))
+          ((shapep input '(symbol))
+           (setf name (path input '(0)))
+           (setf form nil)
+           (setf supplied-p (gensym)))
+          ((shapep input '(symbol t))
+           (setf name (path input '(0)))
+           (setf form (path input '(1)))
+           (setf supplied-p (gensym)))
+          ((shapep input '(symbol t symbol))
+           (setf name (path input '(0)))
+           (setf form (path input '(1)))
+           (setf supplied-p (path input '(2))))
           (t
            (setf correct-syntax-p nil)))
     (if correct-syntax-p
