@@ -69,6 +69,10 @@
                :keyword (caar parameter)
                :supplied-p (caddr parameter))))))
 
+(defun parse-generic-function-optional-parameter (parameter)
+  (make-instance 'cst::generic-function-optional-parameter
+    :name (if (symbolp parameter) parameter (car parameter))))
+
 (defun position-of-first-keyword (lambda-list)
   (position-if (lambda (element)
                  (member element lambda-list-keywords))
