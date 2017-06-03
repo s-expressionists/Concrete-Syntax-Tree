@@ -1,5 +1,12 @@
 (cl:in-package #:concrete-syntax-tree)
 
+(defun shapep (list shape)
+  (if (cl:atom shape)
+      (typep list shape)
+      (and ;; FIXME, add test that list is a proper list
+       (= (length list) (length shape))
+       (every #'shapep list shape))))
+
 (defgeneric scanner-action (client item lambda-list terminal input))
 
 (defmethod scanner-action (client item lambda-list terminal input)
