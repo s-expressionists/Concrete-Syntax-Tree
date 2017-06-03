@@ -28,7 +28,7 @@
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
-    (if (and (symbolp input) (not (member input allowed-keywords)))
+    (if (and (shapep input 'symbol) (not (member input allowed-keywords)))
         (cl:list (advance-dot-position
                   item
                   (make-instance 'simple-variable
