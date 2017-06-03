@@ -30,14 +30,15 @@
 
 (defun test-generic-function (lambda-list)
   (let* ((p (make-instance 'cst::parser
-              :rules cst::*generic-function-lambda-list*
+              :rules cst::*generic-function-lambda-list-grammar*
               :input lambda-list
               :lambda-list
               (make-instance 'cst::generic-function-lambda-list)
               :client nil)))
     (cst::parse p)
     (let ((result (assert-success p)))
-      (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
+      (compare-parse-trees
+       result (parse-generic-function-lambda-list lambda-list)))))
 
 (defun test-ordinary-lambda-lists ()
   (assert (test-ordinary '()))
@@ -70,5 +71,9 @@
   (assert (test-ordinary '(b &optional c &key ((:a a) (f x) supplied-p))))
   (assert (test-ordinary '(&key &allow-other-keys))))
 
+(defun test-generic-function-lambda-lists ()
+  ())
+
 (defun test ()
-  (test-ordinary-lambda-lists))
+  (test-ordinary-lambda-lists)
+  (test-generic-function-lambda-lists))
