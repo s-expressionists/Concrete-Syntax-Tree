@@ -4,7 +4,6 @@
   :serial t
   :components
   ((:file "client")
-   (:file "lambda-list-types")
    (:file "grammar-symbols")
    (:file "lambda-list-keywords")
    (:file "grammar")
