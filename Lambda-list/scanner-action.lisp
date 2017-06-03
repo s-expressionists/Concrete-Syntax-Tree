@@ -144,6 +144,40 @@
           (t
            '()))))
 
+(defmethod scanner-action
+    (client item lambda-list (terminal generic-function-key-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
+        (correct-syntax-p t)
+        name keyword)
+    (cond ((and (symbolp input) (not (member input allowed-keywords)))
+           (setf name input)
+           (setf keyword (intern (symbol-name input) '#:keyword)))
+          ((cl:consp input)
+           (cond ((symbolp (car input))
+                  (setf name (car input))
+                  (setf keyword (intern (symbol-name (car input)) '#:keyword)))
+                 ((cl:consp (car input))
+                  (if (and (symbolp (caar input))
+                           (cl:consp (cdar input))
+                           (cl:null (cddar input))
+                           (symbolp (cadar input)))
+                      (setf name (cadar input)
+                            keyword (caar input))
+                      (setf correct-syntax-p nil)))
+                 (t
+                  (setf correct-syntax-p nil)))
+           (unless (cl:null (cdr input))
+             (setf correct-syntax-p nil)))
+          (t
+           (setf correct-syntax-p nil)))
+    (if correct-syntax-p
+        (cl:list (advance-dot-position
+                  item
+                  (make-instance 'generic-function-key-parameter
+                    :name name
+                    :keyword keyword)))
+        '())))
+
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)
