@@ -86,7 +86,11 @@
   (assert (test-generic-function '(&optional a &rest b)))
   (assert (test-generic-function '(&optional a (b) &rest c)))
   (assert (test-generic-function '(a &optional b &rest c)))
-  (assert (test-generic-function '(&key))))
+  (assert (test-generic-function '(&key)))
+  (assert (test-ordinary '(a &key b)))
+  (assert (test-ordinary '(b &key ((:a a)))))
+  (assert (test-ordinary '(b &optional c &key ((:a a)))))
+  (assert (test-ordinary '(&key &allow-other-keys))))
 
 (defun test ()
   (test-ordinary-lambda-lists)
