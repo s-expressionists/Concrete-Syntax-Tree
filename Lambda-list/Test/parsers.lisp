@@ -140,12 +140,15 @@
                 :children (append
                            (cl:list keyword)
                            parameters
-                           (if (cl:null (cdr groups))
+                           (if (or (cl:null (cdr groups))
+                                   (not (eq (cadar groups) '&allow-other-keys)))
                                '()
-                               (cl:list
-                                (make-instance 'cst::keyword-allow-other-keys
-                                  :name (cadar groups))))))
-            result))
+                               (prog1
+                                   (cl:list
+                                    (make-instance 'cst::keyword-allow-other-keys
+                                      :name (cadar groups)))
+                                 (pop groups)))))
+              result))
       (pop groups))
     (make-instance 'cst::ordinary-lambda-list
       :children (reverse result))))
