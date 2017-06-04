@@ -70,7 +70,8 @@
   (assert (test-ordinary '(b &key ((:a a) (f x) supplied-p))))
   (assert (test-ordinary '(b &optional c &key ((:a a) (f x) supplied-p))))
   (assert (test-ordinary '(&key &allow-other-keys)))
-  (assert (test-ordinary '(&aux))))
+  (assert (test-ordinary '(&aux)))
+  (assert (test-ordinary '(&aux a))))
 
 (defun test-generic-function-lambda-lists ()
   (assert (test-generic-function '()))
