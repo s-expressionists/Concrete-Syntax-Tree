@@ -69,6 +69,28 @@
                :keyword (caar parameter)
                :supplied-p (caddr parameter))))))
 
+(defun parse-aux-parameter (parameter)
+  (cond ((symbolp parameter)
+         (make-instance 'cst::aux-parameter
+           :name parameter
+           :form nil
+           :supplied-p (gensym)))
+        ((null (cdr parameter))
+         (make-instance 'cst::aux-parameter
+           :name (car parameter)
+           :form nil
+           :supplied-p (gensym)))
+        ((null (cddr parameter))
+         (make-instance 'cst::aux-parameter
+           :name (car parameter)
+           :form (cadr parameter)
+           :supplied-p (gensym)))
+        (t
+         (make-instance 'cst::aux-parameter
+           :name (car parameter)
+           :form (cadr parameter)
+           :supplied-p (caddr parameter)))))
+
 (defun parse-generic-function-optional-parameter (parameter)
   (make-instance 'cst::generic-function-optional-parameter
     :name (if (symbolp parameter) parameter (car parameter))))
