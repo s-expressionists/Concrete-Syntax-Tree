@@ -66,6 +66,29 @@
         '())))
 
 (defmethod scanner-action
+    (client item lambda-list (terminal aux-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
+        (correct-syntax-p t)
+        name form)
+    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+           (setf name input)
+           (setf form nil))
+          ((shapep input '(symbol))
+           (setf name (path input '(0)))
+           (setf form nil))
+          ((shapep input '(symbol t))
+           (setf name (path input '(0)))
+           (setf form (path input '(1))))
+          (t
+           (setf correct-syntax-p nil)))
+    (if correct-syntax-p
+        (cl:list (advance-dot-position
+                  item
+                  (make-instance 'aux-parameter
+                    :name name :form form)))
+        '())))
+
+(defmethod scanner-action
     (client item lambda-list (terminal ordinary-key-parameter) input)
   (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
         (correct-syntax-p t)
