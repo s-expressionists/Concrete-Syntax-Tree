@@ -172,6 +172,12 @@
                                  (pop groups)))))
               result))
       (pop groups))
+    (unless (null groups)
+      (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
+            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
+        (push (make-instance 'cst::aux-parameter-group
+                :children (cl:cons keyword parameters))
+              result)))
     (make-instance 'cst::ordinary-lambda-list
       :children (reverse result))))
 
