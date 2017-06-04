@@ -163,12 +163,12 @@
                            (cl:list keyword)
                            parameters
                            (if (or (cl:null (cdr groups))
-                                   (not (eq (cadar groups) '&allow-other-keys)))
+                                   (not (eq (caadr groups) '&allow-other-keys)))
                                '()
                                (prog1
                                    (cl:list
                                     (make-instance 'cst::keyword-allow-other-keys
-                                      :name (cadar groups)))
+                                      :name (caadr groups)))
                                  (pop groups)))))
               result))
       (pop groups))
