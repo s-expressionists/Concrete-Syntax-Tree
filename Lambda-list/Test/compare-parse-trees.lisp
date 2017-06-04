@@ -69,3 +69,9 @@
      (tree2 cst::generic-function-key-parameter))
   (and (eq (cst::name tree1) (cst::name tree2))
        (eq (cst::keyword tree1) (cst::keyword tree2))))
+
+(defmethod compare-parse-trees
+    ((tree1 cst::aux-parameter)
+     (tree2 cst::aux-parameter))
+  (and (eq (cst::name tree1) (cst::name tree2))
+       (equal (cst::form tree1) (cst::form tree2))))
