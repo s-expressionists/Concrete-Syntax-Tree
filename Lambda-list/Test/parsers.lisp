@@ -73,23 +73,15 @@
   (cond ((symbolp parameter)
          (make-instance 'cst::aux-parameter
            :name parameter
-           :form nil
-           :supplied-p (gensym)))
+           :form nil))
         ((null (cdr parameter))
          (make-instance 'cst::aux-parameter
            :name (car parameter)
-           :form nil
-           :supplied-p (gensym)))
-        ((null (cddr parameter))
-         (make-instance 'cst::aux-parameter
-           :name (car parameter)
-           :form (cadr parameter)
-           :supplied-p (gensym)))
+           :form nil))
         (t
          (make-instance 'cst::aux-parameter
            :name (car parameter)
-           :form (cadr parameter)
-           :supplied-p (caddr parameter)))))
+           :form (cadr parameter)))))
 
 (defun parse-generic-function-optional-parameter (parameter)
   (make-instance 'cst::generic-function-optional-parameter
