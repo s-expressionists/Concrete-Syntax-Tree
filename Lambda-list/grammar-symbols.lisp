@@ -114,7 +114,8 @@
 (defclass generic-function-key-parameter (parameter)
   ((%keyword :initarg :keyword :reader keyword)))
 
-(defclass aux-parameter (parameter) ())
+(defclass aux-parameter (parameter)
+  ((%form :initarg :form :reader form)))
 
 ;;; A generic-function optional parameter differs from an ordinary
 ;;; optional parameter in that it can have neither a form to determine
