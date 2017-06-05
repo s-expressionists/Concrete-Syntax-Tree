@@ -42,3 +42,11 @@
     &allow-other-keys
     &rest
     &aux))
+
+(defmethod allowed-lambda-list-keywords append
+    (client (lambda-list defsetf-lambda-list))
+  '(&optional
+    &key
+    &allow-other-keys
+    &rest
+    &environment))
