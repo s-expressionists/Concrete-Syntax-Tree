@@ -103,6 +103,12 @@
 (defclass ordinary-rest-parameter-group (singleton-parameter-group)
   ())
 
+(defclass environment-parameter-group (singleton-parameter-group)
+  ())
+
+(defclass whole-parameter-group (singleton-parameter-group)
+  ())
+
 ;;; This class is the root of all classes that correspond to
 ;;; individual parameters.  Instance of (subclasses of) this class are
 ;;; handled by the scanner.
