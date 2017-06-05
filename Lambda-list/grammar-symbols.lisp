@@ -133,7 +133,8 @@
 (defclass generic-function-optional-parameter (parameter)
   ())
 
-(defclass specialized-required-parameter (parameter) ())
+(defclass specialized-required-parameter (parameter)
+  ((%specializer :initarg :specializer :reader specializer )))
 
 (defclass environment-parameter (parameter) ())
 
