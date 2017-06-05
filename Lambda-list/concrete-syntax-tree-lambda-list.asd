@@ -11,4 +11,5 @@
    (:file "earley-item")
    (:file "earley-state")
    (:file "scanner-action")
-   (:file "earley")))
+   (:file "earley")
+   (:file "parse-top-levels")))
