@@ -68,6 +68,14 @@
      keyword-environment
      simple-variable)))
 
+(defparameter *defsetf-lambda-list*
+  '((ordinary-lambda-list <-
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? environment-parameter-group))))
+
 (defparameter *whole-parameter-group*
   '((whole-parameter-group <-
      keyword-whole
@@ -86,6 +94,7 @@
 	  *specialized-required-parameter-group*
 	  *specialized-lambda-list*
 	  *environment-parameter-group*
+          *defsetf-lambda-list*
 	  *whole-parameter-group*))
 
 (defparameter *ordinary-lambda-list-grammar*
@@ -96,3 +105,6 @@
 
 (defparameter *specialized-lambda-list-grammar*
   (cl:cons '(target <- specialized-lambda-list) *standard-grammar*))
+
+(defparameter *defsetf-lambda-list-grammar*
+  (cl:cons '(target <- defsetf-lambda-list) *standard-grammar*))
