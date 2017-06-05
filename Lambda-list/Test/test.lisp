@@ -40,6 +40,18 @@
       (compare-parse-trees
        result (parse-generic-function-lambda-list lambda-list)))))
 
+(defun test-specialized (lambda-list)
+  (let* ((p (make-instance 'cst::parser
+              :rules cst::*specialized-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list
+              (make-instance 'cst::specialized-lambda-list)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees
+       result (parse-specialized-lambda-list lambda-list)))))
+
 (defun test-ordinary-lambda-lists ()
   (assert (test-ordinary '()))
   (assert (test-ordinary '(a)))
