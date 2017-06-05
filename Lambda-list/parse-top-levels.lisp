@@ -30,3 +30,9 @@
                    *ordinary-lambda-list-grammar*
                    'ordinary-lambda-list
                    lambda-list))
+
+(defun parse-generic-function-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *generic-function-lambda-list-grammar*
+                   'generic-function-lambda-list
+                   lambda-list))
