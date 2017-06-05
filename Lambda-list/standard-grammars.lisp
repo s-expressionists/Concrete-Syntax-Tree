@@ -58,9 +58,9 @@
 (defparameter *specialized-lambda-list*
   '((specialized-lambda-list <-
      specialized-required-parameter-group
-     (? optional-parameters)
+     (? ordinary-optional-parameter-group)
      (? ordinary-rest-parameter-group)
-     (? key-parameters)
+     (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
 
 (defparameter *environment-parameter*
