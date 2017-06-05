@@ -69,7 +69,7 @@
      simple-variable)))
 
 (defparameter *defsetf-lambda-list*
-  '((ordinary-lambda-list <-
+  '((defsetf-lambda-list <-
      ordinary-required-parameter-group
      (? ordinary-optional-parameter-group)
      (? ordinary-rest-parameter-group)
