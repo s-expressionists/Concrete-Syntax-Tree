@@ -52,6 +52,18 @@
       (compare-parse-trees
        result (parse-specialized-lambda-list lambda-list)))))
 
+(defun test-defsetf (lambda-list)
+  (let* ((p (make-instance 'cst::parser
+              :rules cst::*defsetf-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list
+              (make-instance 'cst::defsetf-lambda-list)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees
+       result (parse-defsetf-lambda-list lambda-list)))))
+
 (defun test-ordinary-lambda-lists ()
   (assert (test-ordinary '()))
   (assert (test-ordinary '(a)))
