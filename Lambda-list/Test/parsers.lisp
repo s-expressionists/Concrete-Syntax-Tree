@@ -7,11 +7,11 @@
   (cond ((symbolp parameter)
          (make-instance 'cst::specialized-required-parameter
            :name parameter
-           :specializer nil))
+           :specializer t))
         ((null (cdr parameter))
          (make-instance 'cst::specialized-required-parameter
            :name (car parameter)
-           :specializer nil))
+           :specializer t))
         (t
          (make-instance 'cst::specialized-required-parameter
            :name (car parameter)
