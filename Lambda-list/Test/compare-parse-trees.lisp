@@ -75,3 +75,9 @@
      (tree2 cst::aux-parameter))
   (and (eq (cst::name tree1) (cst::name tree2))
        (equal (cst::form tree1) (cst::form tree2))))
+
+(defmethod compare-parse-trees
+    ((tree1 cst::specialized-required-parameter)
+     (tree2 cst::specialized-required-parameter))
+  (and (eq (cst::name tree1) (cst::name tree2))
+       (equal (cst::specializer tree1) (cst::specializer tree2))))
