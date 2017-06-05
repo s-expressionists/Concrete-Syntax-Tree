@@ -68,8 +68,8 @@
      keyword-environment
      simple-variable)))
 
-(defparameter *whole-parameter*
-  '((whole-parameter <-
+(defparameter *whole-parameter-group*
+  '((whole-parameter-group <-
      keyword-whole
      simple-variable)))
 
@@ -86,7 +86,7 @@
 	  *specialized-required-parameter-group*
 	  *specialized-lambda-list*
 	  *environment-parameter-group*
-	  *whole-parameter*))
+	  *whole-parameter-group*))
 
 (defparameter *ordinary-lambda-list-grammar*
   (cl:cons '(target <- ordinary-lambda-list) *standard-grammar*))
