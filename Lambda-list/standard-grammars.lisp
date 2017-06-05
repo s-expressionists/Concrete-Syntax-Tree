@@ -63,8 +63,8 @@
      (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
 
-(defparameter *environment-parameter*
-  '((environment-parameter <-
+(defparameter *environment-parameter-group*
+  '((environment-parameter-group <-
      keyword-environment
      simple-variable)))
 
@@ -85,7 +85,7 @@
 	  *generic-function-lambda-list*
 	  *specialized-required-parameter-group*
 	  *specialized-lambda-list*
-	  *environment-parameter*
+	  *environment-parameter-group*
 	  *whole-parameter*))
 
 (defparameter *ordinary-lambda-list-grammar*
