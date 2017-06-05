@@ -208,6 +208,29 @@
                     :keyword keyword)))
         '())))
 
+(defmethod scanner-action
+    (client item lambda-list (terminal specialized-required-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
+        (correct-syntax-p t)
+        name specializer)
+    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+           (setf name input)
+           (setf specializer t))
+          ((shapep input '(symbol))
+           (setf name (path input '(0)))
+           (setf specializer t))
+          ((shapep input '(symbol t))
+           (setf name (path input '(0)))
+           (setf specializer (path input '(1))))
+          (t
+           (setf correct-syntax-p nil)))
+    (if correct-syntax-p
+        (cl:list (advance-dot-position
+                  item
+                  (make-instance 'specialized-required-parameter
+                    :name name :specializer specializer)))
+        '())))
+
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)
