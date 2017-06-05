@@ -36,3 +36,15 @@
                    *generic-function-lambda-list-grammar*
                    'generic-function-lambda-list
                    lambda-list))
+
+(defun parse-specialized-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *specialized-lambda-list-grammar*
+                   'specialized-lambda-list
+                   lambda-list))
+
+(defun parse-defsetf-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *defsetf-lambda-list-grammar*
+                   'defsetf-lambda-list
+                   lambda-list))
