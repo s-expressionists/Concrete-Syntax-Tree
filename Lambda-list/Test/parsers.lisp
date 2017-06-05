@@ -3,6 +3,20 @@
 (defun parse-simple-variable (parameter)
   (make-instance 'cst::simple-variable :name parameter))
 
+(defun parse-specialized-required-parameter (parameter)
+  (cond ((symbolp parameter)
+         (make-instance 'cst::specialized-required-parameter
+           :name parameter
+           :specializer nil))
+        ((null (cdr parameter))
+         (make-instance 'cst::specialized-required-parameter
+           :name (car parameter)
+           :specializer nil))
+        (t
+         (make-instance 'cst::specialized-required-parameter
+           :name (car parameter)
+           :specializer (cadr parameter)))))
+
 (defun parse-ordinary-optional-parameter (parameter)
   (cond ((symbolp parameter)
          (make-instance 'cst::ordinary-optional-parameter
