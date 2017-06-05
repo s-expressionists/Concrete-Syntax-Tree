@@ -34,3 +34,11 @@
     &key
     &allow-other-keys
     &rest))
+
+(defmethod allowed-lambda-list-keywords append
+    (client (lambda-list specialized-lambda-list))
+  '(&optional
+    &key
+    &allow-other-keys
+    &rest
+    &aux))
