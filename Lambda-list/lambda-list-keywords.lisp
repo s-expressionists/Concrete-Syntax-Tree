@@ -50,3 +50,8 @@
     &allow-other-keys
     &rest
     &environment))
+
+(defmethod allowed-lambda-list-keywords append
+    (client (lambda-list define-modify-macro-lambda-list))
+  '(&optional
+    &rest))
