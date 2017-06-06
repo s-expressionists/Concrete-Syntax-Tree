@@ -76,6 +76,12 @@
      (? ordinary-key-parameter-group)
      (? environment-parameter-group))))
 
+(defparameter *define-modify-macro-lambda-list*
+  '((define-modify-macro-lambda-list <-
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group))))
+
 (defparameter *whole-parameter-group*
   '((whole-parameter-group <-
      keyword-whole
@@ -108,3 +114,6 @@
 
 (defparameter *defsetf-lambda-list-grammar*
   (cl:cons '(target <- defsetf-lambda-list) *standard-grammar*))
+
+(defparameter *define-modify-macro-lambda-list-grammar*
+  (cl:cons '(target <- define-modify-macro-lambda-list) *standard-grammar*))
