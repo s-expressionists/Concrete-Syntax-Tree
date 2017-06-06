@@ -334,3 +334,31 @@
       (pop groups))
     (make-instance 'cst::defsetf-lambda-list
       :children (reverse result))))
+
+(defun parse-define-modify-macro-lambda-list (lambda-list)
+  (let ((groups (split-lambda-list lambda-list))
+        (result '()))
+    (push (make-instance 'cst::ordinary-required-parameter-group
+            :children (mapcar #'parse-simple-variable
+                       (car groups)))
+          result)
+    (pop groups)
+    (when (and (not (null groups)) (eq (caar groups) '&optional))
+      (push (make-instance 'cst::ordinary-optional-parameter-group
+              :children (cl:cons (make-instance 'cst::keyword-optional
+                                   :name (caar groups))
+                         (mapcar #'parse-ordinary-optional-parameter
+                                 (cdar groups))))
+            result)
+      (pop groups))
+    (when (and (not (null groups)) (eq (caar groups) '&rest))
+      (push (make-instance 'cst::ordinary-rest-parameter-group
+              :children (cl:list
+                         (make-instance 'cst::keyword-rest
+                           :name (caar groups))
+                         (make-instance 'cst::simple-variable
+                           :name (cadar groups))))
+            result)
+      (pop groups))
+    (make-instance 'cst::define-modify-macro-lambda-list
+      :children (reverse result))))
