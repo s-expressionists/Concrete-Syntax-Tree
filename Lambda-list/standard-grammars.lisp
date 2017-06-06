@@ -101,6 +101,7 @@
 	  *specialized-lambda-list*
 	  *environment-parameter-group*
           *defsetf-lambda-list*
+          *define-modify-macro-lambda-list*
 	  *whole-parameter-group*))
 
 (defparameter *ordinary-lambda-list-grammar*
