@@ -44,6 +44,17 @@
     &aux))
 
 (defmethod allowed-lambda-list-keywords append
+    (client (lambda-list macro-lambda-list))
+  '(&optional
+    &key
+    &allow-other-keys
+    &rest
+    &body
+    &aux
+    &environment
+    &whole))
+
+(defmethod allowed-lambda-list-keywords append
     (client (lambda-list defsetf-lambda-list))
   '(&optional
     &key
