@@ -80,4 +80,8 @@
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list define-method-combination-lambda-list))
   '(&optional
-    &rest))
+    &key
+    &allow-other-keys
+    &rest
+    &aux
+    &whole))
