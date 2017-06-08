@@ -87,6 +87,15 @@
      keyword-whole
      simple-variable)))
 
+(defparameter *define-method-combination-lambda-list*
+  '((ordinary-lambda-list <-
+     (? whole-parameter-group)
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+
 (defparameter *standard-grammar*
   (append *ordinary-required-parameter-group*
 	  *ordinary-optional-parameter-group*
