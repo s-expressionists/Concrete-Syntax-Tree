@@ -54,3 +54,9 @@
                    *define-modify-macro-lambda-list-grammar*
                    'define-modify-macro-lambda-list
                    lambda-list))
+
+(defun parse-define-method-combination-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *define-method-combination-lambda-list-grammar*
+                   'define-method-combination-lambda-list
+                   lambda-list))
