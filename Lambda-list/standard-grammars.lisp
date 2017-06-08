@@ -128,3 +128,6 @@
 
 (defparameter *define-modify-macro-lambda-list-grammar*
   (cl:cons '(target <- define-modify-macro-lambda-list) *standard-grammar*))
+
+(defparameter *define-method-combination-lambda-list-grammar*
+  (cl:cons '(target <- define-method-combination-lambda-list) *standard-grammar*))
