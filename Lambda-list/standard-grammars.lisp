@@ -88,7 +88,7 @@
      simple-variable)))
 
 (defparameter *define-method-combination-lambda-list*
-  '((ordinary-lambda-list <-
+  '((define-method-combination-lambda-list <-
      (? whole-parameter-group)
      ordinary-required-parameter-group
      (? ordinary-optional-parameter-group)
