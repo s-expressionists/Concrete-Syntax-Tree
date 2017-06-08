@@ -55,6 +55,16 @@
     &whole))
 
 (defmethod allowed-lambda-list-keywords append
+    (client (lambda-list destructuring-lambda-list))
+  '(&optional
+    &key
+    &allow-other-keys
+    &rest
+    &body
+    &aux
+    &whole))
+
+(defmethod allowed-lambda-list-keywords append
     (client (lambda-list defsetf-lambda-list))
   '(&optional
     &key
