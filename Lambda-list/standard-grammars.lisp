@@ -111,7 +111,8 @@
 	  *environment-parameter-group*
           *defsetf-lambda-list*
           *define-modify-macro-lambda-list*
-	  *whole-parameter-group*))
+	  *whole-parameter-group*
+          *define-method-combination-lambda-list*))
 
 (defparameter *ordinary-lambda-list-grammar*
   (cl:cons '(target <- ordinary-lambda-list) *standard-grammar*))
