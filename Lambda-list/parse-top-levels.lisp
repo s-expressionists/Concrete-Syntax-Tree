@@ -48,3 +48,9 @@
                    *defsetf-lambda-list-grammar*
                    'defsetf-lambda-list
                    lambda-list))
+
+(defun parse-define-modify-macro-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *define-modify-macro-lambda-list-grammar*
+                   'define-modify-macro-lambda-list
+                   lambda-list))
