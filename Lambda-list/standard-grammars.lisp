@@ -137,7 +137,8 @@
           *define-modify-macro-lambda-list*
 	  *whole-parameter-group*
           *define-method-combination-lambda-list*
-          *destructuring-lambda-list*))
+          *destructuring-lambda-list*
+          *macro-lambda-list*))
 
 (defparameter *ordinary-lambda-list-grammar*
   (cl:cons '(target <- ordinary-lambda-list) *standard-grammar*))
