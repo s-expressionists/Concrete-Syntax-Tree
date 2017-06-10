@@ -148,10 +148,6 @@
 (defclass specialized-required-parameter (parameter)
   ((%specializer :initarg :specializer :reader specializer )))
 
-(defclass environment-parameter (parameter) ())
-
-(defclass whole-parameter (parameter) ())
-
 (defclass destructuring-parameter (parameter) ())
 
 (defclass lambda-list-keyword (grammar-symbol)
