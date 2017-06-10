@@ -141,3 +141,6 @@
 
 (defparameter *define-method-combination-lambda-list-grammar*
   (cl:cons '(target <- define-method-combination-lambda-list) *standard-grammar*))
+
+(defparameter *destructuring-lambda-list-grammar*
+  (cl:cons '(target <- destructuring-lambda-list) *standard-grammar*))
