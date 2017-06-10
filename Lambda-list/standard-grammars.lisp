@@ -96,6 +96,15 @@
      (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
 
+(defparameter *destructuring-lambda-list*
+  `((destructuring-lambda-list <-
+     (? whole-parameter-group)
+     destructuring-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? destructuring-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+
 (defparameter *standard-grammar*
   (append *ordinary-required-parameter-group*
 	  *ordinary-optional-parameter-group*
