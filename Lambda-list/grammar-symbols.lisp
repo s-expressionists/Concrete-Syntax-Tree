@@ -152,8 +152,7 @@
 
 (defclass whole-parameter (parameter) ())
 
-(defclass destructuring-required-parameter (parameter) ())
-
+(defclass destructuring-parameter (parameter) ())
 
 (defclass lambda-list-keyword (grammar-symbol)
   ((%name :initarg :name :reader name)))
