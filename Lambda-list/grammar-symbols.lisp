@@ -85,6 +85,9 @@
 (defclass specialized-required-parameter-group (implicit-parameter-group)
   ())
 
+(defclass destructuring-required-parameter-group (implicit-parameter-group)
+  ())
+
 ;;; This class is the root class of parameter groups that take a
 ;;; keyword and a single parameter, such as &WHOLE, &ENVIRONMENT,
 ;;; &REST, &BODY.
