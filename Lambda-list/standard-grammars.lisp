@@ -105,6 +105,21 @@
      (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
 
+(defparameter *macro-lambda-list*
+  `((macro-lambda-list <-
+     (? whole-parameter-group)
+     (? environment-parameter-group)
+     destructuring-required-parameter-group
+     (? environment-parameter-group)
+     (? ordinary-optional-parameter-group)
+     (? environment-parameter-group)
+     (? destructuring-rest-parameter-group)
+     (? environment-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? environment-parameter-group)
+     (? aux-parameter-group)
+     (? environment-parameter-group))))
+
 (defparameter *standard-grammar*
   (append *ordinary-required-parameter-group*
 	  *ordinary-optional-parameter-group*
