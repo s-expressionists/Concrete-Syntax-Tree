@@ -103,6 +103,9 @@
 (defclass ordinary-rest-parameter-group (singleton-parameter-group)
   ())
 
+(defclass destructuring-rest-parameter-group (singleton-parameter-group)
+  ())
+
 (defclass environment-parameter-group (singleton-parameter-group)
   ())
 
