@@ -96,6 +96,11 @@
      (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
 
+(defparameter *destructuring-rest-parameter-group*
+  '((destructuring-rest-parameter-group <-
+     keyword-rest
+     destructuring-parameter)))
+
 (defparameter *destructuring-lambda-list*
   `((destructuring-lambda-list <-
      (? whole-parameter-group)
