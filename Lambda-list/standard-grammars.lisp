@@ -160,3 +160,6 @@
 
 (defparameter *destructuring-lambda-list-grammar*
   (cl:cons '(target <- destructuring-lambda-list) *standard-grammar*))
+
+(defparameter *macro-lambda-list-grammar*
+  (cl:cons '(target <- macro-lambda-list) *standard-grammar*))
