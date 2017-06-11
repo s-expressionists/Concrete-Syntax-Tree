@@ -148,7 +148,13 @@
 (defclass specialized-required-parameter (parameter)
   ((%specializer :initarg :specializer :reader specializer )))
 
-(defclass destructuring-parameter (parameter) ())
+;;; This class will never be part of a parse tree.  When the scanner
+;;; sees an instance of this class, it looks at the input to determine
+;;; whether it is a symbol or a CONS cell.  If it is a symbol, it
+;;; creates a SIMPLE-VARIABLE, and if it is a CONS cell, it
+;;; recursively parses the list as a DESTRUCTURING-LAMBDA-LIST which
+;;; then becomes the resulting parse tree.
+(defclass destructuring-parameter () ())
 
 (defclass lambda-list-keyword (grammar-symbol)
   ((%name :initarg :name :reader name)))
