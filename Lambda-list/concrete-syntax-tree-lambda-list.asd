@@ -10,6 +10,7 @@
    (:file "standard-grammars")
    (:file "earley-item")
    (:file "earley-state")
+   (:file "parser")
    (:file "scanner-action")
    (:file "earley")
    (:file "parse-top-levels")))
