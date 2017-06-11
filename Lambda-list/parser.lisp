@@ -24,3 +24,16 @@
      object
      :states states
      :grammar grammar)))
+
+(defun find-final-item (parser)
+  (let ((initial-state (car (all-states parser)))
+        (final-state (car (cl:last (all-states parser)))))
+    (find-if (lambda (item)
+               (let* ((rule (rule item))
+                      (len (length (right-hand-side rule)))
+                      (pos (dot-position item)))
+                 (and (eq (left-hand-side (rule item))
+                          'target)
+                      (= pos len)
+                      (eq (origin item) initial-state))))
+             (items final-state))))
