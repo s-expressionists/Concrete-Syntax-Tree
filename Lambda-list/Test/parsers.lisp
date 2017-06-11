@@ -120,6 +120,14 @@
                  (member element lambda-list-keywords))
                lambda-list))
 
+;;; Split a lambda list into groups according to role.  Each group is
+;;; a list.  The first group is a list of required parameters, so it
+;;; does not start with a lambda-list keyword.  Each of the remaining
+;;; groups starts with a lambda-list keyword that characterizes the
+;;; group.  Notice that this function does not handle lambda lists
+;;; that start with &WHOLE.  It assumes that everything that precedes
+;;; the first lambda-list keyword belongs to the group of required
+;;; parameters.  A list of the groups is returned.
 (defun split-lambda-list (lambda-list)
   (let ((remaining lambda-list)
         (result '()))
