@@ -37,3 +37,9 @@
                       (= pos len)
                       (eq (origin item) initial-state))))
              (items final-state))))
+
+(defun find-final-parse-tree (parser)
+  (let ((item (find-final-item parser)))
+    (if (cl:null item)
+        nil
+        (car (parse-trees item)))))
