@@ -431,3 +431,75 @@
               result)))
     (make-instance 'cst::destructuring-lambda-list
       :children (reverse result))))
+
+(defun parse-macro-lambda-list (lambda-list)
+  (let ((result '())
+        groups)
+    (if (and (not (null lambda-list)) (eq (car lambda-list) '&whole))
+        (progn (push (subseq lambda-list 0 2) result)
+               (setf groups (split-lambda-list (cddr lambda-list))))
+        (setf groups (split-lambda-list lambda-list)))
+    (flet ((do-environment ()
+             (when (and (not (null groups)) (eq (caar groups) '&environment))
+               (push (make-instance 'cst::environment-parameter-group
+                       :children (cl:cons (make-instance 'cst::keyword-environment
+                                            :name (caar groups))
+                                  (mapcar #'parse-ordinary-optional-parameter
+                                          (cdar groups))))
+                     result)
+               (pop groups))))
+      (do-environment)
+      (push (make-instance 'cst::destructuring-required-parameter-group
+              :children (mapcar #'parse-destructuring-parameter
+                         (car groups)))
+            result)
+      (pop groups)
+      (do-environment)
+      (when (and (not (null groups)) (eq (caar groups) '&optional))
+        (push (make-instance 'cst::ordinary-optional-parameter-group
+                :children (cl:cons (make-instance 'cst::keyword-optional
+                                     :name (caar groups))
+                           (mapcar #'parse-ordinary-optional-parameter
+                                   (cdar groups))))
+              result)
+        (pop groups))
+      (do-environment)
+      (when (and (not (null groups))
+                 (or (eq (caar groups) '&rest)
+                     (eq (caar groups) '&body)))
+        (push (make-instance 'cst::destructuring-rest-parameter-group
+                :children (cl:list
+                           (make-instance 'cst::keyword-rest
+                             :name (caar groups))
+                           (parse-destructuring-parameter (cadar groups))))
+              result)
+        (pop groups))
+      (do-environment)
+      (when (and (not (null groups)) (eq (caar groups) '&key))
+        (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
+              (keyword (make-instance 'cst::keyword-key :name (caar groups))))
+          (push (make-instance 'cst::ordinary-key-parameter-group
+                  :children (append
+                             (cl:list keyword)
+                             parameters
+                             (if (or (cl:null (cdr groups))
+                                     (not (eq (caadr groups) '&allow-other-keys)))
+                                 '()
+                                 (prog1
+                                     (cl:list
+                                      (make-instance 'cst::keyword-allow-other-keys
+                                        :name (caadr groups)))
+                                   (pop groups)))))
+                result))
+        (pop groups))
+      (do-environment)
+      (when (and (not (null groups)) (eq (caar groups) '&aux))
+        (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
+              (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
+          (push (make-instance 'cst::aux-parameter-group
+                  :children (cl:cons keyword parameters))
+                result))
+        (pop groups))
+      (do-environment)
+      (make-instance 'cst::macro-lambda-list
+        :children (reverse result)))))
