@@ -194,23 +194,7 @@
                            :name (cadar groups))))
             result)
       (pop groups))
-    (when (and (not (null groups)) (eq (caar groups) '&key))
-      (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
-        (push (make-instance 'cst::ordinary-key-parameter-group
-                :children (append
-                           (cl:list keyword)
-                           parameters
-                           (if (or (cl:null (cdr groups))
-                                   (not (eq (caadr groups) '&allow-other-keys)))
-                               '()
-                               (prog1
-                                   (cl:list
-                                    (make-instance 'cst::keyword-allow-other-keys
-                                      :name (caadr groups)))
-                                 (pop groups)))))
-              result))
-      (pop groups))
+    (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
             (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
@@ -277,23 +261,7 @@
                            :name (cadar groups))))
             result)
       (pop groups))
-    (when (and (not (null groups)) (eq (caar groups) '&key))
-      (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
-        (push (make-instance 'cst::ordinary-key-parameter-group
-                :children (append
-                           (cl:list keyword)
-                           parameters
-                           (if (or (cl:null (cdr groups))
-                                   (not (eq (caadr groups) '&allow-other-keys)))
-                               '()
-                               (prog1
-                                   (cl:list
-                                    (make-instance 'cst::keyword-allow-other-keys
-                                      :name (caadr groups)))
-                                 (pop groups)))))
-              result))
-      (pop groups))
+    (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
             (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
@@ -317,23 +285,7 @@
                            :name (cadar groups))))
             result)
       (pop groups))
-    (when (and (not (null groups)) (eq (caar groups) '&key))
-      (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
-        (push (make-instance 'cst::ordinary-key-parameter-group
-                :children (append
-                           (cl:list keyword)
-                           parameters
-                           (if (or (cl:null (cdr groups))
-                                   (not (eq (caadr groups) '&allow-other-keys)))
-                               '()
-                               (prog1
-                                   (cl:list
-                                    (make-instance 'cst::keyword-allow-other-keys
-                                      :name (caadr groups)))
-                                 (pop groups)))))
-              result))
-      (pop groups))
+    (do-ordinary-key-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&environment))
       (push (make-instance 'cst::environment-parameter-group
               :children (cl:list
@@ -387,23 +339,7 @@
                            :name (cadar groups))))
             result)
       (pop groups))
-    (when (and (not (null groups)) (eq (caar groups) '&key))
-      (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
-        (push (make-instance 'cst::ordinary-key-parameter-group
-                :children (append
-                           (cl:list keyword)
-                           parameters
-                           (if (or (cl:null (cdr groups))
-                                   (not (eq (caadr groups) '&allow-other-keys)))
-                               '()
-                               (prog1
-                                   (cl:list
-                                    (make-instance 'cst::keyword-allow-other-keys
-                                      :name (caadr groups)))
-                                 (pop groups)))))
-              result))
-      (pop groups))
+    (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
             (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
@@ -441,23 +377,7 @@
                          (parse-destructuring-parameter (cadar groups))))
             result)
       (pop groups))
-    (when (and (not (null groups)) (eq (caar groups) '&key))
-      (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
-        (push (make-instance 'cst::ordinary-key-parameter-group
-                :children (append
-                           (cl:list keyword)
-                           parameters
-                           (if (or (cl:null (cdr groups))
-                                   (not (eq (caadr groups) '&allow-other-keys)))
-                               '()
-                               (prog1
-                                   (cl:list
-                                    (make-instance 'cst::keyword-allow-other-keys
-                                      :name (caadr groups)))
-                                 (pop groups)))))
-              result))
-      (pop groups))
+    (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
             (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
@@ -503,23 +423,7 @@
               result)
         (pop groups))
       (do-environment)
-      (when (and (not (null groups)) (eq (caar groups) '&key))
-        (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
-              (keyword (make-instance 'cst::keyword-key :name (caar groups))))
-          (push (make-instance 'cst::ordinary-key-parameter-group
-                  :children (append
-                             (cl:list keyword)
-                             parameters
-                             (if (or (cl:null (cdr groups))
-                                     (not (eq (caadr groups) '&allow-other-keys)))
-                                 '()
-                                 (prog1
-                                     (cl:list
-                                      (make-instance 'cst::keyword-allow-other-keys
-                                        :name (caadr groups)))
-                                   (pop groups)))))
-                result))
-        (pop groups))
+      (do-ordinary-key-parameter-group)
       (do-environment)
       (when (and (not (null groups)) (eq (caar groups) '&aux))
         (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
