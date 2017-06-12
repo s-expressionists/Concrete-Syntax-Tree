@@ -231,6 +231,23 @@
                     :name name :specializer specializer)))
         '())))
 
+(defmethod scanner-action
+    (client item lambda-list (terminal destructuring-parameter) input)
+  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
+    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+           (cl:list (advance-dot-position
+                     item
+                     (make-instance 'simple-variable
+                       :name input))))
+          ((cl:consp input)
+           ;; FIXME: we should define a top-level parser that does not
+           ;; call ERROR when parse fails and call it, rather than calling
+           ;; PARSE-DESTRUCTURING-LAMBDA-LIST here.
+           (let ((parse-tree (parse-destructuring-lambda-list client input)))
+             (cl:list (advance-dot-position item parse-tree))))
+          (t
+           '()))))
+
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)
