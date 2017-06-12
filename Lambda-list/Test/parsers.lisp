@@ -200,6 +200,18 @@
              result))
      (pop groups)))
 
+(defmacro do-destructuring-rest-parameter-group ()
+  `(when (and (not (null groups))
+              (or (eq (caar groups) '&rest)
+                  (eq (caar groups) '&body)))
+     (push (make-instance 'cst::destructuring-rest-parameter-group
+             :children (cl:list
+                        (make-instance 'cst::keyword-rest
+                          :name (caar groups))
+                        (parse-destructuring-parameter (cadar groups))))
+           result)
+     (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
@@ -324,16 +336,7 @@
           result)
     (pop groups)
     (do-ordinary-optional-parameter-group)
-    (when (and (not (null groups))
-               (or (eq (caar groups) '&rest)
-                   (eq (caar groups) '&body)))
-      (push (make-instance 'cst::destructuring-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (parse-destructuring-parameter (cadar groups))))
-            result)
-      (pop groups))
+    (do-destructuring-rest-parameter-group)
     (do-ordinary-key-parameter-group)
     (do-aux-parameter-group)
     (make-instance 'cst::destructuring-lambda-list
@@ -364,16 +367,7 @@
       (do-environment)
       (do-ordinary-optional-parameter-group)
       (do-environment)
-      (when (and (not (null groups))
-                 (or (eq (caar groups) '&rest)
-                     (eq (caar groups) '&body)))
-        (push (make-instance 'cst::destructuring-rest-parameter-group
-                :children (cl:list
-                           (make-instance 'cst::keyword-rest
-                             :name (caar groups))
-                           (parse-destructuring-parameter (cadar groups))))
-              result)
-        (pop groups))
+      (do-destructuring-rest-parameter-group)
       (do-environment)
       (do-ordinary-key-parameter-group)
       (do-environment)
