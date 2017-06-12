@@ -47,3 +47,9 @@
                    *define-method-combination-lambda-list-grammar*
                    'define-method-combination-lambda-list
                    lambda-list))
+
+(defun parse-destructuring-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *destructuring-lambda-list-grammar*
+                   'destructuring-lambda-list
+                   lambda-list))
