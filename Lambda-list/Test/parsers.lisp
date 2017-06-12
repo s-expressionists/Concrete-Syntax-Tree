@@ -180,6 +180,17 @@
              result))
      (pop groups)))
 
+(defmacro do-ordinary-rest-parameter-group ()
+  `(when (and (not (null groups)) (eq (caar groups) '&rest))
+     (push (make-instance 'cst::ordinary-rest-parameter-group
+             :children (cl:list
+                        (make-instance 'cst::keyword-rest
+                          :name (caar groups))
+                        (make-instance 'cst::simple-variable
+                          :name (cadar groups))))
+           result)
+     (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
