@@ -201,11 +201,7 @@
 (defun parse-generic-function-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
-    (push (make-instance 'cst::ordinary-required-parameter-group
-            :children (mapcar #'parse-simple-variable
-                       (car groups)))
-          result)
-    (pop groups)
+    (do-ordinary-required-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&optional))
       (push (make-instance 'cst::generic-function-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
@@ -295,11 +291,7 @@
 (defun parse-defsetf-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
-    (push (make-instance 'cst::ordinary-required-parameter-group
-            :children (mapcar #'parse-simple-variable
-                       (car groups)))
-          result)
-    (pop groups)
+    (do-ordinary-required-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&optional))
       (push (make-instance 'cst::ordinary-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
@@ -349,11 +341,7 @@
 (defun parse-define-modify-macro-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
-    (push (make-instance 'cst::ordinary-required-parameter-group
-            :children (mapcar #'parse-simple-variable
-                       (car groups)))
-          result)
-    (pop groups)
+    (do-ordinary-required-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&optional))
       (push (make-instance 'cst::ordinary-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
@@ -387,11 +375,7 @@
           (push whole-group result)
           (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
-    (push (make-instance 'cst::ordinary-required-parameter-group
-            :children (mapcar #'parse-simple-variable
-                       (car groups)))
-          result)
-    (pop groups)
+    (do-ordinary-required-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&optional))
       (push (make-instance 'cst::ordinary-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
