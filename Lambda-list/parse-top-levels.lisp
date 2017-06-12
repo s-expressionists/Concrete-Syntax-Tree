@@ -53,3 +53,9 @@
                    *destructuring-lambda-list-grammar*
                    'destructuring-lambda-list
                    lambda-list))
+
+(defun parse-macro-lambda-list (client lambda-list)
+  (parse-top-level client
+                   *macro-lambda-list-grammar*
+                   'macro-lambda-list
+                   lambda-list))
