@@ -165,14 +165,7 @@
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
     (do-ordinary-required-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&optional))
-      (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-optional
-                                   :name (caar groups))
-                         (mapcar #'parse-ordinary-optional-parameter
-                                 (cdar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-optional-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
               :children (cl:list
@@ -255,14 +248,7 @@
                        (car groups)))
           result)
     (pop groups)
-    (when (and (not (null groups)) (eq (caar groups) '&optional))
-      (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-optional
-                                   :name (caar groups))
-                         (mapcar #'parse-ordinary-optional-parameter
-                                 (cdar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-optional-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
               :children (cl:list
@@ -302,14 +288,7 @@
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
     (do-ordinary-required-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&optional))
-      (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-optional
-                                   :name (caar groups))
-                         (mapcar #'parse-ordinary-optional-parameter
-                                 (cdar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-optional-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
               :children (cl:list
@@ -352,14 +331,7 @@
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
     (do-ordinary-required-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&optional))
-      (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-optional
-                                   :name (caar groups))
-                         (mapcar #'parse-ordinary-optional-parameter
-                                 (cdar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-optional-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
               :children (cl:list
@@ -386,14 +358,7 @@
           (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
     (do-ordinary-required-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&optional))
-      (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-optional
-                                   :name (caar groups))
-                         (mapcar #'parse-ordinary-optional-parameter
-                                 (cdar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-optional-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&rest))
       (push (make-instance 'cst::ordinary-rest-parameter-group
               :children (cl:list
@@ -446,14 +411,7 @@
                        (car groups)))
           result)
     (pop groups)
-    (when (and (not (null groups)) (eq (caar groups) '&optional))
-      (push (make-instance 'cst::ordinary-optional-parameter-group
-              :children (cl:cons (make-instance 'cst::keyword-optional
-                                   :name (caar groups))
-                         (mapcar #'parse-ordinary-optional-parameter
-                                 (cdar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-optional-parameter-group)
     (when (and (not (null groups))
                (or (eq (caar groups) '&rest)
                    (eq (caar groups) '&body)))
@@ -513,14 +471,7 @@
             result)
       (pop groups)
       (do-environment)
-      (when (and (not (null groups)) (eq (caar groups) '&optional))
-        (push (make-instance 'cst::ordinary-optional-parameter-group
-                :children (cl:cons (make-instance 'cst::keyword-optional
-                                     :name (caar groups))
-                           (mapcar #'parse-ordinary-optional-parameter
-                                   (cdar groups))))
-              result)
-        (pop groups))
+      (do-ordinary-optional-parameter-group)
       (do-environment)
       (when (and (not (null groups))
                  (or (eq (caar groups) '&rest)
