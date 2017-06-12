@@ -191,6 +191,15 @@
            result)
      (pop groups)))
 
+(defmacro do-aux-parameter-group ()
+  `(when (and (not (null groups)) (eq (caar groups) '&aux))
+     (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
+           (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
+       (push (make-instance 'cst::aux-parameter-group
+               :children (cl:cons keyword parameters))
+             result))
+     (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
@@ -198,12 +207,7 @@
     (do-ordinary-optional-parameter-group)
     (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
-    (unless (null groups)
-      (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
-        (push (make-instance 'cst::aux-parameter-group
-                :children (cl:cons keyword parameters))
-              result)))
+    (do-aux-parameter-group)
     (make-instance 'cst::ordinary-lambda-list
       :children (reverse result))))
 
@@ -249,12 +253,7 @@
     (do-ordinary-optional-parameter-group)
     (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
-    (unless (null groups)
-      (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
-        (push (make-instance 'cst::aux-parameter-group
-                :children (cl:cons keyword parameters))
-              result)))
+    (do-aux-parameter-group)
     (make-instance 'cst::specialized-lambda-list
       :children (reverse result))))
 
@@ -303,12 +302,7 @@
     (do-ordinary-optional-parameter-group)
     (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
-    (unless (null groups)
-      (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
-        (push (make-instance 'cst::aux-parameter-group
-                :children (cl:cons keyword parameters))
-              result)))
+    (do-aux-parameter-group)
     (make-instance 'cst::define-method-combination-lambda-list
       :children (reverse result))))
 
@@ -341,12 +335,7 @@
             result)
       (pop groups))
     (do-ordinary-key-parameter-group)
-    (unless (null groups)
-      (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
-            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
-        (push (make-instance 'cst::aux-parameter-group
-                :children (cl:cons keyword parameters))
-              result)))
+    (do-aux-parameter-group)
     (make-instance 'cst::destructuring-lambda-list
       :children (reverse result))))
 
@@ -388,13 +377,7 @@
       (do-environment)
       (do-ordinary-key-parameter-group)
       (do-environment)
-      (when (and (not (null groups)) (eq (caar groups) '&aux))
-        (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
-              (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
-          (push (make-instance 'cst::aux-parameter-group
-                  :children (cl:cons keyword parameters))
-                result))
-        (pop groups))
+      (do-aux-parameter-group)
       (do-environment)
       (make-instance 'cst::macro-lambda-list
         :children (reverse result)))))
