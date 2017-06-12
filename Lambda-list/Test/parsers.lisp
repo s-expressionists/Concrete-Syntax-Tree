@@ -151,6 +151,16 @@
                 result)
           (pop groups)))
 
+(defmacro do-ordinary-optional-parameter-group ()
+  `(when (and (not (null groups)) (eq (caar groups) '&optional))
+     (push (make-instance 'cst::ordinary-optional-parameter-group
+             :children (cl:cons (make-instance 'cst::keyword-optional
+                                  :name (caar groups))
+                        (mapcar #'parse-ordinary-optional-parameter
+                                (cdar groups))))
+           result)
+     (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
