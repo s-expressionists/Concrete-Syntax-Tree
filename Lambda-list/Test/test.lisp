@@ -63,6 +63,18 @@
       (compare-parse-trees
        result (parse-define-modify-macro-lambda-list lambda-list)))))
 
+(defun test-define-method-combination (lambda-list)
+  (let* ((p (make-instance 'cst::parser
+              :rules cst::*define-method-combination-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list
+              (make-instance 'cst::define-method-combination-lambda-list)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees
+       result (parse-define-method-combination-lambda-list lambda-list)))))
+
 (defun test-ordinary-lambda-lists ()
   (assert (test-ordinary '()))
   (assert (test-ordinary '(a)))
