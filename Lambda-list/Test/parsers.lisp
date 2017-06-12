@@ -144,14 +144,17 @@
                        finally (push remaining result)
                                (return (reverse result))))))))
 
+(defmacro do-ordinary-required-parameter-group ()
+  `(progn (push (make-instance 'cst::ordinary-required-parameter-group
+                  :children (mapcar #'parse-simple-variable
+                             (car groups)))
+                result)
+          (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
-    (push (make-instance 'cst::ordinary-required-parameter-group
-            :children (mapcar #'parse-simple-variable
-                       (car groups)))
-          result)
-    (pop groups)
+    (do-ordinary-required-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&optional))
       (push (make-instance 'cst::ordinary-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
