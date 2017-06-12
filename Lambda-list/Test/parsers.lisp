@@ -196,15 +196,7 @@
         (result '()))
     (do-ordinary-required-parameter-group)
     (do-ordinary-optional-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&rest))
-      (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
@@ -227,15 +219,7 @@
                                  (cdar groups))))
             result)
       (pop groups))
-    (when (and (not (null groups)) (eq (caar groups) '&rest))
-      (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-rest-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&key))
       (let ((parameters (mapcar #'parse-generic-function-key-parameter
                                 (cdar groups)))
@@ -263,15 +247,7 @@
           result)
     (pop groups)
     (do-ordinary-optional-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&rest))
-      (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
@@ -287,15 +263,7 @@
         (result '()))
     (do-ordinary-required-parameter-group)
     (do-ordinary-optional-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&rest))
-      (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
     (when (and (not (null groups)) (eq (caar groups) '&environment))
       (push (make-instance 'cst::environment-parameter-group
@@ -314,15 +282,7 @@
         (result '()))
     (do-ordinary-required-parameter-group)
     (do-ordinary-optional-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&rest))
-      (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-rest-parameter-group)
     (make-instance 'cst::define-modify-macro-lambda-list
       :children (reverse result))))
 
@@ -341,15 +301,7 @@
         (setf groups (split-lambda-list lambda-list)))
     (do-ordinary-required-parameter-group)
     (do-ordinary-optional-parameter-group)
-    (when (and (not (null groups)) (eq (caar groups) '&rest))
-      (push (make-instance 'cst::ordinary-rest-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-rest
-                           :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
-            result)
-      (pop groups))
+    (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
     (unless (null groups)
       (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
