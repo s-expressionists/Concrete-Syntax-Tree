@@ -161,6 +161,25 @@
            result)
      (pop groups)))
 
+(defmacro do-ordinary-key-parameter-group ()
+  `(when (and (not (null groups)) (eq (caar groups) '&key))
+     (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
+           (keyword (make-instance 'cst::keyword-key :name (caar groups))))
+       (push (make-instance 'cst::ordinary-key-parameter-group
+               :children (append
+                          (cl:list keyword)
+                          parameters
+                          (if (or (cl:null (cdr groups))
+                                  (not (eq (caadr groups) '&allow-other-keys)))
+                              '()
+                              (prog1
+                                  (cl:list
+                                   (make-instance 'cst::keyword-allow-other-keys
+                                     :name (caadr groups)))
+                                (pop groups)))))
+             result))
+     (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
