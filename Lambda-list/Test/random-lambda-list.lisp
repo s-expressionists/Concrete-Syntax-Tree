@@ -130,3 +130,26 @@
           (random-generic-function-optional-parameter-group)
           (random-ordinary-rest-parameter-group)
           (random-generic-function-key-parameter-group)))
+
+(defun random-specialized-required-parameter ()
+  (let ((x (random 1d0)))
+    (cond ((< x 0.25d0)
+           (random-variable))
+          ((< x 0.5d0)
+           (list (random-variable)))
+          ((< x 0.75d0)
+           (list (random-variable) (random-variable)))
+          (t
+           (list (random-variable)
+                 (list 'eql (random-form)))))))
+
+(defun random-specialized-required-parameter-group ()
+  (loop repeat (random 5)
+        collect (random-specialized-required-parameter)))
+
+(defun random-specialized-lambda-list ()
+  (append (random-specialized-required-parameter-group)
+          (random-ordinary-optional-parameter-group)
+          (random-ordinary-rest-parameter-group)
+          (random-ordinary-key-parameter-group)
+          (random-aux-parameter-group)))
