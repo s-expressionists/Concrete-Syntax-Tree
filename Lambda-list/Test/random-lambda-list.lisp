@@ -153,3 +153,16 @@
           (random-ordinary-rest-parameter-group)
           (random-ordinary-key-parameter-group)
           (random-aux-parameter-group)))
+
+(defun random-environment-parameter-group ()
+  (let ((x (random 1d0)))
+    (if (< x 0.25d0)
+        '()
+        (list '&environment (random-variable)))))
+  
+(defun random-defsetf-lambda-list ()
+  (append (random-ordinary-required-parameter-group)
+          (random-ordinary-optional-parameter-group)
+          (random-ordinary-rest-parameter-group)
+          (random-ordinary-key-parameter-group)
+          (random-environment-parameter-group)))
