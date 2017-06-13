@@ -171,3 +171,17 @@
   (append (random-ordinary-required-parameter-group)
           (random-ordinary-optional-parameter-group)
           (random-ordinary-rest-parameter-group)))
+
+(defun random-whole-parameter-group ()
+  (let ((x (random 1d0)))
+    (if (< x 0.25d0)
+        '()
+        (list '&whole (random-variable)))))
+
+(defun random-define-method-combination-lambda-list ()
+  (append (random-whole-parameter-group)
+          (random-ordinary-required-parameter-group)
+          (random-ordinary-optional-parameter-group)
+          (random-ordinary-rest-parameter-group)
+          (random-ordinary-key-parameter-group)
+          (random-aux-parameter-group)))
