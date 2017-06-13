@@ -116,24 +116,9 @@
         do (assert (test-defsetf (random-defsetf-lambda-list)))))
 
 (defun test-define-modify-macro-lambda-lists ()
-  (assert (test-define-modify-macro '()))
-  (assert (test-define-modify-macro '(a)))
-  (assert (test-define-modify-macro '(a b)))
-  (assert (test-define-modify-macro '(&optional)))
-  (assert (test-define-modify-macro '(&optional a)))
-  (assert (test-define-modify-macro '(&optional a b)))
-  (assert (test-define-modify-macro '(&optional (a (f x)))))
-  (assert (test-define-modify-macro '(&optional (a (f x)) b)))
-  (assert (test-define-modify-macro '(&optional (a (f x) supplied-p))))
-  (assert (test-define-modify-macro '(a &optional)))
-  (assert (test-define-modify-macro '(a &optional b)))
-  (assert (test-define-modify-macro '(a &optional (b (f x)))))
-  (assert (test-define-modify-macro '(&rest a)))
-  (assert (test-define-modify-macro '(a &rest b)))
-  (assert (test-define-modify-macro '(a b &rest c)))
-  (assert (test-define-modify-macro '(&optional a &rest b)))
-  (assert (test-define-modify-macro '(&optional a (b) &rest c)))
-  (assert (test-define-modify-macro '(a &optional b &rest c))))
+  (loop repeat 10000
+        do (assert (test-define-modify-macro
+                    (random-define-modify-macro-lambda-list)))))
 
 (defun test-define-method-combination-lambda-lists ()
   (assert (test-define-method-combination '()))
