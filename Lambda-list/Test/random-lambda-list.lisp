@@ -90,3 +90,43 @@
           (random-ordinary-rest-parameter-group)
           (random-ordinary-key-parameter-group)
           (random-aux-parameter-group)))
+
+(defun random-generic-function-optional-parameter ()
+  (let ((x (random 1d0)))
+    (cond ((< x 0.5d0)
+           (random-variable))
+          (t
+           (list (random-variable))))))
+
+(defun random-generic-function-optional-parameter-group ()
+  (let ((x (random 1d0)))
+    (if (< x 0.25d0)
+        '()
+        (cons '&optional
+              (loop repeat (random 5)
+                    collect (random-generic-function-optional-parameter))))))
+
+(defun random-generic-function-key-parameter ()
+  (let ((x (random 1d0)))
+    (cond ((< x 0.5d0)
+           (random-variable))
+          (t
+           (list (random-key-variable))))))
+
+(defun random-generic-function-key-parameter-group ()
+  (let ((x (random 1d0))
+        (y (random 1d0)))
+    (if (< x 0.25d0)
+        '()
+        (cons '&key
+              (append (loop repeat (random 5)
+                            collect (random-generic-function-key-parameter))
+                      (if (< y 0.5d0)
+                          '()
+                          '(&allow-other-keys)))))))
+
+(defun random-generic-function-lambda-list ()
+  (append (random-ordinary-required-parameter-group)
+          (random-generic-function-optional-parameter-group)
+          (random-ordinary-rest-parameter-group)
+          (random-generic-function-key-parameter-group)))
