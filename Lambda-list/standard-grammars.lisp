@@ -147,6 +147,7 @@
 	  *whole-parameter-group*
           *define-method-combination-lambda-list*
           *destructuring-required-parameter-group*
+          *destructuring-rest-parameter-group*
           *destructuring-lambda-list*
           *macro-lambda-list*))
 
