@@ -185,3 +185,27 @@
           (random-ordinary-rest-parameter-group)
           (random-ordinary-key-parameter-group)
           (random-aux-parameter-group)))
+
+(defun random-destructuring-parameter ()
+  (let ((x (random 1d0)))
+    (if (< x 0.9d0)
+        (random-variable)
+        (random-destructuring-lambda-list))))
+
+(defun random-destructuring-required-parameter-group ()
+  (loop repeat (random 5)
+        collect (random-destructuring-parameter)))
+
+(defun random-destructuring-rest-parameter-group ()
+  (let ((x (random 1d0)))
+    (if (< x 0.5d0)
+        '()
+        (list '&rest (random-destructuring-parameter)))))
+
+(defun random-destructuring-lambda-list ()
+  (append (random-whole-parameter-group)
+          (random-destructuring-required-parameter-group)
+          (random-ordinary-optional-parameter-group)
+          (random-destructuring-rest-parameter-group)
+          (random-ordinary-key-parameter-group)
+          (random-aux-parameter-group)))
