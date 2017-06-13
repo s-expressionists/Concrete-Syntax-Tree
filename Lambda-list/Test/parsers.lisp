@@ -330,8 +330,14 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list)) (eq (car lambda-list) '&whole))
-        (progn (push (subseq lambda-list 0 2) result)
-               (setf groups (split-lambda-list (cddr lambda-list))))
+        (let ((whole-group (make-instance 'cst::whole-parameter-group
+                             :children (cl:list
+                                        (make-instance 'cst::keyword-whole
+                                          :name (car lambda-list))
+                                        (make-instance 'cst::simple-variable
+                                          :name (cadr lambda-list))))))
+          (push whole-group result)
+          (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
     (push (make-instance 'cst::destructuring-required-parameter-group
             :children (mapcar #'parse-destructuring-parameter
@@ -349,8 +355,14 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list)) (eq (car lambda-list) '&whole))
-        (progn (push (subseq lambda-list 0 2) result)
-               (setf groups (split-lambda-list (cddr lambda-list))))
+        (let ((whole-group (make-instance 'cst::whole-parameter-group
+                             :children (cl:list
+                                        (make-instance 'cst::keyword-whole
+                                          :name (car lambda-list))
+                                        (make-instance 'cst::simple-variable
+                                          :name (cadr lambda-list))))))
+          (push whole-group result)
+          (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
     (flet ((do-environment ()
              (when (and (not (null groups)) (eq (caar groups) '&environment))
