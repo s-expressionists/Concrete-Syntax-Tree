@@ -154,7 +154,7 @@
 ;;; creates a SIMPLE-VARIABLE, and if it is a CONS cell, it
 ;;; recursively parses the list as a DESTRUCTURING-LAMBDA-LIST which
 ;;; then becomes the resulting parse tree.
-(defclass destructuring-parameter () ())
+(defclass destructuring-parameter (grammar-symbol) ())
 
 (defclass lambda-list-keyword (grammar-symbol)
   ((%name :initarg :name :reader name)))
