@@ -166,3 +166,8 @@
           (random-ordinary-rest-parameter-group)
           (random-ordinary-key-parameter-group)
           (random-environment-parameter-group)))
+
+(defun random-define-modify-macro-lambda-list ()
+  (append (random-ordinary-required-parameter-group)
+          (random-ordinary-optional-parameter-group)
+          (random-ordinary-rest-parameter-group)))
