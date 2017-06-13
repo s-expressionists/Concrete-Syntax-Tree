@@ -33,7 +33,7 @@
      (tree2 cst::singleton-parameter-group))
   (and (eq (class-of tree1) (class-of tree2))
        (eq (cst::name (cst::keyword tree1)) (cst::name (cst::keyword tree2)))
-       (eq (cst::name (cst::parameter tree1)) (cst::name (cst::parameter tree2)))))
+       (compare-parse-trees (cst::parameter tree1) (cst::parameter tree2))))
 
 (defmethod compare-parse-trees
     ((tree1 cst::simple-variable)
