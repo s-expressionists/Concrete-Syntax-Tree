@@ -75,6 +75,18 @@
       (compare-parse-trees
        result (parse-define-method-combination-lambda-list lambda-list)))))
 
+(defun test-destructuring (lambda-list)
+  (let* ((p (make-instance 'cst::parser
+              :rules cst::*destructuring-lambda-list-grammar*
+              :input lambda-list
+              :lambda-list
+              (make-instance 'cst::destructuring-lambda-list)
+              :client nil)))
+    (cst::parse p)
+    (let ((result (assert-success p)))
+      (compare-parse-trees
+       result (parse-destructuring-lambda-list lambda-list)))))
+
 (defun test-ordinary-lambda-lists ()
   (assert (test-ordinary '()))
   (assert (test-ordinary '(a)))
@@ -336,10 +348,14 @@
   (assert (test-define-method-combination '(&whole x b &optional c &key d &aux a)))
   (assert (test-define-method-combination '(&whole x b &optional c &key d &allow-other-keys &aux a))))
 
+(defun test-destructuring-lambda-lists ()
+  (assert (test-destructuring '())))
+
 (defun test ()
   (test-ordinary-lambda-lists)
   (test-generic-function-lambda-lists)
   (test-specialized-lambda-lists)
   (test-defsetf-lambda-lists)
   (test-define-modify-macro-lambda-lists)
-  (test-define-method-combination-lambda-lists))
+  (test-define-method-combination-lambda-lists)
+  (test-destructuring-lambda-lists))
