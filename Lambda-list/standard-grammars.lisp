@@ -96,6 +96,10 @@
      (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
 
+(defparameter *destructuring-required-parameter-group*
+  '((destructuring-required-parameter-group <-
+     (* destructuring-parameter))))
+
 (defparameter *destructuring-rest-parameter-group*
   '((destructuring-rest-parameter-group <-
      keyword-rest
@@ -142,6 +146,7 @@
           *define-modify-macro-lambda-list*
 	  *whole-parameter-group*
           *define-method-combination-lambda-list*
+          *destructuring-required-parameter-group*
           *destructuring-lambda-list*
           *macro-lambda-list*))
 
