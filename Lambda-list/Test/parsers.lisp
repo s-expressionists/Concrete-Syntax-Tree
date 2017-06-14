@@ -121,13 +121,13 @@
                lambda-list))
 
 ;;; Split a lambda list into groups according to role.  Each group is
-;;; a list.  The first group is a list of required parameters, so it
-;;; does not start with a lambda-list keyword.  Each of the remaining
-;;; groups starts with a lambda-list keyword that characterizes the
-;;; group.  Notice that this function does not handle lambda lists
-;;; that start with &WHOLE.  It assumes that everything that precedes
-;;; the first lambda-list keyword belongs to the group of required
-;;; parameters.  A list of the groups is returned.
+;;; a list.  If the first element of the lambda-list is the
+;;; lambda-list keyword &WHOLE, then the &WHOLE parameter group is
+;;; processed first.  The required parameters are assumed to follow
+;;; &WHOLE, or to be first on the list if there is no &WHOLE.  This
+;;; assumption does not work for the macro lambda list, because in
+;;; that list, there can be an &ENVIRONMENT parameter group preceding
+;;; the required parameters.
 (defun split-lambda-list (lambda-list)
   (let ((remaining lambda-list)
         (result '()))
@@ -147,6 +147,16 @@
                        finally (push remaining result)
                                (return (reverse result))))))))
 
+;;; This function differs from the previous one in that if there is an
+;;; &ENVIRONMENT parameter group first on list, or immediately
+;;; following the &WHOLE parameter group, then the required parameters
+;;; follow the &ENVIRONMENT parameter group.  Unfortunately, there is
+;;; a case where the parse is ambiguous, and that is when the list of
+;;; required parameters is empty.  In that case, two parses are
+;;; possible, namely the empty required parameter group either
+;;; precedes or follows the &ENVIRONMENT parameter group.  We "solve"
+;;; this problem by only testing macro lambda lists with non-empty
+;;; required parameter groups so that the parse is unambiguous.
 (defun split-macro-lambda-list (lambda-list)
   (let ((remaining lambda-list)
         (result '()))
