@@ -4,11 +4,11 @@
   (make-instance 'cst::simple-variable :name parameter))
 
 (defun parse-specialized-required-parameter (parameter)
-  (cond ((symbolp parameter)
+  (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::specialized-required-parameter
            :name parameter
            :specializer t))
-        ((null (cdr parameter))
+        ((cst::shapep parameter '(symbol))
          (make-instance 'cst::specialized-required-parameter
            :name (car parameter)
            :specializer t))
@@ -18,17 +18,17 @@
            :specializer (cadr parameter)))))
 
 (defun parse-ordinary-optional-parameter (parameter)
-  (cond ((symbolp parameter)
+  (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::ordinary-optional-parameter
            :name parameter
            :form nil
            :supplied-p (gensym)))
-        ((null (cdr parameter))
+        ((cst::shapep parameter '(symbol))
          (make-instance 'cst::ordinary-optional-parameter
            :name (car parameter)
            :form nil
            :supplied-p (gensym)))
-        ((null (cddr parameter))
+        ((cst::shapep parameter '(symbol t))
          (make-instance 'cst::ordinary-optional-parameter
            :name (car parameter)
            :form (cadr parameter)
@@ -40,80 +40,87 @@
            :supplied-p (caddr parameter)))))
 
 (defun parse-ordinary-key-parameter (parameter)
-  (cond ((symbolp parameter)
+  (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::ordinary-key-parameter
            :name parameter
            :form nil
            :keyword (intern (symbol-name parameter) :keyword)
            :supplied-p (gensym)))
-        ((null (cdr parameter))
-         (if (symbolp (car parameter))
-             (make-instance 'cst::ordinary-key-parameter
-               :name (car parameter)
-               :form nil
-               :keyword (intern (symbol-name (car parameter)) :keyword)
-               :supplied-p (gensym))
-             (make-instance 'cst::ordinary-key-parameter
-               :name (cadar parameter)
-               :form nil
-               :keyword (caar parameter)
-               :supplied-p (gensym))))
-        ((null (cddr parameter))
-         (if (symbolp (car parameter))
-             (make-instance 'cst::ordinary-key-parameter
-               :name (car parameter)
-               :form (cadr parameter)
-               :keyword (intern (symbol-name (car parameter)) :keyword)
-               :supplied-p (gensym))
-             (make-instance 'cst::ordinary-key-parameter
-               :name (cadar parameter)
-               :form (cadr parameter)
-               :keyword (caar parameter)
-               :supplied-p (gensym))))
+        ((cst::shapep parameter '(symbol))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (car parameter)
+           :form nil
+           :keyword (intern (symbol-name (car parameter)) :keyword)
+           :supplied-p (gensym)))
+        ((cst::shapep parameter '((symbol symbol)))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (cadar parameter)
+           :form nil
+           :keyword (caar parameter)
+           :supplied-p (gensym)))
+        ((cst::shapep parameter '(symbol t))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (car parameter)
+           :form (cadr parameter)
+           :keyword (intern (symbol-name (car parameter)) :keyword)
+           :supplied-p (gensym)))
+        ((cst::shapep parameter '((symbol symbol) t))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (cadar parameter)
+           :form (cadr parameter)
+           :keyword (caar parameter)
+           :supplied-p (gensym)))
+        ((cst::shapep parameter '(symbol t symbol))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (car parameter)
+           :form (cadr parameter)
+           :keyword (intern (symbol-name (car parameter)) :keyword)
+           :supplied-p (caddr parameter)))
+        ((cst::shapep parameter '((symbol symbol) t symbol))
+         (make-instance 'cst::ordinary-key-parameter
+           :name (cadar parameter)
+           :form (cadr parameter)
+           :keyword (caar parameter)
+           :supplied-p (caddr parameter)))
         (t
-         (if (symbolp (car parameter))
-             (make-instance 'cst::ordinary-key-parameter
-               :name (car parameter)
-               :form (cadr parameter)
-               :keyword (intern (symbol-name (car parameter)) :keyword)
-               :supplied-p (caddr parameter))
-             (make-instance 'cst::ordinary-key-parameter
-               :name (cadar parameter)
-               :form (cadr parameter)
-               :keyword (caar parameter)
-               :supplied-p (caddr parameter))))))
+         (error "Unknown shape for ordinary key parameter ~s" parameter))))
 
 (defun parse-aux-parameter (parameter)
-  (cond ((symbolp parameter)
+  (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::aux-parameter
            :name parameter
            :form nil))
-        ((null (cdr parameter))
+        ((cst::shapep parameter '(symbol))
          (make-instance 'cst::aux-parameter
            :name (car parameter)
            :form nil))
-        (t
+        ((cst::shapep parameter '(symbol t))
          (make-instance 'cst::aux-parameter
            :name (car parameter)
-           :form (cadr parameter)))))
+           :form (cadr parameter)))
+        (t
+         (error "Unknown shape for aux parameter ~s" parameter))))
 
 (defun parse-generic-function-optional-parameter (parameter)
   (make-instance 'cst::generic-function-optional-parameter
     :name (if (symbolp parameter) parameter (car parameter))))
 
 (defun parse-generic-function-key-parameter (parameter)
-  (cond ((symbolp parameter)
+  (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::generic-function-key-parameter
            :name parameter
            :keyword (intern (symbol-name parameter) :keyword)))
-        ((symbolp (car parameter))
+        ((cst::shapep parameter '(symbol))
          (make-instance 'cst::generic-function-key-parameter
            :name (car parameter)
            :keyword (intern (symbol-name (car parameter)) :keyword)))
-        (t
+        ((cst::shapep parameter '((symbol symbol)))
          (make-instance 'cst::generic-function-key-parameter
            :name (cadar parameter)
-           :keyword (caar parameter)))))
+           :keyword (caar parameter)))
+        (t
+         (error "Unknown shape for generic-function key parameter ~s"
+                parameter))))
 
 (defun position-of-first-keyword (lambda-list)
   (position-if (lambda (element)
