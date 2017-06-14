@@ -3,23 +3,6 @@
 (defun parse-simple-variable (parameter)
   (make-instance 'cst::simple-variable :name parameter))
 
-(defun parse-generic-function-key-parameter (parameter)
-  (cond ((cst::shapep parameter 'symbol)
-         (make-instance 'cst::generic-function-key-parameter
-           :name parameter
-           :keyword (intern (symbol-name parameter) :keyword)))
-        ((cst::shapep parameter '(symbol))
-         (make-instance 'cst::generic-function-key-parameter
-           :name (car parameter)
-           :keyword (intern (symbol-name (car parameter)) :keyword)))
-        ((cst::shapep parameter '((symbol symbol)))
-         (make-instance 'cst::generic-function-key-parameter
-           :name (cadar parameter)
-           :keyword (caar parameter)))
-        (t
-         (error "Unknown shape for generic-function key parameter ~s"
-                parameter))))
-
 (defun position-of-first-keyword (lambda-list)
   (position-if (lambda (element)
                  (member element lambda-list-keywords))
@@ -190,7 +173,7 @@
     (do-ordinary-rest-parameter-group)
     (when (and (not (null groups))
                (lambda-list-keyword-p (caar groups) '&key))
-      (let ((parameters (mapcar #'parse-generic-function-key-parameter
+      (let ((parameters (mapcar #'cst::parse-generic-function-key-parameter
                                 (cdar groups)))
             (keyword (make-instance 'cst::keyword-key :name (caar groups))))
         (push (make-instance 'cst::generic-function-key-parameter-group
