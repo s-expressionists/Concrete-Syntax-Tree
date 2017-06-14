@@ -17,52 +17,6 @@
            :name (car parameter)
            :specializer (cadr parameter)))))
 
-(defun parse-ordinary-key-parameter (parameter)
-  (cond ((cst::shapep parameter 'symbol)
-         (make-instance 'cst::ordinary-key-parameter
-           :name parameter
-           :form nil
-           :keyword (intern (symbol-name parameter) :keyword)
-           :supplied-p (gensym)))
-        ((cst::shapep parameter '(symbol))
-         (make-instance 'cst::ordinary-key-parameter
-           :name (car parameter)
-           :form nil
-           :keyword (intern (symbol-name (car parameter)) :keyword)
-           :supplied-p (gensym)))
-        ((cst::shapep parameter '((symbol symbol)))
-         (make-instance 'cst::ordinary-key-parameter
-           :name (cadar parameter)
-           :form nil
-           :keyword (caar parameter)
-           :supplied-p (gensym)))
-        ((cst::shapep parameter '(symbol t))
-         (make-instance 'cst::ordinary-key-parameter
-           :name (car parameter)
-           :form (cadr parameter)
-           :keyword (intern (symbol-name (car parameter)) :keyword)
-           :supplied-p (gensym)))
-        ((cst::shapep parameter '((symbol symbol) t))
-         (make-instance 'cst::ordinary-key-parameter
-           :name (cadar parameter)
-           :form (cadr parameter)
-           :keyword (caar parameter)
-           :supplied-p (gensym)))
-        ((cst::shapep parameter '(symbol t symbol))
-         (make-instance 'cst::ordinary-key-parameter
-           :name (car parameter)
-           :form (cadr parameter)
-           :keyword (intern (symbol-name (car parameter)) :keyword)
-           :supplied-p (caddr parameter)))
-        ((cst::shapep parameter '((symbol symbol) t symbol))
-         (make-instance 'cst::ordinary-key-parameter
-           :name (cadar parameter)
-           :form (cadr parameter)
-           :keyword (caar parameter)
-           :supplied-p (caddr parameter)))
-        (t
-         (error "Unknown shape for ordinary key parameter ~s" parameter))))
-
 (defun parse-aux-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::aux-parameter
@@ -193,7 +147,7 @@
 (defmacro do-ordinary-key-parameter-group ()
   `(when (and (not (null groups))
               (lambda-list-keyword-p (caar groups) '&key))
-     (let ((parameters (mapcar #'parse-ordinary-key-parameter (cdar groups)))
+     (let ((parameters (mapcar #'cst::parse-ordinary-key-parameter (cdar groups)))
            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
        (push (make-instance 'cst::ordinary-key-parameter-group
                :children (append
