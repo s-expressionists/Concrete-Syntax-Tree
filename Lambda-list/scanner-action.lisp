@@ -25,6 +25,9 @@
     :parse-trees (cl:cons parse-tree (parse-trees item))
     :dot-position (1+ (dot-position item))))
 
+(defun allowed-keyword-p (symbol client lambda-list)
+  (not (member symbol (allowed-lambda-list-keywords client lambda-list))))
+
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
