@@ -41,6 +41,29 @@
     :form (if form-p form nil)
     :supplied-p (if supplied-p-p supplied-p (gensym))))
 
+;;; If PARAMETER can be parsed as an ordinary optional parameter, then
+;;; return an instance of ORDINARY-OPTIONAL-PARAMETER with the various
+;;; slots filled in from the contents of PARAMETER.  If not, return
+;;; NIL to indicate that PARAMETER can not be parsed as an ordinary
+;;; optional parameter.
+(defun parse-ordinary-optional-parameter (parameter)
+  (cond ((shapep parameter 'symbol)
+         (make-ordinary-optional-parameter
+          parameter))
+        ((shapep parameter '(symbol))
+         (make-ordinary-optional-parameter
+          (path parameter '(0))))
+        ((shapep parameter '(symbol t))
+         (make-ordinary-optional-parameter
+          (path parameter '(0))
+          :form (path parameter '(1))))
+        ((shapep parameter '(symbol t symbol))
+         (make-ordinary-optional-parameter
+          (path parameter '(0))
+          :form (path parameter '(1))
+          :supplied-p (path parameter '(2))))
+        (t nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (if (and (shapep input 'symbol)
