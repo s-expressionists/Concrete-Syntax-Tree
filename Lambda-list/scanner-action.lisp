@@ -53,31 +53,31 @@
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-optional-parameter) input)
   (let ((correct-syntax-p t)
-        name form supplied-p)
+        result)
     (cond ((and (shapep input 'symbol)
                 (not (allowed-keyword-p input client lambda-list)))
-           (setf name input)
-           (setf form nil)
-           (setf supplied-p (gensym)))
+           (setf result
+                 (make-ordinary-optional-parameter
+                  input)))
           ((shapep input '(symbol))
-           (setf name (path input '(0)))
-           (setf form nil)
-           (setf supplied-p (gensym)))
+           (setf result
+                 (make-ordinary-optional-parameter
+                  (path input '(0)))))
           ((shapep input '(symbol t))
-           (setf name (path input '(0)))
-           (setf form (path input '(1)))
-           (setf supplied-p (gensym)))
+           (setf result
+                 (make-ordinary-optional-parameter
+                  (path input '(0))
+                  :form (path input '(1)))))
           ((shapep input '(symbol t symbol))
-           (setf name (path input '(0)))
-           (setf form (path input '(1)))
-           (setf supplied-p (path input '(2))))
+           (setf result
+                 (make-ordinary-optional-parameter
+                  (path input '(0))
+                  :form (path input '(1))
+                  :supplied-p (path input '(2)))))
           (t
            (setf correct-syntax-p nil)))
     (if correct-syntax-p
-        (cl:list (advance-dot-position
-                  item
-                  (make-instance 'ordinary-optional-parameter
-                    :name name :form form :supplied-p supplied-p)))
+        (cl:list (advance-dot-position item result))
         '())))
 
 (defmethod scanner-action
