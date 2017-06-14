@@ -239,8 +239,7 @@
              :children (cl:list
                         (make-instance 'cst::keyword-rest
                           :name (caar groups))
-                        (make-instance 'cst::simple-variable
-                          :name (cadar groups))))
+                        (cst::make-simple-variable (cadar groups))))
            result)
      (pop groups)))
 
@@ -338,8 +337,7 @@
               :children (cl:list
                          (make-instance 'cst::keyword-environment
                            :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
+                         (cst::make-simple-variable (cadar groups))))
             result)
       (pop groups))
     (make-instance 'cst::defsetf-lambda-list
@@ -363,8 +361,8 @@
                              :children (cl:list
                                         (make-instance 'cst::keyword-whole
                                           :name (car lambda-list))
-                                        (make-instance 'cst::simple-variable
-                                          :name (cadr lambda-list))))))
+                                        (cst::make-simple-variable
+                                         (cadr lambda-list))))))
           (push whole-group result)
           (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
@@ -390,8 +388,8 @@
                              :children (cl:list
                                         (make-instance 'cst::keyword-whole
                                           :name (car lambda-list))
-                                        (make-instance 'cst::simple-variable
-                                          :name (cadr lambda-list))))))
+                                        (cst::make-simple-variable
+                                         (cadr lambda-list))))))
           (push whole-group result)
           (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
@@ -416,8 +414,7 @@
               :children (cl:list
                          (make-instance 'cst::keyword-whole
                            :name (caar groups))
-                         (make-instance 'cst::simple-variable
-                           :name (cadar groups))))
+                         (cst::make-simple-variable (cadar groups))))
             result)
       (pop groups))
     (flet ((do-environment ()
@@ -427,8 +424,7 @@
                        :children (cl:list
                                   (make-instance 'cst::keyword-environment
                                     :name (caar groups))
-                                  (make-instance 'cst::simple-variable
-                                    :name (cadar groups))))
+                                  (cst::make-simple-variable (cadar groups))))
                      result)
                (pop groups))))
       (do-environment)
