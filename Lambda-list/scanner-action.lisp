@@ -34,6 +34,13 @@
 (defun make-simple-variable (parameter)
   (make-instance 'simple-variable :name parameter))
 
+(defun make-ordinary-optional-parameter
+    (name &key (form nil form-p) (supplied-p nil supplied-p-p))
+  (make-instance 'ordinary-optional-parameter
+    :name name
+    :form (if form-p form nil)
+    :supplied-p (if supplied-p-p supplied-p (gensym))))
+
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (if (and (shapep input 'symbol)
