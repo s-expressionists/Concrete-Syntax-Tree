@@ -242,7 +242,7 @@
                    item
                    (make-instance 'simple-variable
                      :name input))))
-        ((cl:consp input)
+        ((shapep input 'cl:cons)
          ;; FIXME: we should define a top-level parser that does not
          ;; call ERROR when parse fails and call it, rather than calling
          ;; PARSE-DESTRUCTURING-LAMBDA-LIST here.
