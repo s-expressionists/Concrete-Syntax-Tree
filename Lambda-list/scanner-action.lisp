@@ -235,28 +235,35 @@
                     :keyword keyword)))
         '())))
 
+(defun make-specialized-required-parameter
+    (name &key (specializer nil specializer-p))
+  (make-instance 'specialized-required-parameter
+    :name name
+    :specializer (if specializer-p specializer t)))
+
+(defun parse-specialized-required-parameter (parameter)
+  (cond ((shapep parameter 'symbol)
+         (make-instance 'specialized-required-parameter
+           :name parameter
+           :specializer t))
+        ((shapep parameter '(symbol))
+         (make-instance 'specialized-required-parameter
+           :name (path parameter '(0))
+           :specializer t))
+        ((shapep parameter '(symbol t))
+         (make-instance 'specialized-required-parameter
+           :name (path parameter '(0))
+           :specializer (path parameter '(1))))
+        (t nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal specialized-required-parameter) input)
-  (let ((correct-syntax-p t)
-        name specializer)
-    (cond ((and (shapep input 'symbol)
-                (not (allowed-keyword-p input client lambda-list)))
-           (setf name input)
-           (setf specializer t))
-          ((shapep input '(symbol))
-           (setf name (path input '(0)))
-           (setf specializer t))
-          ((shapep input '(symbol t))
-           (setf name (path input '(0)))
-           (setf specializer (path input '(1))))
-          (t
-           (setf correct-syntax-p nil)))
-    (if correct-syntax-p
-        (cl:list (advance-dot-position
-                  item
-                  (make-instance 'specialized-required-parameter
-                    :name name :specializer specializer)))
-        '())))
+  (if (allowed-keyword-p input client lambda-list)
+      '()
+      (let ((result (parse-specialized-required-parameter input)))
+        (if (cl:null result)
+            '()
+            (cl:list (advance-dot-position item result))))))
 
 (defmethod scanner-action
     (client item lambda-list (terminal destructuring-parameter) input)
