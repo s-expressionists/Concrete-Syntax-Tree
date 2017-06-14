@@ -105,6 +105,16 @@
                     :name name :form form)))
         '())))
 
+(defun make-ordinary-key-parameter (name &key
+                                           (keyword nil keyword-p)
+                                           (form nil form-p)
+                                           (supplied-p nil supplied-p-p))
+  (make-instance 'ordinary-key-parameter
+    :name name
+    :keyword (if keyword-p keyword (intern (symbol-name name) '#:keyword))
+    :form (if form-p form nil)
+    :supplied-p (if supplied-p-p supplied-p (gensym))))
+
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-key-parameter) input)
   (let ((correct-syntax-p t)
