@@ -367,10 +367,11 @@
     (flet ((do-environment ()
              (when (and (not (null groups)) (eq (caar groups) '&environment))
                (push (make-instance 'cst::environment-parameter-group
-                       :children (cl:cons (make-instance 'cst::keyword-environment
-                                            :name (caar groups))
-                                  (mapcar #'parse-ordinary-optional-parameter
-                                          (cdar groups))))
+                       :children (cl:list
+                                  (make-instance 'cst::keyword-environment
+                                    :name (caar groups))
+                                  (make-instance 'cst::simple-variable
+                                    :name (cadar groups))))
                      result)
                (pop groups))))
       (do-environment)
