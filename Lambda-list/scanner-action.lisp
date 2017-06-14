@@ -66,7 +66,7 @@
 
 (defun make-aux-parameter
     (name &key (form nil form-p))
-  (make-instance 'ordinary-optional-parameter
+  (make-instance 'aux-parameter
     :name name
     :form (if form-p form nil)))
 
@@ -103,26 +103,12 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal aux-parameter) input)
-  (let ((correct-syntax-p t)
-        name form)
-    (cond ((and (shapep input 'symbol)
-                (not (allowed-keyword-p input client lambda-list)))
-           (setf name input)
-           (setf form nil))
-          ((shapep input '(symbol))
-           (setf name (path input '(0)))
-           (setf form nil))
-          ((shapep input '(symbol t))
-           (setf name (path input '(0)))
-           (setf form (path input '(1))))
-          (t
-           (setf correct-syntax-p nil)))
-    (if correct-syntax-p
-        (cl:list (advance-dot-position
-                  item
-                  (make-instance 'aux-parameter
-                    :name name :form form)))
-        '())))
+  (if (allowed-keyword-p input client lambda-list)
+      '()
+      (let ((result (parse-aux-parameter input)))
+        (if (cl:null result)
+            '()
+            (cl:list (advance-dot-position item result))))))
 
 (defun make-ordinary-key-parameter (name &key
                                            (keyword nil keyword-p)
