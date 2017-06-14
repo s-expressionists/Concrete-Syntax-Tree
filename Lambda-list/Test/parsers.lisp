@@ -3,20 +3,6 @@
 (defun parse-simple-variable (parameter)
   (make-instance 'cst::simple-variable :name parameter))
 
-(defun parse-specialized-required-parameter (parameter)
-  (cond ((cst::shapep parameter 'symbol)
-         (make-instance 'cst::specialized-required-parameter
-           :name parameter
-           :specializer t))
-        ((cst::shapep parameter '(symbol))
-         (make-instance 'cst::specialized-required-parameter
-           :name (car parameter)
-           :specializer t))
-        (t
-         (make-instance 'cst::specialized-required-parameter
-           :name (car parameter)
-           :specializer (cadr parameter)))))
-
 (defun parse-generic-function-key-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::generic-function-key-parameter
@@ -225,7 +211,7 @@
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
     (push (make-instance 'cst::specialized-required-parameter-group
-            :children (mapcar #'parse-specialized-required-parameter
+            :children (mapcar #'cst::parse-specialized-required-parameter
                        (car groups)))
           result)
     (pop groups)
