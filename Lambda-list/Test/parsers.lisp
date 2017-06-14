@@ -17,22 +17,6 @@
            :name (car parameter)
            :specializer (cadr parameter)))))
 
-(defun parse-aux-parameter (parameter)
-  (cond ((cst::shapep parameter 'symbol)
-         (make-instance 'cst::aux-parameter
-           :name parameter
-           :form nil))
-        ((cst::shapep parameter '(symbol))
-         (make-instance 'cst::aux-parameter
-           :name (car parameter)
-           :form nil))
-        ((cst::shapep parameter '(symbol t))
-         (make-instance 'cst::aux-parameter
-           :name (car parameter)
-           :form (cadr parameter)))
-        (t
-         (error "Unknown shape for aux parameter ~s" parameter))))
-
 (defun parse-generic-function-optional-parameter (parameter)
   (make-instance 'cst::generic-function-optional-parameter
     :name (if (symbolp parameter) parameter (car parameter))))
@@ -178,7 +162,7 @@
 (defmacro do-aux-parameter-group ()
   `(when (and (not (null groups))
               (lambda-list-keyword-p (caar groups) '&aux))
-     (let ((parameters (mapcar #'parse-aux-parameter (cdar groups)))
+     (let ((parameters (mapcar #'cst::parse-aux-parameter (cdar groups)))
            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
        (push (make-instance 'cst::aux-parameter-group
                :children (cl:cons keyword parameters))
