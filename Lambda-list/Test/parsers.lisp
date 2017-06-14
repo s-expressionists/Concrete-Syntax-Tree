@@ -17,23 +17,6 @@
            :name (car parameter)
            :specializer (cadr parameter)))))
 
-(defun parse-ordinary-optional-parameter (parameter)
-  (cond ((cst::shapep parameter 'symbol)
-         (cst::make-ordinary-optional-parameter
-          parameter))
-        ((cst::shapep parameter '(symbol))
-         (cst::make-ordinary-optional-parameter
-           (car parameter)))
-        ((cst::shapep parameter '(symbol t))
-         (cst::make-ordinary-optional-parameter
-           (car parameter)
-           :form (cadr parameter)))
-        (t
-         (cst::make-ordinary-optional-parameter
-           (car parameter)
-           :form (cadr parameter)
-           :supplied-p (caddr parameter)))))
-
 (defun parse-ordinary-key-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::ordinary-key-parameter
@@ -202,7 +185,7 @@
      (push (make-instance 'cst::ordinary-optional-parameter-group
              :children (cl:cons (make-instance 'cst::keyword-optional
                                   :name (caar groups))
-                        (mapcar #'parse-ordinary-optional-parameter
+                        (mapcar #'cst::parse-ordinary-optional-parameter
                                 (cdar groups))))
            result)
      (pop groups)))
