@@ -115,6 +115,40 @@
     :form (if form-p form nil)
     :supplied-p (if supplied-p-p supplied-p (gensym))))
 
+(defun parse-ordinary-key-parameter (parameter)
+  (cond ((shapep parameter 'symbol)
+         (make-ordinary-key-parameter
+           parameter))
+        ((shapep parameter '(symbol))
+         (make-ordinary-key-parameter
+           (path parameter '(0))))
+        ((shapep parameter '((symbol symbol)))
+         (make-ordinary-key-parameter
+           (path parameter '(0 1))
+           :keyword (path parameter '(0 0))))
+        ((shapep parameter '(symbol t))
+         (make-ordinary-key-parameter
+           (path parameter '(0))
+           :form (path parameter '(1))
+           :supplied-p (gensym)))
+        ((shapep parameter '((symbol symbol) t))
+         (make-ordinary-key-parameter
+           (path parameter '(0 1))
+           :form (path parameter '(1))
+           :keyword (path parameter '(0 0))))
+        ((shapep parameter '(symbol t symbol))
+         (make-ordinary-key-parameter
+           (path parameter '(0))
+           :form (path parameter '(1))
+           :supplied-p (path parameter '(2))))
+        ((shapep parameter '((symbol symbol) t symbol))
+         (make-ordinary-key-parameter
+           (path parameter '(0 1))
+           :form (path parameter '(1))
+           :keyword (path parameter '(0 0))
+           :supplied-p (path parameter '(2))))
+        (t nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-key-parameter) input)
   (let ((correct-syntax-p t)
