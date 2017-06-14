@@ -70,6 +70,19 @@
     :name name
     :form (if form-p form nil)))
 
+(defun parse-aux-parameter (parameter)
+  (cond ((shapep parameter 'symbol)
+         (make-aux-parameter
+           parameter))
+        ((shapep parameter '(symbol))
+         (make-aux-parameter
+           (path parameter '(0))))
+        ((shapep parameter '(symbol t))
+         (make-aux-parameter
+           (path parameter '(0))
+           :form (path parameter '(1))))
+        (t nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (if (and (shapep input 'symbol)
