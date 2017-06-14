@@ -28,6 +28,12 @@
 (defun allowed-keyword-p (symbol client lambda-list)
   (member symbol (allowed-lambda-list-keywords client lambda-list)))
 
+;;; At the moment, PARAMETER is a symbol, so we return the parameter
+;;; wrapped in an instance of SIMPLE-VARIABLE.  Later when PARAMETER
+;;; will be a CST, we will change its class and return it.
+(defun make-simple-variable (parameter)
+  (make-instance 'simple-variable :name parameter))
+
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (if (and (shapep input 'symbol)
