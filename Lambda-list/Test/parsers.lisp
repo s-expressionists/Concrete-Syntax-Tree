@@ -147,6 +147,28 @@
                        finally (push remaining result)
                                (return (reverse result))))))))
 
+(defun split-macro-lambda-list (lambda-list)
+  (let ((remaining lambda-list)
+        (result '()))
+    (when (and (not (null lambda-list)) (eq (car lambda-list) '&whole))
+      (push (subseq lambda-list 0 2) result)
+      (setf lambda-list (cddr lambda-list)))
+    (when (and (not (null lambda-list)) (eq (car lambda-list) '&environment))
+      (push (subseq lambda-list 0 2) result)
+      (setf lambda-list (cddr lambda-list)))
+    (let ((pos (position-of-first-keyword lambda-list)))
+      (if (null pos)
+          (append (reverse result) (list lambda-list))
+          (progn (push (subseq lambda-list 0 pos) result)
+                 (setf remaining (subseq lambda-list pos))
+                 (setf pos 0)
+                 (loop for pos = (position-of-first-keyword (cdr remaining))
+                       until (null pos)
+                       do (push (subseq remaining 0 (1+ pos)) result)
+                          (setf remaining (subseq remaining (1+ pos)))
+                       finally (push remaining result)
+                               (return (reverse result))))))))
+
 (defmacro do-ordinary-required-parameter-group ()
   `(progn (push (make-instance 'cst::ordinary-required-parameter-group
                   :children (mapcar #'parse-simple-variable
@@ -353,17 +375,16 @@
 
 (defun parse-macro-lambda-list (lambda-list)
   (let ((result '())
-        groups)
-    (if (and (not (null lambda-list)) (eq (car lambda-list) '&whole))
-        (let ((whole-group (make-instance 'cst::whole-parameter-group
-                             :children (cl:list
-                                        (make-instance 'cst::keyword-whole
-                                          :name (car lambda-list))
-                                        (make-instance 'cst::simple-variable
-                                          :name (cadr lambda-list))))))
-          (push whole-group result)
-          (setf groups (split-lambda-list (cddr lambda-list))))
-        (setf groups (split-lambda-list lambda-list)))
+        (groups (split-macro-lambda-list lambda-list)))
+    (when (and (not (null groups)) (eq (caar groups) '&whole))
+      (push (make-instance 'cst::whole-parameter-group
+              :children (cl:list
+                         (make-instance 'cst::keyword-whole
+                           :name (caar groups))
+                         (make-instance 'cst::simple-variable
+                           :name (cadar groups))))
+            result)
+      (pop groups))
     (flet ((do-environment ()
              (when (and (not (null groups)) (eq (caar groups) '&environment))
                (push (make-instance 'cst::environment-parameter-group
