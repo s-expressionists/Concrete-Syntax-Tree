@@ -64,6 +64,12 @@
           :supplied-p (path parameter '(2))))
         (t nil)))
 
+(defun make-aux-parameter
+    (name &key (form nil form-p))
+  (make-instance 'ordinary-optional-parameter
+    :name name
+    :form (if form-p form nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
   (if (and (shapep input 'symbol)
