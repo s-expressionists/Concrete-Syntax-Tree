@@ -19,23 +19,18 @@
 
 (defun parse-ordinary-optional-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
-         (make-instance 'cst::ordinary-optional-parameter
-           :name parameter
-           :form nil
-           :supplied-p (gensym)))
+         (cst::make-ordinary-optional-parameter
+          parameter))
         ((cst::shapep parameter '(symbol))
-         (make-instance 'cst::ordinary-optional-parameter
-           :name (car parameter)
-           :form nil
-           :supplied-p (gensym)))
+         (cst::make-ordinary-optional-parameter
+           (car parameter)))
         ((cst::shapep parameter '(symbol t))
-         (make-instance 'cst::ordinary-optional-parameter
-           :name (car parameter)
-           :form (cadr parameter)
-           :supplied-p (gensym)))
+         (cst::make-ordinary-optional-parameter
+           (car parameter)
+           :form (cadr parameter)))
         (t
-         (make-instance 'cst::ordinary-optional-parameter
-           :name (car parameter)
+         (cst::make-ordinary-optional-parameter
+           (car parameter)
            :form (cadr parameter)
            :supplied-p (caddr parameter)))))
 
