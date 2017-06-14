@@ -17,10 +17,6 @@
            :name (car parameter)
            :specializer (cadr parameter)))))
 
-(defun parse-generic-function-optional-parameter (parameter)
-  (make-instance 'cst::generic-function-optional-parameter
-    :name (if (symbolp parameter) parameter (car parameter))))
-
 (defun parse-generic-function-key-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
          (make-instance 'cst::generic-function-key-parameter
@@ -201,7 +197,7 @@
       (push (make-instance 'cst::generic-function-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
                                    :name (caar groups))
-                         (mapcar #'parse-generic-function-optional-parameter
+                         (mapcar #'cst::parse-generic-function-optional-parameter
                                  (cdar groups))))
             result)
       (pop groups))
