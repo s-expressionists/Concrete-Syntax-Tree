@@ -151,55 +151,12 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-key-parameter) input)
-  (let ((correct-syntax-p t)
-        name keyword form supplied-p)
-    (cond ((and (shapep input 'symbol)
-                (not (allowed-keyword-p input client lambda-list)))
-           (setf name input)
-           (setf keyword (intern (symbol-name input) '#:keyword))
-           (setf form nil)
-           (setf supplied-p (gensym)))
-          ((shapep input '(symbol))
-           (setf name (path input '(0)))
-           (setf keyword (intern (symbol-name name) '#:keyword))
-           (setf form nil)
-           (setf supplied-p (gensym)))
-          ((shapep input '(symbol t))
-           (setf name (path input '(0)))
-           (setf keyword (intern (symbol-name name) '#:keyword))
-           (setf form (path input '(1)))
-           (setf supplied-p (gensym)))
-          ((shapep input '(symbol t symbol))
-           (setf name (path input '(0)))
-           (setf keyword (intern (symbol-name name) '#:keyword))
-           (setf form (path input '(1)))
-           (setf supplied-p (path input '(2))))
-          ((shapep input '((symbol symbol)))
-           (setf name (path input '(0 1)))
-           (setf keyword (path input '(0 0)))
-           (setf form nil)
-           (setf supplied-p (gensym)))
-          ((shapep input '((symbol symbol) t))
-           (setf name (path input '(0 1)))
-           (setf keyword (path input '(0 0)))
-           (setf form (path input '(1)))
-           (setf supplied-p (gensym)))
-          ((shapep input '((symbol symbol) t symbol))
-           (setf name (path input '(0 1)))
-           (setf keyword (path input '(0 0)))
-           (setf form (path input '(1)))
-           (setf supplied-p (path input '(2))))
-          (t
-           (setf correct-syntax-p nil)))
-    (if correct-syntax-p
-        (cl:list (advance-dot-position
-                  item
-                  (make-instance 'ordinary-key-parameter
-                    :name name
-                    :keyword keyword
-                    :form form
-                    :supplied-p supplied-p)))
-        '())))
+  (if (allowed-keyword-p input client lambda-list)
+      '()
+      (let ((result (parse-ordinary-key-parameter input)))
+        (if (cl:null result)
+            '()
+            (cl:list (advance-dot-position item result))))))
 
 (defmethod scanner-action
     (client item lambda-list (terminal cl:cons) input)
