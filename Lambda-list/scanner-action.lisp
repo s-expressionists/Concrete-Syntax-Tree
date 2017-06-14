@@ -201,39 +201,33 @@
             '()
             (cl:list (advance-dot-position item result))))))
 
+(defun make-generic-function-key-parameter
+    (name &key (keyword nil keyword-p))
+  (make-instance 'generic-function-key-parameter
+    :name name
+    :keyword (if keyword-p keyword (intern (symbol-name name) '#:keyword))))
+
+(defun parse-generic-function-key-parameter (parameter)
+  (cond ((cst::shapep parameter 'symbol)
+         (make-generic-function-key-parameter
+          parameter))
+        ((cst::shapep parameter '(symbol))
+         (make-generic-function-key-parameter
+          (path parameter '(0))))
+        ((cst::shapep parameter '((symbol symbol)))
+         (make-generic-function-key-parameter
+          (path parameter '(0 1))
+          :keyword (path parameter '(0 0))))
+        (t nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal generic-function-key-parameter) input)
-  (let ((correct-syntax-p t)
-        name keyword)
-    (cond ((and (symbolp input)
-                (not (allowed-keyword-p input client lambda-list)))
-           (setf name input)
-           (setf keyword (intern (symbol-name input) '#:keyword)))
-          ((cl:consp input)
-           (cond ((symbolp (car input))
-                  (setf name (car input))
-                  (setf keyword (intern (symbol-name (car input)) '#:keyword)))
-                 ((cl:consp (car input))
-                  (if (and (symbolp (caar input))
-                           (cl:consp (cdar input))
-                           (cl:null (cddar input))
-                           (symbolp (cadar input)))
-                      (setf name (cadar input)
-                            keyword (caar input))
-                      (setf correct-syntax-p nil)))
-                 (t
-                  (setf correct-syntax-p nil)))
-           (unless (cl:null (cdr input))
-             (setf correct-syntax-p nil)))
-          (t
-           (setf correct-syntax-p nil)))
-    (if correct-syntax-p
-        (cl:list (advance-dot-position
-                  item
-                  (make-instance 'generic-function-key-parameter
-                    :name name
-                    :keyword keyword)))
-        '())))
+  (if (allowed-keyword-p input client lambda-list)
+      '()
+      (let ((result (parse-generic-function-key-parameter input)))
+        (if (cl:null result)
+            '()
+            (cl:list (advance-dot-position item result))))))
 
 (defun make-specialized-required-parameter
     (name &key (specializer nil specializer-p))
