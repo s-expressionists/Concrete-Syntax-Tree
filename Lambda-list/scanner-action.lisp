@@ -26,24 +26,24 @@
     :dot-position (1+ (dot-position item))))
 
 (defun allowed-keyword-p (symbol client lambda-list)
-  (not (member symbol (allowed-lambda-list-keywords client lambda-list))))
+  (member symbol (allowed-lambda-list-keywords client lambda-list)))
 
 (defmethod scanner-action
     (client item lambda-list (terminal simple-variable) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
-    (if (and (shapep input 'symbol) (not (member input allowed-keywords)))
-        (cl:list (advance-dot-position
-                  item
-                  (make-instance 'simple-variable
-                    :name input)))
-        '())))
+  (if (and (shapep input 'symbol)
+           (not (allowed-keyword-p input client lambda-list)))
+      (cl:list (advance-dot-position
+                item
+                (make-instance 'simple-variable
+                  :name input)))
+      '()))
 
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-optional-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
-        (correct-syntax-p t)
+  (let ((correct-syntax-p t)
         name form supplied-p)
-    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+    (cond ((and (shapep input 'symbol)
+                (not (allowed-keyword-p input client lambda-list)))
            (setf name input)
            (setf form nil)
            (setf supplied-p (gensym)))
@@ -70,10 +70,10 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal aux-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
-        (correct-syntax-p t)
+  (let ((correct-syntax-p t)
         name form)
-    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+    (cond ((and (shapep input 'symbol)
+                (not (allowed-keyword-p input client lambda-list)))
            (setf name input)
            (setf form nil))
           ((shapep input '(symbol))
@@ -93,10 +93,10 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal ordinary-key-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
-        (correct-syntax-p t)
+  (let ((correct-syntax-p t)
         name keyword form supplied-p)
-    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+    (cond ((and (shapep input 'symbol)
+                (not (allowed-keyword-p input client lambda-list)))
            (setf name input)
            (setf keyword (intern (symbol-name input) '#:keyword))
            (setf form nil)
@@ -163,26 +163,26 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal generic-function-optional-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
-    (cond ((and (symbolp input) (not (member input allowed-keywords)))
-           (cl:list (advance-dot-position
-                     item
-                     (make-instance 'generic-function-optional-parameter
-                       :name input))))
-          ((and (cl:consp input) (cl:null (cdr input)))
-           (cl:list (advance-dot-position
-                     item
-                     (make-instance 'generic-function-optional-parameter
-                       :name (car input)))))
-          (t
-           '()))))
+  (cond ((and (symbolp input)
+              (not (allowed-keyword-p input client lambda-list)))
+         (cl:list (advance-dot-position
+                   item
+                   (make-instance 'generic-function-optional-parameter
+                     :name input))))
+        ((and (cl:consp input) (cl:null (cdr input)))
+         (cl:list (advance-dot-position
+                   item
+                   (make-instance 'generic-function-optional-parameter
+                     :name (car input)))))
+        (t
+         '())))
 
 (defmethod scanner-action
     (client item lambda-list (terminal generic-function-key-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
-        (correct-syntax-p t)
+  (let ((correct-syntax-p t)
         name keyword)
-    (cond ((and (symbolp input) (not (member input allowed-keywords)))
+    (cond ((and (symbolp input)
+                (not (allowed-keyword-p input client lambda-list)))
            (setf name input)
            (setf keyword (intern (symbol-name input) '#:keyword)))
           ((cl:consp input)
@@ -213,10 +213,10 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal specialized-required-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list))
-        (correct-syntax-p t)
+  (let ((correct-syntax-p t)
         name specializer)
-    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
+    (cond ((and (shapep input 'symbol)
+                (not (allowed-keyword-p input client lambda-list)))
            (setf name input)
            (setf specializer t))
           ((shapep input '(symbol))
@@ -236,20 +236,20 @@
 
 (defmethod scanner-action
     (client item lambda-list (terminal destructuring-parameter) input)
-  (let ((allowed-keywords (allowed-lambda-list-keywords client lambda-list)))
-    (cond ((and (shapep input 'symbol) (not (member input allowed-keywords)))
-           (cl:list (advance-dot-position
-                     item
-                     (make-instance 'simple-variable
-                       :name input))))
-          ((cl:consp input)
-           ;; FIXME: we should define a top-level parser that does not
-           ;; call ERROR when parse fails and call it, rather than calling
-           ;; PARSE-DESTRUCTURING-LAMBDA-LIST here.
-           (let ((parse-tree (parse-destructuring-lambda-list client input)))
-             (cl:list (advance-dot-position item parse-tree))))
-          (t
-           '()))))
+  (cond ((and (shapep input 'symbol)
+              (not (allowed-keyword-p input client lambda-list)))
+         (cl:list (advance-dot-position
+                   item
+                   (make-instance 'simple-variable
+                     :name input))))
+        ((cl:consp input)
+         ;; FIXME: we should define a top-level parser that does not
+         ;; call ERROR when parse fails and call it, rather than calling
+         ;; PARSE-DESTRUCTURING-LAMBDA-LIST here.
+         (let ((parse-tree (parse-destructuring-lambda-list client input)))
+           (cl:list (advance-dot-position item parse-tree))))
+        (t
+         '())))
 
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
