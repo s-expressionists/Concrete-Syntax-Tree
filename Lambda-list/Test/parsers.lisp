@@ -120,6 +120,11 @@
                  (member element lambda-list-keywords))
                lambda-list))
 
+;;; At the moment, the PUTATIVE-KEYWORD is just a Common Lisp
+;;; S-expression.  Later it will be a CST instead.
+(defun lambda-list-keyword-p (putative-keyword keyword)
+  (eq putative-keyword keyword))
+
 ;;; Split a lambda list into groups according to role.  Each group is
 ;;; a list.  If the first element of the lambda-list is the
 ;;; lambda-list keyword &WHOLE, then the &WHOLE parameter group is
