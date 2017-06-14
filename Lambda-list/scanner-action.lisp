@@ -181,21 +181,25 @@
                                    :dot-position (1- (dot-position item))))))
           (t (error "Unknown operator: ~s" (car terminal))))))
 
+(defun make-generic-function-optional-parameter (name)
+  (make-instance 'generic-function-optional-parameter
+    :name name))
+
+(defun parse-generic-function-optional-parameter (parameter)
+  (cond ((shapep parameter 'symbol)
+         (make-generic-function-optional-parameter parameter))
+        ((shapep parameter '(symbol))
+         (make-generic-function-optional-parameter (path parameter '(0))))
+        (t nil)))
+
 (defmethod scanner-action
     (client item lambda-list (terminal generic-function-optional-parameter) input)
-  (cond ((and (symbolp input)
-              (not (allowed-keyword-p input client lambda-list)))
-         (cl:list (advance-dot-position
-                   item
-                   (make-instance 'generic-function-optional-parameter
-                     :name input))))
-        ((and (cl:consp input) (cl:null (cdr input)))
-         (cl:list (advance-dot-position
-                   item
-                   (make-instance 'generic-function-optional-parameter
-                     :name (car input)))))
-        (t
-         '())))
+  (if (allowed-keyword-p input client lambda-list)
+      '()
+      (let ((result (parse-generic-function-optional-parameter input)))
+        (if (cl:null result)
+            '()
+            (cl:list (advance-dot-position item result))))))
 
 (defmethod scanner-action
     (client item lambda-list (terminal generic-function-key-parameter) input)
