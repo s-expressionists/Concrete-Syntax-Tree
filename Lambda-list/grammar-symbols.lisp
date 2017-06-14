@@ -1,5 +1,6 @@
 (cl:in-package #:concrete-syntax-tree)
 
+;;; This is the root class of all grammar symbols.
 (defclass grammar-symbol ()
   ())
 
@@ -50,31 +51,24 @@
 (defclass ordinary-optional-parameter-group (explicit-parameter-group)
   ())
 
-(defclass ordinary-key-parameter-group (explicit-parameter-group)
+(defclass key-parameter-group (explicit-parameter-group)
   (;; This slot can be either &ALLOW-OTHER-KEYS, if that lambda-list
    ;; keyword is present, or NIL if it is absent.
    (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
 
+(defclass ordinary-key-parameter-group (key-parameter-group)
+  ())
+
 (defmethod initialize-instance :after
-    ((parameter-group ordinary-key-parameter-group) &key children)
+    ((parameter-group key-parameter-group) &key children)
   (when (typep (car (last children)) 'keyword-allow-other-keys)
     (reinitialize-instance parameter-group
                            :keyword (car children)
                            :parameters (cdr (butlast children))
                            :allow-other-keys (car (last children)))))
 
-(defclass generic-function-key-parameter-group (explicit-parameter-group)
-  (;; This slot can be either &ALLOW-OTHER-KEYS, if that lambda-list
-   ;; keyword is present, or NIL if it is absent.
-   (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
-
-(defmethod initialize-instance :after
-    ((parameter-group generic-function-key-parameter-group) &key children)
-  (when (typep (car (last children)) 'keyword-allow-other-keys)
-    (reinitialize-instance parameter-group
-                           :keyword (car children)
-                           :parameters (cdr (butlast children))
-                           :allow-other-keys (car (last children)))))
+(defclass generic-function-key-parameter-group (key-parameter-group)
+  ())
 
 (defclass aux-parameter-group (explicit-parameter-group)
   ())
