@@ -141,6 +141,15 @@
            result)
      (pop groups)))
 
+(defmacro do-whole-parameter-group ()
+  `(progn (push (make-instance 'cst::whole-parameter-group
+                  :children (cl:list
+                             (make-instance 'cst::keyword-whole
+                               :name (caar groups))
+                             (cst::make-simple-variable (cadar groups))))
+                result)
+          (pop groups)))
+
 (defun parse-ordinary-lambda-list (lambda-list)
   (let ((groups (split-lambda-list lambda-list))
         (result '()))
@@ -232,11 +241,11 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list))
-             (cst::lambda-list-keyword-p (car lambda-list) '&whole))
+             (cst::lambda-list-keyword-p (cst::path lambda-list '(0)) '&whole))
         (let ((whole-group (make-instance 'cst::whole-parameter-group
                              :children (cl:list
                                         (make-instance 'cst::keyword-whole
-                                          :name (car lambda-list))
+                                          :name (cst::path lambda-list '(0)))
                                         (cst::make-simple-variable
                                          (cadr lambda-list))))))
           (push whole-group result)
@@ -259,11 +268,11 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list))
-             (cst::lambda-list-keyword-p (car lambda-list) '&whole))
+             (cst::lambda-list-keyword-p (cst::path lambda-list '(0)) '&whole))
         (let ((whole-group (make-instance 'cst::whole-parameter-group
                              :children (cl:list
                                         (make-instance 'cst::keyword-whole
-                                          :name (car lambda-list))
+                                          :name (cst::path lambda-list '(0)))
                                         (cst::make-simple-variable
                                          (cadr lambda-list))))))
           (push whole-group result)
