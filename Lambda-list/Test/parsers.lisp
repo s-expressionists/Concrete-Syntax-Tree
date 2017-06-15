@@ -8,11 +8,6 @@
                  (member element lambda-list-keywords))
                lambda-list))
 
-;;; At the moment, the PUTATIVE-KEYWORD is just a Common Lisp
-;;; S-expression.  Later it will be a CST instead.
-(defun lambda-list-keyword-p (putative-keyword keyword)
-  (eq putative-keyword keyword))
-
 ;;; Split a lambda list into groups according to role.  Each group is
 ;;; a list.  If the first element of the lambda-list is the
 ;;; lambda-list keyword &WHOLE, then the &WHOLE parameter group is
@@ -25,7 +20,7 @@
   (let ((remaining lambda-list)
         (result '()))
     (when (and (not (null lambda-list))
-               (lambda-list-keyword-p (car lambda-list) '&whole))
+               (cst::lambda-list-keyword-p (car lambda-list) '&whole))
       (push (subseq lambda-list 0 2) result)
       (setf lambda-list (cddr lambda-list)))
     (let ((pos (position-of-first-keyword lambda-list)))
@@ -55,11 +50,11 @@
   (let ((remaining lambda-list)
         (result '()))
     (when (and (not (null lambda-list))
-               (lambda-list-keyword-p (car lambda-list) '&whole))
+               (cst::lambda-list-keyword-p (car lambda-list) '&whole))
       (push (subseq lambda-list 0 2) result)
       (setf lambda-list (cddr lambda-list)))
     (when (and (not (null lambda-list))
-               (lambda-list-keyword-p (car lambda-list) '&environment))
+               (cst::lambda-list-keyword-p (car lambda-list) '&environment))
       (push (subseq lambda-list 0 2) result)
       (setf lambda-list (cddr lambda-list)))
     (let ((pos (position-of-first-keyword lambda-list)))
@@ -84,7 +79,7 @@
 
 (defmacro do-ordinary-optional-parameter-group ()
   `(when (and (not (null groups))
-              (lambda-list-keyword-p (caar groups) '&optional))
+              (cst::lambda-list-keyword-p (caar groups) '&optional))
      (push (make-instance 'cst::ordinary-optional-parameter-group
              :children (cl:cons (make-instance 'cst::keyword-optional
                                   :name (caar groups))
@@ -95,7 +90,7 @@
 
 (defmacro do-ordinary-key-parameter-group ()
   `(when (and (not (null groups))
-              (lambda-list-keyword-p (caar groups) '&key))
+              (cst::lambda-list-keyword-p (caar groups) '&key))
      (let ((parameters (mapcar #'cst::parse-ordinary-key-parameter (cdar groups)))
            (keyword (make-instance 'cst::keyword-key :name (caar groups))))
        (push (make-instance 'cst::ordinary-key-parameter-group
@@ -103,7 +98,7 @@
                           (cl:list keyword)
                           parameters
                           (if (or (cl:null (cdr groups))
-                                  (not (lambda-list-keyword-p (caadr groups) '&allow-other-keys)))
+                                  (not (cst::lambda-list-keyword-p (caadr groups) '&allow-other-keys)))
                               '()
                               (prog1
                                   (cl:list
@@ -115,7 +110,7 @@
 
 (defmacro do-ordinary-rest-parameter-group ()
   `(when (and (not (null groups))
-              (lambda-list-keyword-p (caar groups) '&rest))
+              (cst::lambda-list-keyword-p (caar groups) '&rest))
      (push (make-instance 'cst::ordinary-rest-parameter-group
              :children (cl:list
                         (make-instance 'cst::keyword-rest
@@ -126,7 +121,7 @@
 
 (defmacro do-aux-parameter-group ()
   `(when (and (not (null groups))
-              (lambda-list-keyword-p (caar groups) '&aux))
+              (cst::lambda-list-keyword-p (caar groups) '&aux))
      (let ((parameters (mapcar #'cst::parse-aux-parameter (cdar groups)))
            (keyword (make-instance 'cst::keyword-aux :name (caar groups))))
        (push (make-instance 'cst::aux-parameter-group
@@ -136,8 +131,8 @@
 
 (defmacro do-destructuring-rest-parameter-group ()
   `(when (and (not (null groups))
-              (or (lambda-list-keyword-p (caar groups) '&rest)
-                  (lambda-list-keyword-p (caar groups) '&body)))
+              (or (cst::lambda-list-keyword-p (caar groups) '&rest)
+                  (cst::lambda-list-keyword-p (caar groups) '&body)))
      (push (make-instance 'cst::destructuring-rest-parameter-group
              :children (cl:list
                         (make-instance 'cst::keyword-rest
@@ -162,7 +157,7 @@
         (result '()))
     (do-ordinary-required-parameter-group)
     (when (and (not (null groups))
-               (lambda-list-keyword-p (caar groups) '&optional))
+               (cst::lambda-list-keyword-p (caar groups) '&optional))
       (push (make-instance 'cst::generic-function-optional-parameter-group
               :children (cl:cons (make-instance 'cst::keyword-optional
                                    :name (caar groups))
@@ -172,7 +167,7 @@
       (pop groups))
     (do-ordinary-rest-parameter-group)
     (when (and (not (null groups))
-               (lambda-list-keyword-p (caar groups) '&key))
+               (cst::lambda-list-keyword-p (caar groups) '&key))
       (let ((parameters (mapcar #'cst::parse-generic-function-key-parameter
                                 (cdar groups)))
             (keyword (make-instance 'cst::keyword-key :name (caar groups))))
@@ -213,7 +208,7 @@
     (do-ordinary-rest-parameter-group)
     (do-ordinary-key-parameter-group)
     (when (and (not (null groups))
-               (lambda-list-keyword-p (caar groups) '&environment))
+               (cst::lambda-list-keyword-p (caar groups) '&environment))
       (push (make-instance 'cst::environment-parameter-group
               :children (cl:list
                          (make-instance 'cst::keyword-environment
@@ -237,7 +232,7 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list))
-             (lambda-list-keyword-p (car lambda-list) '&whole))
+             (cst::lambda-list-keyword-p (car lambda-list) '&whole))
         (let ((whole-group (make-instance 'cst::whole-parameter-group
                              :children (cl:list
                                         (make-instance 'cst::keyword-whole
@@ -264,7 +259,7 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list))
-             (lambda-list-keyword-p (car lambda-list) '&whole))
+             (cst::lambda-list-keyword-p (car lambda-list) '&whole))
         (let ((whole-group (make-instance 'cst::whole-parameter-group
                              :children (cl:list
                                         (make-instance 'cst::keyword-whole
@@ -290,7 +285,7 @@
   (let ((result '())
         (groups (split-macro-lambda-list lambda-list)))
     (when (and (not (null groups))
-               (lambda-list-keyword-p (caar groups) '&whole))
+               (cst::lambda-list-keyword-p (caar groups) '&whole))
       (push (make-instance 'cst::whole-parameter-group
               :children (cl:list
                          (make-instance 'cst::keyword-whole
@@ -300,7 +295,7 @@
       (pop groups))
     (flet ((do-environment ()
              (when (and (not (null groups))
-                        (lambda-list-keyword-p (caar groups) '&environment))
+                        (cst::lambda-list-keyword-p (caar groups) '&environment))
                (push (make-instance 'cst::environment-parameter-group
                        :children (cl:list
                                   (make-instance 'cst::keyword-environment

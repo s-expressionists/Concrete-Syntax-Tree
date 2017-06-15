@@ -13,6 +13,11 @@
       list
       (path (cl:nth (car path) list) (cdr path))))
 
+;;; At the moment, the PUTATIVE-KEYWORD is just a Common Lisp
+;;; S-expression.  Later it will be a CST instead.
+(defun lambda-list-keyword-p (putative-keyword keyword)
+  (eq putative-keyword keyword))
+
 (defgeneric scanner-action (client item lambda-list terminal input))
 
 (defmethod scanner-action (client item lambda-list terminal input)
