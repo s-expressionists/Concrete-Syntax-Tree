@@ -2,10 +2,6 @@
 
 (defgeneric completer-action (symbol grammar origin state))
 
-;; (defmethod completer-action (symbol origin state)
-;;   (declare (ignore symbol state origin))
-;;   nil)
-
 (defmethod completer-action
     ((symbol grammar-symbol)
      (grammar grammar)
