@@ -32,3 +32,40 @@
   (loop for result = (make-instance 'null-cst) then (cons cst result)
         for cst in (reverse csts)
         finally (return result)))
+
+(defgeneric nthrest (n cst)
+  (:method (n (cst cons-cst))
+    (loop for tail = cst then (rest tail)
+          repeat n
+          finally (return tail))))
+
+(defgeneric nth (n cst)
+  (:method (n (cst cons-cst))
+    (first (nthrest n cst))))
+
+(defmethod second ((cst cons-cst))
+  (nth 1 cst))
+
+(defmethod third ((cst cons-cst))
+  (nth 2 cst))
+
+(defmethod fourth ((cst cons-cst))
+  (nth 3 cst))
+
+(defmethod fifth ((cst cons-cst))
+  (nth 4 cst))
+
+(defmethod sixth ((cst cons-cst))
+  (nth 5 cst))
+
+(defmethod seventh ((cst cons-cst))
+  (nth 6 cst))
+
+(defmethod eigth ((cst cons-cst))
+  (nth 7 cst))
+
+(defmethod ninth ((cst cons-cst))
+  (nth 8 cst))
+
+(defmethod tenth ((cst cons-cst))
+  (nth 9 cst))
