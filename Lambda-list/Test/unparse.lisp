@@ -2,5 +2,8 @@
 
 (defgeneric unparse (tree))
 
-(defmethod unparse ((tree cst::ordinary-lambda-list))
+(defmethod unparse ((tree cst::lambda-list-type))
   (reduce #'append (mapcar #'unparse (cst::children tree))))
+
+(defmethod unparse ((tree cst::parameter-group))
+  (mapcar #'unparse (cst::parameters tree)))
