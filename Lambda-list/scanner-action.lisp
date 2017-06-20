@@ -1,17 +1,17 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defun shapep (list shape)
+(defun shapep (expression shape)
   (if (cl:atom shape)
-      (typep list shape)
-      (and ;; FIXME, add test that list is a proper list
-       (cl:consp list)
-       (= (length list) (length shape))
-       (every #'shapep list shape))))
+      (typep expression shape)
+      (and ;; FIXME, add test that expression is a proper list
+       (cl:consp expression)
+       (= (length expression) (length shape))
+       (every #'shapep expression shape))))
 
-(defun path (list path)
+(defun path (expression path)
   (if (cl:null path)
-      list
-      (path (cl:nth (car path) list) (cdr path))))
+      expression
+      (path (cl:nth (car path) expression) (cdr path))))
 
 ;;; At the moment, the PUTATIVE-KEYWORD is just a Common Lisp
 ;;; S-expression.  Later it will be a CST instead.
