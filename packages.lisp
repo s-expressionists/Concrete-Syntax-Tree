@@ -34,6 +34,7 @@
            #:eighth
            #:ninth
            #:tenth
+           #:nthrest
            #:nth
            #:rest
            #:atom
