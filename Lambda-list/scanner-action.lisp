@@ -272,11 +272,11 @@
                    item
                    (make-simple-variable input))))
         ((shapep input 'cl:cons)
-         ;; FIXME: we should define a top-level parser that does not
-         ;; call ERROR when parse fails and call it, rather than calling
-         ;; PARSE-DESTRUCTURING-LAMBDA-LIST here.
-         (let ((parse-tree (parse-destructuring-lambda-list client input)))
-           (cl:list (advance-dot-position item parse-tree))))
+         (let ((parse-tree (parse-destructuring-lambda-list
+                            client input :error-p nil)))
+           (if (cl:null parse-tree)
+               '()
+               (cl:list (advance-dot-position item parse-tree)))))
         (t
          '())))
 
