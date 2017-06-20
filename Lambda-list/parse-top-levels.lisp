@@ -13,8 +13,9 @@
           (car (parse-trees item))))))
   
 (defmacro define-top-level-parser (name grammar type)
-  `(defun ,name (client lambda-list)
-     (parse-top-level client ,grammar ',type lambda-list)))
+  `(defun ,name (client lambda-list &key (error-p t))
+     (parse-top-level client ,grammar ',type lambda-list
+                      :error-p error-p)))
 
 (define-top-level-parser parse-ordinary-lambda-list
   *ordinary-lambda-list-grammar*
