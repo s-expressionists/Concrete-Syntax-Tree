@@ -7,4 +7,5 @@
    (:file "random-lambda-list")
    (:file "compare-parse-trees")
    (:file "parsers")
+   (:file "unparse")
    (:file "test")))
