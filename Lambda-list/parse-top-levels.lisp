@@ -1,6 +1,6 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defun parse-top-level (client rules class lambda-list)
+(defun parse-top-level (client rules class lambda-list &key (error-p t))
   (let ((p (make-instance 'cst::parser
              :rules rules
              :input lambda-list
@@ -9,7 +9,7 @@
     (parse p)
     (let ((item (find-final-item p)))
       (if (cl:null item)
-          (error "Parse failed")
+          (if error-p (error "Parse failed") nil)
           (car (parse-trees item))))))
   
 (defmacro define-top-level-parser (name grammar type)
