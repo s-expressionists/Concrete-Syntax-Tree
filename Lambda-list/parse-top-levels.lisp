@@ -12,50 +12,38 @@
           (error "Parse failed")
           (car (parse-trees item))))))
   
-(defun parse-ordinary-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *ordinary-lambda-list-grammar*
-                   'ordinary-lambda-list
-                   lambda-list))
+(defmacro define-top-level-parser (name grammar type)
+  `(defun ,name (client lambda-list)
+     (parse-top-level client ,grammar ',type lambda-list)))
 
-(defun parse-generic-function-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *generic-function-lambda-list-grammar*
-                   'generic-function-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-ordinary-lambda-list
+  *ordinary-lambda-list-grammar*
+  ordinary-lambda-list)
 
-(defun parse-specialized-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *specialized-lambda-list-grammar*
-                   'specialized-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-generic-function-lambda-list
+  *generic-function-lambda-list-grammar*
+  generic-function-lambda-list)
 
-(defun parse-defsetf-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *defsetf-lambda-list-grammar*
-                   'defsetf-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-specialized-lambda-list
+  *specialized-lambda-list-grammar*
+  specialized-lambda-list)
 
-(defun parse-define-modify-macro-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *define-modify-macro-lambda-list-grammar*
-                   'define-modify-macro-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-defsetf-lambda-list
+  *defsetf-lambda-list-grammar*
+  defsetf-lambda-list)
 
-(defun parse-define-method-combination-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *define-method-combination-lambda-list-grammar*
-                   'define-method-combination-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-define-modify-macro-lambda-list
+  *define-modify-macro-lambda-list-grammar*
+  define-modify-macro-lambda-list)
 
-(defun parse-destructuring-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *destructuring-lambda-list-grammar*
-                   'destructuring-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-define-method-combination-lambda-list
+  *define-method-combination-lambda-list-grammar*
+  define-method-combination-lambda-list)
 
-(defun parse-macro-lambda-list (client lambda-list)
-  (parse-top-level client
-                   *macro-lambda-list-grammar*
-                   'macro-lambda-list
-                   lambda-list))
+(define-top-level-parser parse-destructuring-lambda-list
+  *destructuring-lambda-list-grammar*
+  destructuring-lambda-list)
+
+(define-top-level-parser parse-macro-lambda-list
+  *macro-lambda-list-grammar*
+  macro-lambda-list)
