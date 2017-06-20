@@ -7,3 +7,6 @@
 
 (defmethod unparse ((tree cst::parameter-group))
   (mapcar #'unparse (cst::parameters tree)))
+
+(defmethod unparse ((tree cst::lambda-list-keyword))
+  (cst::name tree))
