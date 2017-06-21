@@ -16,10 +16,8 @@
       cst
       (path (nth (car path) cst) (cdr path))))
 
-;;; At the moment, the PUTATIVE-KEYWORD is just a Common Lisp
-;;; S-expression.  Later it will be a CST instead.
-(defun lambda-list-keyword-p (putative-keyword keyword)
-  (eq putative-keyword keyword))
+(defun lambda-list-keyword-p (putative-keyword-cst keyword)
+  (eq (raw putative-keyword-cst) keyword))
 
 (defgeneric scanner-action (client item lambda-list terminal input))
 
@@ -153,8 +151,7 @@
         ((shapep parameter '(symbol t))
          (make-ordinary-key-parameter
            (path parameter '(0))
-           :form (path parameter '(1))
-           :supplied-p (gensym)))
+           :form (path parameter '(1))))
         ((shapep parameter '((symbol symbol) t))
          (make-ordinary-key-parameter
            (path parameter '(0 1))
