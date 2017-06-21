@@ -10,7 +10,7 @@
    (%remaining-input :initarg :input :accessor remaining-input)))
 
 (defmethod initialize-instance :after ((object parser) &key rules)
-  (let* ((states (loop repeat (1+ (length (all-input object)))
+  (let* ((states (loop repeat (1+ (length (raw (all-input object))))
                        collect (make-instance 'earley-state)))
          (grammar (make-instance 'grammar :rules rules))
          (target-rule (find 'target (rules grammar) :key #'left-hand-side))
