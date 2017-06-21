@@ -1,17 +1,20 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defun shapep (expression shape)
+(defun shapep (cst shape)
   (if (cl:atom shape)
-      (typep expression shape)
-      (and ;; FIXME, add test that expression is a proper list
-       (cl:consp expression)
-       (= (length expression) (length shape))
-       (every #'shapep expression shape))))
+      (typep (raw cst) shape)
+      (and ;; FIXME, add test that cst is a proper list
+       (consp cst)
+       (= (length (raw cst)) (length shape))
+       (loop for remaining = cst then (rest remaining)
+             for sub-shape in shape
+             until (null remaining)
+             always (shapep (first remaining) sub-shape)))))
 
-(defun path (expression path)
+(defun path (cst path)
   (if (cl:null path)
-      expression
-      (path (cl:nth (car path) expression) (cdr path))))
+      cst
+      (path (nth (car path) cst) (cdr path))))
 
 ;;; At the moment, the PUTATIVE-KEYWORD is just a Common Lisp
 ;;; S-expression.  Later it will be a CST instead.
@@ -43,8 +46,12 @@
     (name &key (form nil form-p) (supplied-p nil supplied-p-p))
   (make-instance 'ordinary-optional-parameter
     :name name
-    :form (if form-p form nil)
-    :supplied-p (if supplied-p-p supplied-p (gensym))))
+    :form (if form-p
+              form
+              (cst-from-expression nil))
+    :supplied-p (if supplied-p-p
+                    supplied-p
+                    (cst-from-expression (gensym)))))
 
 ;;; If PARAMETER can be parsed as an ordinary optional parameter, then
 ;;; return an instance of ORDINARY-OPTIONAL-PARAMETER with the various
@@ -73,7 +80,7 @@
     (name &key (form nil form-p))
   (make-instance 'aux-parameter
     :name name
-    :form (if form-p form nil)))
+    :form (if form-p form (cst-from-expression nil))))
 
 (defun parse-aux-parameter (parameter)
   (cond ((shapep parameter 'symbol)
@@ -121,9 +128,15 @@
                                            (supplied-p nil supplied-p-p))
   (make-instance 'ordinary-key-parameter
     :name name
-    :keyword (if keyword-p keyword (intern (symbol-name name) '#:keyword))
-    :form (if form-p form nil)
-    :supplied-p (if supplied-p-p supplied-p (gensym))))
+    :keyword (if keyword-p
+                 keyword
+                 (cst-from-expression (intern (symbol-name name) '#:keyword)))
+    :form (if form-p
+              form
+              (cst-from-expression nil))
+    :supplied-p (if supplied-p-p
+                    supplied-p
+                    (cst-from-expression (gensym)))))
 
 (defun parse-ordinary-key-parameter (parameter)
   (cond ((shapep parameter 'symbol)
@@ -210,7 +223,9 @@
     (name &key (keyword nil keyword-p))
   (make-instance 'generic-function-key-parameter
     :name name
-    :keyword (if keyword-p keyword (intern (symbol-name name) '#:keyword))))
+    :keyword (if keyword-p
+                 keyword
+                 (cst-from-expression (intern (symbol-name name) '#:keyword)))))
 
 (defun parse-generic-function-key-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
@@ -238,7 +253,9 @@
     (name &key (specializer nil specializer-p))
   (make-instance 'specialized-required-parameter
     :name name
-    :specializer (if specializer-p specializer t)))
+    :specializer (if specializer-p
+                     specializer
+                     (cst-from-expression t))))
 
 (defun parse-specialized-required-parameter (parameter)
   (cond ((shapep parameter 'symbol)
@@ -284,7 +301,7 @@
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)
      (declare (ignore client lambda-list))
-     (if (eq input ',symbol)
+     (if (eq (raw input) ',symbol)
          (cl:list (advance-dot-position
                    item
                    (make-instance ',keyword-class-name
