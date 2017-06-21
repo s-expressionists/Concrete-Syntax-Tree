@@ -130,7 +130,8 @@
     :name name
     :keyword (if keyword-p
                  keyword
-                 (cst-from-expression (intern (symbol-name name) '#:keyword)))
+                 (cst-from-expression (intern (symbol-name (raw name))
+                                              '#:keyword)))
     :form (if form-p
               form
               (cst-from-expression nil))
@@ -225,7 +226,8 @@
     :name name
     :keyword (if keyword-p
                  keyword
-                 (cst-from-expression (intern (symbol-name name) '#:keyword)))))
+                 (cst-from-expression (intern (symbol-name (raw name))
+                                              '#:keyword)))))
 
 (defun parse-generic-function-key-parameter (parameter)
   (cond ((cst::shapep parameter 'symbol)
