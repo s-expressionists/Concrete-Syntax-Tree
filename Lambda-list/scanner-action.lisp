@@ -33,8 +33,8 @@
     :parse-trees (cl:cons parse-tree (parse-trees item))
     :dot-position (1+ (dot-position item))))
 
-(defun allowed-keyword-p (symbol client lambda-list)
-  (member symbol (allowed-lambda-list-keywords client lambda-list)))
+(defun allowed-keyword-p (cst client lambda-list)
+  (member (raw cst) (allowed-lambda-list-keywords client lambda-list)))
 
 ;;; At the moment, PARAMETER is a symbol, so we return the parameter
 ;;; wrapped in an instance of SIMPLE-VARIABLE.  Later when PARAMETER
