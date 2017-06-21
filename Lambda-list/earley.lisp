@@ -87,7 +87,7 @@
                                             terminal)))
                           (proto (make-instance terminal-class))
                           (scan-result
-                            (if (cl:null remaining-input)
+                            (if (null remaining-input)
                                 nil
                                 (scanner-action client
                                                 item
@@ -95,7 +95,7 @@
                                                 (if (cl:consp terminal)
                                                     terminal
                                                     proto)
-                                                (car remaining-input)))))
+                                                (first remaining-input)))))
                      (loop with next-state = (cadr states)
                            for item in scan-result
                            for items = (cl:cons item
@@ -111,11 +111,12 @@
 
 (defmethod parse-step ((parser parser))
   (process-current-state parser)
-  (cl:pop (remaining-input parser))
+  (unless (null (remaining-input parser))
+    (setf (remaining-input parser) (rest (remaining-input parser))))
   (cl:pop (remaining-states parser)))
 
 (defgeneric parse (parser))
 
 (defmethod parse ((parser parser))
-  (loop repeat (1+ (length (all-input parser)))
+  (loop repeat (1+ (length (raw (all-input parser))))
         do (parse-step parser)))
