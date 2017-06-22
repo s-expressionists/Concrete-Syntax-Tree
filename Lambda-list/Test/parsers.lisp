@@ -282,9 +282,9 @@
       :children (reverse result))))
 
 (defun parse-destructuring-parameter (parameter)
-  (if (symbolp parameter)
+  (if (symbolp (cst:raw parameter))
       (parse-simple-variable parameter)
-      (parse-destructuring-lambda-list parameter)))
+      (parse-destructuring-lambda-list (cst:raw parameter))))
 
 (defun parse-destructuring-lambda-list (lambda-list)
   (let ((result '())
@@ -316,13 +316,14 @@
   (let ((result '())
         (groups (split-macro-lambda-list lambda-list)))
     (when (and (not (null groups))
-               (cst::lambda-list-keyword-p (caar groups) '&whole))
-      (push (make-instance 'cst::whole-parameter-group
-              :children (cl:list
-                         (make-instance 'cst::keyword-whole
-                           :name (caar groups))
-                         (cst::make-simple-variable (cadar groups))))
-            result)
+               (eq (car lambda-list) '&whole))
+      (let* ((keyword-name (cst:cst-from-expression (car lambda-list)))
+             (keyword (make-instance 'cst::keyword-whole :name keyword-name))
+             (variable-name (cst:cst-from-expression (cadr lambda-list)))
+             (variable (cst::make-simple-variable variable-name))
+             (whole-group (make-instance 'cst::whole-parameter-group
+                            :children (cl:list keyword variable))))
+        (push whole-group result))
       (pop groups))
     (flet ((do-environment ()
              (when (and (not (null groups))
