@@ -87,7 +87,8 @@
                                             terminal)))
                           (proto (make-instance terminal-class))
                           (scan-result
-                            (if (null remaining-input)
+                            (if (or (null remaining-input)
+                                    (atom remaining-input))
                                 nil
                                 (scanner-action client
                                                 item
@@ -111,7 +112,8 @@
 
 (defmethod parse-step ((parser parser))
   (process-current-state parser)
-  (unless (null (remaining-input parser))
+  (unless (or (null (remaining-input parser))
+              (atom (remaining-input parser)))
     (setf (remaining-input parser) (rest (remaining-input parser))))
   (cl:pop (remaining-states parser)))
 
