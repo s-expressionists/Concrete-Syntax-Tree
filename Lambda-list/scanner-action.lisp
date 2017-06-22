@@ -258,16 +258,14 @@
 
 (defun parse-specialized-required-parameter (parameter)
   (cond ((shapep parameter 'symbol)
-         (make-instance 'specialized-required-parameter
-           :name parameter
-           :specializer t))
+         (make-specialized-required-parameter
+           parameter))
         ((shapep parameter '(symbol))
-         (make-instance 'specialized-required-parameter
-           :name (path parameter '(0))
-           :specializer t))
+         (make-specialized-required-parameter
+           (path parameter '(0))))
         ((shapep parameter '(symbol t))
-         (make-instance 'specialized-required-parameter
-           :name (path parameter '(0))
+         (make-specialized-required-parameter
+           (path parameter '(0))
            :specializer (path parameter '(1))))
         (t nil)))
 
