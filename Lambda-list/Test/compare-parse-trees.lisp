@@ -93,5 +93,7 @@
 (defmethod compare-parse-trees
     ((tree1 cst::specialized-required-parameter)
      (tree2 cst::specialized-required-parameter))
-  (and (eq (cst::name tree1) (cst::name tree2))
-       (equal (cst::specializer tree1) (cst::specializer tree2))))
+  (and (eq (cst:raw (cst::name tree1))
+           (cst:raw (cst::name tree2)))
+       (equal (cst:raw (cst::specializer tree1))
+              (cst:raw (cst::specializer tree2)))))
