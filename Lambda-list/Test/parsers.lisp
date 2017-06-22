@@ -263,13 +263,13 @@
   (let ((result '())
         groups)
     (if (and (not (null lambda-list))
-             (cst::lambda-list-keyword-p (cst::path lambda-list '(0)) '&whole))
-        (let ((whole-group (make-instance 'cst::whole-parameter-group
-                             :children (cl:list
-                                        (make-instance 'cst::keyword-whole
-                                          :name (cst::path lambda-list '(0)))
-                                        (cst::make-simple-variable
-                                         (cadr lambda-list))))))
+             (eq (car lambda-list) '&whole))
+        (let* ((keyword-name (cst:cst-from-expression (car lambda-list)))
+               (keyword (make-instance 'cst::keyword-whole :name keyword-name))
+               (variable-name (cst:cst-from-expression (cadr lambda-list)))
+               (variable (cst::make-simple-variable variable-name))
+               (whole-group (make-instance 'cst::whole-parameter-group
+                              :children (cl:list keyword variable))))
           (push whole-group result)
           (setf groups (split-lambda-list (cddr lambda-list))))
         (setf groups (split-lambda-list lambda-list)))
