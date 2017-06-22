@@ -282,9 +282,9 @@
       :children (reverse result))))
 
 (defun parse-destructuring-parameter (parameter)
-  (if (symbolp parameter)
+  (if (symbolp (cst:raw parameter))
       (parse-simple-variable parameter)
-      (parse-destructuring-lambda-list parameter)))
+      (parse-destructuring-lambda-list (cst:raw parameter))))
 
 (defun parse-destructuring-lambda-list (lambda-list)
   (let ((result '())
