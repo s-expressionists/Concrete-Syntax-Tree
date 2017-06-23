@@ -58,4 +58,33 @@
            #:parse-define-modify-macro-lambda-list
            #:parse-define-method-combination-lambda-list
            #:parse-destructuring-lambda-list
-           #:parse-macro-lambda-list))
+           #:parse-macro-lambda-list
+           #:*ordinary-required-parameter-group*
+           #:*ordinary-optional-parameter-group*
+           #:*ordinary-rest-parameter-group*
+           #:*ordinary-key-parameter-group*
+           #:*aux-parameter-group*
+           #:*ordinary-lambda-list*
+           #:*generic-function-optional-parameter-group*
+           #:*generic-function-key-parameter-group*
+           #:*generic-function-lambda-list*
+           #:*specialized-required-parameter-group*
+           #:*specialized-lambda-list*
+           #:*environment-parameter-group*
+           #:*defsetf-lambda-list*
+           #:*define-modify-macro-lambda-list*
+           #:*whole-parameter-group*
+           #:*define-method-combination-lambda-list*
+           #:*destructuring-required-parameter-group*
+           #:*destructuring-rest-parameter-group*
+           #:*destructuring-lambda-list*
+           #:*macro-lambda-list*
+           #:*standard-grammar*
+           #:*ordinary-lambda-list-grammar*
+           #:*generic-function-lambda-list-grammar*
+           #:*specialized-lambda-list-grammar*
+           #:*defsetf-lambda-list-grammar*
+           #:*define-modify-macro-lambda-list-grammar*
+           #:*define-method-combination-lambda-list-grammar*
+           #:*destructuring-lambda-list-grammar*
+           #:*macro-lambda-list-grammar*))
