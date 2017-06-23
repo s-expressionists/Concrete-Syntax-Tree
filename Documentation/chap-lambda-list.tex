@@ -1,3 +1,35 @@
 \chapter{Parsing lambda lists}
 \label{chap-user-parsing-lambda-lists}
 
+The \sysname{} library contains a framework for parsing lambda lists.
+This framework contains functions for parsing the types of lambda
+lists that specified in the \commonlisp{} standard, but it also
+contains a protocol that allows different implementations to specify
+additional lambda-list keywords, and to specify how lambda lists
+containing these additional keywords should be parsed.
+
+\section{Parsers for standard lambda lists}
+
+\Defun {parse-ordinary-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-generic-function-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-specialized-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-defsetf-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-define-modify-macro-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-define-method-combination-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-destructuring-lambda-list}\\
+{client lambda-list \key (error-p t)}
+
+\Defun {parse-macro-lambda-list}\\
+{client lambda-list \key (error-p t)}
