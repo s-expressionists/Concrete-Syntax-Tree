@@ -50,4 +50,12 @@
            #:proper-list-p
            #:cst-from-expression
            #:canonicalize-declaration-specifier
-           #:reconstruct))
+           #:reconstruct
+           #:parse-ordinary-lambda-list
+           #:parse-generic-function-lambda-list
+           #:parse-specialized-lambda-list
+           #:parse-defsetf-lambda-list
+           #:parse-define-modify-macro-lambda-list
+           #:parse-define-method-combination-lambda-list
+           #:parse-destructuring-lambda-list
+           #:parse-macro-lambda-list))
