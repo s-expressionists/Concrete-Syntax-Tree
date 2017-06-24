@@ -23,7 +23,7 @@ instances of the class \texttt{simple-variable}.
 
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{ordinary-optional-parameter-group}.  This rule defines
-an ordinary required parameter group as the lambda list keyword
+an ordinary optional parameter group as the lambda list keyword
 \texttt{\&optional}, followed by a (possibly empty) sequence of
 instances of the class \texttt{ordinary-optional-parameter}.
 
@@ -31,7 +31,7 @@ instances of the class \texttt{ordinary-optional-parameter}.
 
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{ordinary-rest-parameter-group}.  This rule defines an
-ordinary required parameter group as the lambda list keyword
+ordinary rest parameter group as the lambda list keyword
 \texttt{\&rest}, followed by an instances of the class
 \texttt{simple-variable}.
 
@@ -39,7 +39,7 @@ ordinary required parameter group as the lambda list keyword
 
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{ordinary-key-parameter-group}.  This rule defines
-an ordinary required parameter group as the lambda list keyword
+an ordinary key parameter group as the lambda list keyword
 \texttt{\&key}, followed by a (possibly empty) sequence of
 instances of the class \texttt{ordinary-key-parameter}, optionally
 followed by the lambda-list keyword \texttt{\&allow-other-keys}.
@@ -47,12 +47,19 @@ followed by the lambda-list keyword \texttt{\&allow-other-keys}.
 \Defvar {*aux-parameter-group*}
 
 This variable defines a grammar rule for the grammar-symbol class
-named \texttt{aux-parameter-group}.  This rule defines
-an ordinary required parameter group as the lambda list keyword
-\texttt{\&aux}, followed by a (possibly empty) sequence of
-instances of the class \texttt{aux-parameter}.
+named \texttt{aux-parameter-group}.  This rule defines an aux
+parameter group as the lambda list keyword \texttt{\&aux}, followed by
+a (possibly empty) sequence of instances of the class
+\texttt{aux-parameter}.
 
 \Defvar {*generic-function-optional-parameter-group*}
+
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{generic-function-optional-parameter-group}.  This rule
+defines a generic-function optional parameter group as the lambda list
+keyword \texttt{\&optional}, followed by a (possibly empty) sequence
+of instances of the class named\\
+\texttt{generic-function-optional-parameter}.
 
 \Defvar {*generic-function-key-parameter-group*}
 
