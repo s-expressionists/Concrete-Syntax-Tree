@@ -114,6 +114,18 @@ a destructuring rest parameter group as the lambda list keyword
 
 \Defvar {*ordinary-lambda-list*}
 
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{ordinary-lambda-list}.
+
+This rule defines an ordinary lambda list as a mandatory instance of
+the grammar-symbol class named
+\texttt{ordinary-required-parameter-group}, followed by optional
+instances of the grammar-symbol classes
+\texttt{ordinary-optional-parameter-group},
+\texttt{ordinary-rest-parameter-group},
+\texttt{ordinary-key-parameter-group}, and
+\texttt{aux-parameter-group} in that order.
+
 \Defvar {*generic-function-lambda-list*}
 
 \Defvar {*specialized-lambda-list*}
