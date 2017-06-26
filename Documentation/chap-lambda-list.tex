@@ -159,28 +159,41 @@ following items:
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{specialized-lambda-list}.
 
-This rule defines a specialized lambda list as a mandatory instance of
-the grammar-symbol class named
-\texttt{specialized-required-parameter-group}, followed by optional
-instances of the grammar-symbol classes
-\texttt{ordinary-optional-parameter-group},
-\texttt{ordinary-rest-parameter-group},
-\texttt{ordinary-key-parameter-group}, and
-\texttt{aux-parameter-group} in that order.
+This rule defines a specialized lambda list as sequence of the
+following items:
 
-\Defvar {*defsetf-lambda-list*}
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{specialized-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
 
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{defsetf-lambda-list}.
 
-This rule defines a defsetf lambda list as a mandatory instance of
-the grammar-symbol class named
-\texttt{ordinary-required-parameter-group}, followed by optional
-instances of the grammar-symbol classes
-\texttt{ordinary-optional-parameter-group},
-\texttt{ordinary-rest-parameter-group},
-\texttt{ordinary-key-parameter-group}, and
-\texttt{environment-parameter-group} in that order.
+
+This rule defines a defsetf lambda list as sequence of the following
+items:
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{environment-parameter-group}.
+\end{enumerate}
 
 \Defvar {*define-modify-macro-lambda-list*}
 
