@@ -156,6 +156,18 @@ instances of the grammar-symbol classes
 
 \Defvar {*defsetf-lambda-list*}
 
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{defsetf-lambda-list}.
+
+This rule defines a defsetf lambda list as a mandatory instance of
+the grammar-symbol class named
+\texttt{ordinary-required-parameter-group}, followed by optional
+instances of the grammar-symbol classes
+\texttt{ordinary-optional-parameter-group},
+\texttt{ordinary-rest-parameter-group},
+\texttt{ordinary-key-parameter-group}, and
+\texttt{environment-parameter-group} in that order.
+
 \Defvar {*define-modify-macro-lambda-list*}
 
 \Defvar {*define-method-combination-lambda-list*}
