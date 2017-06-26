@@ -117,28 +117,42 @@ a destructuring rest parameter group as the lambda list keyword
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{ordinary-lambda-list}.
 
-This rule defines an ordinary lambda list as a mandatory instance of
-the grammar-symbol class named
-\texttt{ordinary-required-parameter-group}, followed by optional
-instances of the grammar-symbol classes
-\texttt{ordinary-optional-parameter-group},
-\texttt{ordinary-rest-parameter-group},
-\texttt{ordinary-key-parameter-group}, and
-\texttt{aux-parameter-group} in that order.
+This rule defines an ordinary lambda list as sequence of the following
+items:
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
 
 \Defvar {*generic-function-lambda-list*}
 
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{generic-function-lambda-list}.
 
-This rule defines a generic-function lambda list as a mandatory
-instance of the grammar-symbol class named
-\texttt{ordinary-required-parameter-group}, followed by optional
-instances of the grammar-symbol classes
+This rule defines a generic-function lambda list as sequence of the
+following items:
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
 \texttt{generic-function-optional-parameter-group},
-\texttt{ordinary-rest-parameter-group},
-\texttt{generic-function-key-parameter-group}, and
-\texttt{aux-parameter-group} in that order.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{generic-function-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
 
 \Defvar {*specialized-lambda-list*}
 
