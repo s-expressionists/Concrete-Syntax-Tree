@@ -128,6 +128,18 @@ instances of the grammar-symbol classes
 
 \Defvar {*generic-function-lambda-list*}
 
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{generic-function-lambda-list}.
+
+This rule defines a generic-function lambda list as a mandatory
+instance of the grammar-symbol class named
+\texttt{ordinary-required-parameter-group}, followed by optional
+instances of the grammar-symbol classes
+\texttt{generic-function-optional-parameter-group},
+\texttt{ordinary-rest-parameter-group},
+\texttt{generic-function-key-parameter-group}, and
+\texttt{aux-parameter-group} in that order.
+
 \Defvar {*specialized-lambda-list*}
 
 \Defvar {*defsetf-lambda-list*}
