@@ -51,6 +51,7 @@
            #:cst-from-expression
            #:canonicalize-declaration-specifier
            #:reconstruct
+           #:parser
            #:parse-ordinary-lambda-list
            #:parse-generic-function-lambda-list
            #:parse-specialized-lambda-list
