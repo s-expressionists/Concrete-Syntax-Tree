@@ -213,6 +213,27 @@ following items:
 
 \Defvar {*define-method-combination-lambda-list*}
 
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{define-method-combination-lambda-list}.
+
+This rule defines a define-method-combination lambda list as sequence
+of the following items:
+
+\begin{enumerate}
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{whole-parameter-group}.
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
+
 \Defvar {*destructuring-lambda-list*}
 
 \Defvar {*macro-lambda-list*}
