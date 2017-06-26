@@ -178,7 +178,6 @@ following items:
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{defsetf-lambda-list}.
 
-
 This rule defines a defsetf lambda list as sequence of the following
 items:
 
@@ -196,6 +195,21 @@ items:
 \end{enumerate}
 
 \Defvar {*define-modify-macro-lambda-list*}
+
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{define-modify-macro-lambda-list}.
+
+This rule defines a define-modify-macro lambda list as sequence of the
+following items:
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\end{enumerate}
 
 \Defvar {*define-method-combination-lambda-list*}
 
