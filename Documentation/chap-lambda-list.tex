@@ -259,6 +259,45 @@ following items:
 
 \Defvar {*macro-lambda-list*}
 
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{macro-lambda-list}.
+
+This rule defines a macro lambda list as sequence of the
+following items:
+
+\begin{enumerate}
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{whole-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{environment-parameter-group}.
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{destructuring-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{environment-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{environment-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{destructuring-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{environment-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{environment-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{environment-parameter-group}.
+\end{enumerate}
+
+Notice that this definition allows for there to be several occurrences
+of the grammar symbol \texttt{environment-parameter-group}, whereas
+the \commonlisp{} standard allows for at most one such occurrence.
+The top-level parser for this type of lambda list checks that at most
+one such occurrence is present after parsing is complete.
+
 \subsection{Full grammars}
 
 \Defvar {*standard-grammar*}
