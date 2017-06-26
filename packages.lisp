@@ -52,6 +52,7 @@
            #:canonicalize-declaration-specifier
            #:reconstruct
            #:parser
+           #:parse
            #:parse-ordinary-lambda-list
            #:parse-generic-function-lambda-list
            #:parse-specialized-lambda-list
