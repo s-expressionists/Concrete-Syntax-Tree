@@ -11,7 +11,7 @@
               :input (cst:cst-from-expression lambda-list)
               :lambda-list (make-instance 'cst::ordinary-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
 
@@ -22,7 +22,7 @@
               :lambda-list
               (make-instance 'cst::generic-function-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-generic-function-lambda-list lambda-list)))))
@@ -34,7 +34,7 @@
               :lambda-list
               (make-instance 'cst::specialized-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-specialized-lambda-list lambda-list)))))
@@ -46,7 +46,7 @@
               :lambda-list
               (make-instance 'cst::defsetf-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-defsetf-lambda-list lambda-list)))))
@@ -58,7 +58,7 @@
               :lambda-list
               (make-instance 'cst::define-modify-macro-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-define-modify-macro-lambda-list lambda-list)))))
@@ -70,7 +70,7 @@
               :lambda-list
               (make-instance 'cst::define-method-combination-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-define-method-combination-lambda-list lambda-list)))))
@@ -82,7 +82,7 @@
               :lambda-list
               (make-instance 'cst::destructuring-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-destructuring-lambda-list lambda-list)))))
@@ -94,7 +94,7 @@
               :lambda-list
               (make-instance 'cst::macro-lambda-list)
               :client nil)))
-    (cst::parse p)
+    (cst:parse p)
     (let ((result (assert-success p)))
       (compare-parse-trees
        result (parse-macro-lambda-list lambda-list)))))
