@@ -300,23 +300,65 @@ one such occurrence is present after parsing is complete.
 
 \subsection{Full grammars}
 
+In order to have a grammar that is possible to use for parsing a
+lambda list, in addition to the rules for all the lambda list types
+and its components, a special rule for the grammar symbol
+\texttt{target} is required.  A different rule for this grammar symbol
+is added to the grammar, according to the particular lambda-list type
+that is desired.
+
 \Defvar {*standard-grammar*}
+
+This variable contains all the standard grammar rules, excluding a
+rule for the grammar symbol \texttt{target}.
 
 \Defvar {*ordinary-lambda-list-grammar*}
 
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{ordinary-lambda-list} as its right-hand side.
+
 \Defvar {*generic-function-lambda-list-grammar*}
+
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{generic-function-lambda-list} as its right-hand side.
 
 \Defvar {*specialized-lambda-list-grammar*}
 
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{specialized-lambda-list} as its right-hand side.
+
 \Defvar {*defsetf-lambda-list-grammar*}
+
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{defsetf-lambda-list} as its right-hand side.
 
 \Defvar {*define-modify-macro-lambda-list-grammar*}
 
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{define-modify-macro-lambda-list} as its right-hand side.
+
 \Defvar {*define-method-combination-lambda-list-grammar*}
+
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{define-method-combination-lambda-list} as its right-hand side.
 
 \Defvar {*destructuring-lambda-list-grammar*}
 
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{destructuring-lambda-list} as its right-hand side.
+
 \Defvar {*macro-lambda-list-grammar*}
+
+This variable contains all the standard grammar rules, plus a rule
+with \texttt{target} on its left-hand side and
+\texttt{macro-lambda-list} as its right-hand side.
 
 \section{Parsers for standard lambda lists}
 
