@@ -236,6 +236,27 @@ of the following items:
 
 \Defvar {*destructuring-lambda-list*}
 
+This variable defines a grammar rule for the grammar-symbol class
+named \texttt{destructuring-lambda-list}.
+
+This rule defines a destructuring lambda list as sequence of the
+following items:
+
+\begin{enumerate}
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{whole-parameter-group}.
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{destructuring-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{destructuring-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
+
 \Defvar {*macro-lambda-list*}
 
 \subsection{Full grammars}
