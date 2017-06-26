@@ -59,6 +59,7 @@
            #:parse-define-method-combination-lambda-list
            #:parse-destructuring-lambda-list
            #:parse-macro-lambda-list
+           #:target
            #:*ordinary-required-parameter-group*
            #:*ordinary-optional-parameter-group*
            #:*ordinary-rest-parameter-group*
