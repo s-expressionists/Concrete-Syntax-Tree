@@ -6,7 +6,7 @@
     (car (cst::parse-trees item))))
 
 (defun test-ordinary (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*ordinary-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list (make-instance 'cst::ordinary-lambda-list)
@@ -16,7 +16,7 @@
       (compare-parse-trees result (parse-ordinary-lambda-list lambda-list)))))
 
 (defun test-generic-function (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*generic-function-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
@@ -28,7 +28,7 @@
        result (parse-generic-function-lambda-list lambda-list)))))
 
 (defun test-specialized (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*specialized-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
@@ -40,7 +40,7 @@
        result (parse-specialized-lambda-list lambda-list)))))
 
 (defun test-defsetf (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*defsetf-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
@@ -52,7 +52,7 @@
        result (parse-defsetf-lambda-list lambda-list)))))
 
 (defun test-define-modify-macro (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*define-modify-macro-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
@@ -64,7 +64,7 @@
        result (parse-define-modify-macro-lambda-list lambda-list)))))
 
 (defun test-define-method-combination (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*define-method-combination-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
@@ -76,7 +76,7 @@
        result (parse-define-method-combination-lambda-list lambda-list)))))
 
 (defun test-destructuring (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*destructuring-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
@@ -88,7 +88,7 @@
        result (parse-destructuring-lambda-list lambda-list)))))
 
 (defun test-macro (lambda-list)
-  (let* ((p (make-instance 'cst::parser
+  (let* ((p (make-instance 'cst:parser
               :rules cst:*macro-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
