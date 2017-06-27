@@ -20,7 +20,7 @@
               :rules cst:*generic-function-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::generic-function-lambda-list)
+              (make-instance 'cst:generic-function-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
@@ -32,7 +32,7 @@
               :rules cst:*specialized-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::specialized-lambda-list)
+              (make-instance 'cst:specialized-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
@@ -44,7 +44,7 @@
               :rules cst:*defsetf-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::defsetf-lambda-list)
+              (make-instance 'cst:defsetf-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
@@ -56,7 +56,7 @@
               :rules cst:*define-modify-macro-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::define-modify-macro-lambda-list)
+              (make-instance 'cst:define-modify-macro-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
@@ -68,7 +68,7 @@
               :rules cst:*define-method-combination-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::define-method-combination-lambda-list)
+              (make-instance 'cst:define-method-combination-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
@@ -80,7 +80,7 @@
               :rules cst:*destructuring-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::destructuring-lambda-list)
+              (make-instance 'cst:destructuring-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
@@ -92,7 +92,7 @@
               :rules cst:*macro-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
               :lambda-list
-              (make-instance 'cst::macro-lambda-list)
+              (make-instance 'cst:macro-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
