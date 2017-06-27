@@ -8,6 +8,244 @@ contains a protocol that allows different implementations to specify
 additional lambda-list keywords, and to specify how lambda lists
 containing these additional keywords should be parsed.
 
+\section{Classes for grammar symbols}
+
+\Defclass {grammar-symbol}
+
+This class is the root of all grammar-symbol classes.
+
+\Defclass {parameter-group}
+
+This class is the root class of all classes that represent parameter
+groups.  It is a subclass of the class \texttt{grammar-symbol}.
+
+\Defclass {implicit-parameter-group}
+
+This class is the root class of all classes that represent parameter
+groups that are \emph{not} introduced by a lambda-list keyword, which
+is all the different classes representing required parameter groups.
+
+This class is a subclass of the class \texttt{parameter-group}.
+
+\Defclass {explicit-parameter-group}
+
+This class is the root class of all classes that represent parameter
+groups that \emph{are} introduced by a lambda-list keyword.
+
+This class is a subclass of the class \texttt{parameter-group}.
+
+\Defclass {ordinary-required-parameter-group}
+
+This class represents the list of required parameters in all lambda
+lists that only allow a simple variables to represent a required
+parameter.
+
+This class is a subclass of the class \texttt{implicit-parameter-group}.
+
+\Defclass {ordinary-optional-parameter-group}
+
+This class represents the list of optional parameters in all lambda
+lists that allow for an optional parameter to have a form representing
+the default value and a \texttt{supplied-p} parameter.
+
+This class is a subclass of the class \texttt{explicit-parameter-group}.
+
+\Defclass {key-parameter-group}
+
+This class is the root class of all parameter groups that are
+introduced by the lambda-list keyword \texttt{\&key}.
+
+This class is a subclass of the class \texttt{explicit-parameter-group}.
+
+\Defgeneric {allow-other-keys} {key-parameter-group}
+
+This function can be called on any instance of the class
+\texttt{key-parameter-group}.  If the lambda-list keyword
+\texttt{\&allow-other-keys} is present in this key parameter group,
+then \texttt{allow-other-keys} returns a concrete syntax
+tree for that lambda-list keyword.  If the lambda-list keyword
+\texttt{\&allow-other-keys} is \emph{not} present, this function
+returns \texttt{nil}.
+
+\Defclass {ordinary-key-parameter-group}
+
+This class represents the list of \texttt{\&key} parameters in all
+lambda lists that allow for the parameter to have a form representing
+the default value and a \texttt{supplied-p} parameter.
+
+This class is a subclass of the class \texttt{key-parameter-group}.
+
+\Defclass {generic-function-key-parameter-group}
+
+This class represents the list of \texttt{\&key} parameters in a
+generic-function lambda list.  This type of lambda list only allows
+for the parameter to have a variable name and a keyword.
+
+This class is a subclass of the class \texttt{key-parameter-group}.
+
+\Defclass {aux-parameter-group}
+
+This class represent the list of \texttt{\&aux} parameters in all
+lambda lists that allow for such parameters.
+
+This class is a subclass of the class \texttt{explicit-parameter-group}.
+
+\Defclass {generic-function-optional-parameter-group}
+
+This class represents the list of optional parameters in a
+generic-function lambda list.  This type of lambda list only allows
+for the parameter to have a variable name.
+
+This class is a subclass of the class \texttt{explicit-parameter-group}.
+
+\Defclass {specialized-required-parameter-group}
+
+This class is a subclass of the class \texttt{implicit-parameter-group}.
+
+\Defclass {destructuring-required-parameter-group}
+
+This class is a subclass of the class \texttt{implicit-parameter-group}.
+
+\Defclass {singleton-parameter-group}
+
+This class is a subclass of the class \texttt{grammar-symbol}.
+
+\Defclass {ordinary-rest-parameter-group}
+
+This class is a subclass of the class \texttt{singleton-parameter-group}.
+
+\Defclass {destructuring-rest-parameter-group}
+
+This class is a subclass of the class \texttt{singleton-parameter-group}.
+
+\Defclass {environment-parameter-group}
+
+This class is a subclass of the class \texttt{singleton-parameter-group}.
+
+\Defclass {whole-parameter-group}
+
+This class is a subclass of the class \texttt{singleton-parameter-group}.
+
+\Defclass {parameter}
+
+This class is a subclass of the class \texttt{grammar-symbol}.
+
+\Defclass {simple-variable}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {ordinary-optional-parameter}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {ordinary-key-parameter}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {generic-function-key-parameter}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {aux-parameter}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {generic-function-optional-parameter}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {specialized-required-parameter}
+
+This class is a subclass of the class \texttt{parameter}.
+
+\Defclass {destructuring-parameter}
+
+This class is a subclass of the class \texttt{grammar-symbol}. ())
+
+\Defclass {lambda-list-keyword}
+
+This class is a subclass of the class \texttt{grammar-symbol}.
+
+\Defclass {keyword-optional}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-rest}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-body}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-key}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-allow-other-keys}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-aux}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-environment}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {keyword-whole}
+
+This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+
+\Defclass {lambda-list-type}
+
+This class is a subclass of the class \texttt{grammar-symbol}.
+
+\Defclass {ordinary-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {generic-function-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {specialized-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {macro-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {destructuring-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {boa-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {defsetf-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {deftype-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {define-modify-macro-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {define-method-combination-lambda-list}
+
+This class is a subclass of the class \texttt{lambda-list-type}. ())
+
+\Defclass {target}
+
+This class is a subclass of the class \texttt{grammar-symbol}.
+
 \section{Variables}
 
 \subsection{Parameter groups}
