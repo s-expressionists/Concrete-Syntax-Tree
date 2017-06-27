@@ -53,6 +53,7 @@
            #:reconstruct
            #:parser
            #:parse
+           #:ordinary-lambda-list
            #:parse-ordinary-lambda-list
            #:parse-generic-function-lambda-list
            #:parse-specialized-lambda-list
