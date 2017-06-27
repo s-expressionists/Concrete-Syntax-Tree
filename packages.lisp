@@ -54,6 +54,13 @@
            #:parser
            #:parse
            #:ordinary-lambda-list
+           #:generic-function-lambda-list
+           #:specialized-lambda-list
+           #:defsetf-lambda-list
+           #:define-modify-macro-lambda-list
+           #:define-method-combination-lambda-list
+           #:destructuring-lambda-list
+           #:macro-lambda-list
            #:parse-ordinary-lambda-list
            #:parse-generic-function-lambda-list
            #:parse-specialized-lambda-list
