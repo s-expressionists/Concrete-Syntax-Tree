@@ -9,7 +9,7 @@
   (let* ((p (make-instance 'cst:parser
               :rules cst:*ordinary-lambda-list-grammar*
               :input (cst:cst-from-expression lambda-list)
-              :lambda-list (make-instance 'cst::ordinary-lambda-list)
+              :lambda-list (make-instance 'cst:ordinary-lambda-list)
               :client nil)))
     (cst:parse p)
     (let ((result (assert-success p)))
