@@ -19,6 +19,16 @@ This class is the root of all grammar-symbol classes.
 This class is the root class of all classes that represent parameter
 groups.  It is a subclass of the class \texttt{grammar-symbol}.
 
+\Definitarg {:children}
+
+This initialization argument can be used with all subclasses of the
+class named \texttt{parameter-group}.  For parameter groups that have
+no lambda-list keywords, such as all the parameter groups
+corresponding to required parameters, the value of the argument is a
+(possibly empty) list of parameters.  For parameter groups that have
+associated lambda-list keywords, the value of the argument includes
+those lambda-list keywords in addition to the parameters themselves.
+
 \Defclass {implicit-parameter-group}
 
 This class is the root class of all classes that represent parameter
