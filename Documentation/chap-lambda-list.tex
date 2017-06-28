@@ -100,15 +100,35 @@ This class is a subclass of the class \texttt{explicit-parameter-group}.
 
 \Defclass {specialized-required-parameter-group}
 
+This class represents the list of required parameters in a specialized
+lambda list, i.e., the type of lambda list that can be present in a
+\texttt{defmethod} definition.  In this type of lambda list, a
+required parameter may optionally have a \emph{specializer} associated
+with it.
+
 This class is a subclass of the class \texttt{implicit-parameter-group}.
 
 \Defclass {destructuring-required-parameter-group}
+
+This class represents the list of required parameters in a destructuring
+lambda list, i.e. the kind of lambda list that can be present in a
+\texttt{defmacro} definition, both as the top-level lambda list and as
+a nested lambda list where this is allowed.
 
 This class is a subclass of the class \texttt{implicit-parameter-group}.
 
 \Defclass {singleton-parameter-group}
 
+This class is the root class of all parameter groups that consist of a
+lambda-list keyword followed by a single parameter.  It is a subclass
+of the class \texttt{explicit-parameter-group}.
+
 This class is a subclass of the class \texttt{grammar-symbol}.
+
+\Defgeneric {parameter} {singleton-parameter-group}
+
+This generic function returns a concrete syntax tree representing the
+single parameter of its argument.
 
 \Defclass {ordinary-rest-parameter-group}
 
