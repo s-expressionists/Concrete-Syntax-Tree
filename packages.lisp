@@ -71,6 +71,15 @@
            #:destructuring-rest-parameter-group
            #:environment-parameter-group
            #:whole-parameter-group
+           #:parameter
+           #:simple-variable
+           #:ordinary-optional-parameter
+           #:ordinary-key-parameter
+           #:generic-function-key-parameter
+           #:aux-parameter
+           #:generic-function-optional-parameter
+           #:specialized-required-parameter
+           #:destructuring-parameter
            #:ordinary-lambda-list
            #:generic-function-lambda-list
            #:specialized-lambda-list
