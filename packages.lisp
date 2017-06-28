@@ -80,6 +80,15 @@
            #:generic-function-optional-parameter
            #:specialized-required-parameter
            #:destructuring-parameter
+           #:lambda-list-keyword
+           #:keyword-optional
+           #:keyword-rest
+           #:keyword-body
+           #:keyword-key
+           #:keyword-allow-other-keys
+           #:keyword-aux
+           #:keyword-environment
+           #:keyword-whole
            #:ordinary-lambda-list
            #:generic-function-lambda-list
            #:specialized-lambda-list
