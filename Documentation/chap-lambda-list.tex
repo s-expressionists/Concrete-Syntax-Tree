@@ -209,17 +209,31 @@ This class is a subclass of the class named
 
 \Defclass {ordinary-rest-parameter-group}
 
+This class represents parameter groups that have either the
+lambda-list keyword \texttt{\&rest} or the lambda-list keyword
+\texttt{\&body} followed by a simple-variable.
+
 This class is a subclass of the class \texttt{singleton-parameter-group}.
 
 \Defclass {destructuring-rest-parameter-group}
+
+This class represents parameter groups that have either the
+lambda-list keyword \texttt{\&rest} or the lambda-list keyword
+\texttt{\&body} followed by a destructuring parameter.
 
 This class is a subclass of the class \texttt{singleton-parameter-group}.
 
 \Defclass {environment-parameter-group}
 
+This class represents parameter groups that have the lambda-list
+keyword \texttt{\&environment} followed by a simple-variable.
+
 This class is a subclass of the class \texttt{singleton-parameter-group}.
 
 \Defclass {whole-parameter-group}
+
+This class represents parameter groups that have the lambda-list
+keyword \texttt{\&whole} followed by a simple-variable.
 
 This class is a subclass of the class \texttt{singleton-parameter-group}.
 
