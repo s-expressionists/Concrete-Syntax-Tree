@@ -53,6 +53,24 @@
            #:reconstruct
            #:parser
            #:parse
+           #:grammar-symbol
+           #:parameter-group
+           #:implicit-parameter-group
+           #:explicit-parameter-group
+           #:ordinary-required-parameter-group
+           #:ordinary-optional-parameter-group
+           #:key-parameter-group
+           #:ordinary-key-parameter-group
+           #:generic-function-key-parameter-group
+           #:aux-parameter-group
+           #:generic-function-optional-parameter-group
+           #:specialized-required-parameter-group
+           #:destructuring-required-parameter-group
+           #:singleton-parameter-group
+           #:ordinary-rest-parameter-group
+           #:destructuring-rest-parameter-group
+           #:environment-parameter-group
+           #:whole-parameter-group
            #:ordinary-lambda-list
            #:generic-function-lambda-list
            #:specialized-lambda-list
