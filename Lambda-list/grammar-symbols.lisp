@@ -11,12 +11,9 @@
 ;;; A parameter group represents a list of parameters of the same kind
 ;;; and that appear together in a lambda list.
 
-;;; The root of all classes that represent parameter groups.  This
-;;; class has a single slot, named PARAMETERS which contains a
-;;; (possibly empty) list of parameters of the kind admitted by this
-;;; particular kind of parameter group.
+;;; The root of all classes that represent parameter groups.
 (defclass parameter-group (grammar-symbol)
-  ((%parameters :initarg :parameters :reader parameters)))
+  ())
 
 (defclass singleton-parameter-group-mixin ()
   ((%parameter :initarg :parameter :reader parameter)))
@@ -27,7 +24,7 @@
 ;;; An instance of this class represents a parameter group that does
 ;;; not have any associated lambda-list keyword.  Every different kind
 ;;; of required parameter group is a subclass of this class.
-(defclass implicit-parameter-group (parameter-group)
+(defclass implicit-parameter-group (parameter-group multi-parameter-group-mixin)
   ())
 
 ;;; When an instance of an implicit parameter group is created, we
@@ -43,10 +40,14 @@
 (defclass explicit-parameter-group (parameter-group)
   ((%keyword :initarg :keyword :reader keyword)))
 
+(defclass explicit-multi-parameter-group
+    (explicit-parameter-group multi-parameter-group-mixin)
+  ())
+
 ;;; When an instance of an explicit parameter group is created, we
 ;;; want to separate the keyword from the list of parameters.
 (defmethod initialize-instance :after
-    ((parameter-group explicit-parameter-group) &key children)
+    ((parameter-group explicit-multi-parameter-group) &key children)
   (reinitialize-instance parameter-group
                          :keyword (car children)
                          :parameters (cdr children)))
@@ -54,10 +55,13 @@
 (defclass ordinary-required-parameter-group (implicit-parameter-group)
   ())
 
-(defclass ordinary-optional-parameter-group (explicit-parameter-group)
+(defclass optional-parameter-group (explicit-multi-parameter-group)
   ())
 
-(defclass key-parameter-group (explicit-parameter-group)
+(defclass ordinary-optional-parameter-group (optional-parameter-group)
+  ())
+
+(defclass key-parameter-group (explicit-multi-parameter-group)
   (;; This slot can be either &ALLOW-OTHER-KEYS, if that lambda-list
    ;; keyword is present, or NIL if it is absent.
    (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
@@ -76,10 +80,10 @@
 (defclass generic-function-key-parameter-group (key-parameter-group)
   ())
 
-(defclass aux-parameter-group (explicit-parameter-group)
+(defclass aux-parameter-group (explicit-multi-parameter-group)
   ())
 
-(defclass generic-function-optional-parameter-group (explicit-parameter-group)
+(defclass generic-function-optional-parameter-group (optional-parameter-group)
   ())
 
 (defclass specialized-required-parameter-group (implicit-parameter-group)
@@ -91,9 +95,9 @@
 ;;; This class is the root class of parameter groups that take a
 ;;; keyword and a single parameter, such as &WHOLE, &ENVIRONMENT,
 ;;; &REST, &BODY.
-(defclass singleton-parameter-group (grammar-symbol)
-  ((%keyword :initarg :keyword :reader keyword)
-   (%parameter :initarg :parameter :reader parameter)))
+(defclass singleton-parameter-group
+    (explicit-parameter-group singleton-parameter-group-mixin)
+  ())
 
 ;;; When an instance of a singleton parameter group is created, we
 ;;; want to separate the keyword from the parameter itself.
