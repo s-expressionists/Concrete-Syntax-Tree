@@ -48,6 +48,26 @@ keyword itself and the single following parameter.
 This generic function returns a concrete syntax tree representing the
 single parameter of its argument.
 
+\Defclass {multi-parameter-group-mixin}
+
+This class is used as a superclass of all classes representing
+parameter groups with or without a keyword followed by a (possibly
+empty) list of parameters.
+
+\Definitarg {:parameters}
+
+This initialization argument can be used with subclasses of the class
+named \texttt{multi-parameter-group-mixin}, but the parser does
+not use it.  Instead, it passes the \texttt{:children} initialization
+argument.  An appropriate \texttt{:after} method on
+\texttt{initialize-instance} computes this initialization argument
+from the children.
+
+\Defgeneric {parameters} {multi-parameter-group-mixin}
+
+This generic function returns a list of concrete syntax trees
+representing the parameters of its argument.
+
 \Defclass {implicit-parameter-group}
 
 This class is the root class of all classes that represent parameter
