@@ -29,6 +29,25 @@ corresponding to required parameters, the value of the argument is a
 associated lambda-list keywords, the value of the argument includes
 those lambda-list keywords in addition to the parameters themselves.
 
+\Defclass {singleton-parameter-group-mixin}
+
+This class is used as a superclass of all classes representing
+parameter groups with a keyword followed by a single parameter.
+
+\Definitarg {:parameter}
+
+This initialization argument can be used with subclasses of the class
+named \texttt{singleton-parameter-group-mixin}, but the parser does
+not use it.  Instead, it passes the \texttt{:children} initialization
+argument.  An appropriate \texttt{:after} method on
+\texttt{initialize-instance} splits the children into the lambda-list
+keyword itself and the single following parameter.
+
+\Defgeneric {parameter} {singleton-parameter-group-mixin}
+
+This generic function returns a concrete syntax tree representing the
+single parameter of its argument.
+
 \Defclass {implicit-parameter-group}
 
 This class is the root class of all classes that represent parameter
@@ -134,11 +153,6 @@ lambda-list keyword followed by a single parameter.  It is a subclass
 of the class \texttt{explicit-parameter-group}.
 
 This class is a subclass of the class \texttt{grammar-symbol}.
-
-\Defgeneric {parameter} {singleton-parameter-group}
-
-This generic function returns a concrete syntax tree representing the
-single parameter of its argument.
 
 \Defclass {ordinary-rest-parameter-group}
 
