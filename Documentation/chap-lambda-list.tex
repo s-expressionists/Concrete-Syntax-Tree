@@ -135,7 +135,7 @@ This class is a subclass of the class \texttt{optional-parameter-group}.
 This class is the root class of all parameter groups that are
 introduced by the lambda-list keyword \texttt{\&key}.
 
-This class is a subclass of the class \texttt{explicit-parameter-group}.
+This class is a subclass of the class \texttt{explicit-multi-parameter-group}.
 
 \Defgeneric {allow-other-keys} {key-parameter-group}
 
@@ -168,7 +168,7 @@ This class is a subclass of the class \texttt{key-parameter-group}.
 This class represent the list of \texttt{\&aux} parameters in all
 lambda lists that allow for such parameters.
 
-This class is a subclass of the class \texttt{explicit-parameter-group}.
+This class is a subclass of the class \texttt{explicit-multi-parameter-group}.
 
 \Defclass {generic-function-optional-parameter-group}
 
@@ -203,7 +203,9 @@ This class is the root class of all parameter groups that consist of a
 lambda-list keyword followed by a single parameter.  It is a subclass
 of the class \texttt{explicit-parameter-group}.
 
-This class is a subclass of the class \texttt{grammar-symbol}.
+This class is a subclass of the class named
+\texttt{explicit-parameter-group} and of the class named \texttt{
+  singleton-parameter-group-mixin}.
 
 \Defclass {ordinary-rest-parameter-group}
 
