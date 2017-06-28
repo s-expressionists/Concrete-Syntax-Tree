@@ -84,6 +84,19 @@ groups that \emph{are} introduced by a lambda-list keyword.
 
 This class is a subclass of the class \texttt{parameter-group}.
 
+\Definitarg {:keyword}
+
+This initialization argument can be used with subclasses of the class
+named \texttt{explicit-parameter-group}, but the parser does not use
+it.  Instead, it passes the \texttt{:children} initialization
+argument.  An appropriate \texttt{:after} method on
+\texttt{initialize-instance} computes this initialization argument
+from the children.
+
+\Defgeneric {keyword} {explicit-parameter-group}
+
+This generic function returns the lambda-list keyword of its argument.
+
 \Defclass {explicit-multi-parameter-group}
 
 This class is the root class of all classes that represent parameter
