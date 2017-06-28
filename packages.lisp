@@ -55,9 +55,13 @@
            #:parse
            #:grammar-symbol
            #:parameter-group
+           #:singleton-parameter-group-mixin
+           #:multi-parameter-group-mixin
            #:implicit-parameter-group
            #:explicit-parameter-group
+           #:explicit-multi-parameter-group
            #:ordinary-required-parameter-group
+           #:optional-parameter-group
            #:ordinary-optional-parameter-group
            #:key-parameter-group
            #:ordinary-key-parameter-group
