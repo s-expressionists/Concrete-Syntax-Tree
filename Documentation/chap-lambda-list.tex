@@ -74,7 +74,8 @@ This class is the root class of all classes that represent parameter
 groups that are \emph{not} introduced by a lambda-list keyword, which
 is all the different classes representing required parameter groups.
 
-This class is a subclass of the class \texttt{parameter-group}.
+This class is a subclass of the class named \texttt{parameter-group}
+and the class named \texttt{multi-parameter-group-mixin}.
 
 \Defclass {explicit-parameter-group}
 
@@ -82,6 +83,16 @@ This class is the root class of all classes that represent parameter
 groups that \emph{are} introduced by a lambda-list keyword.
 
 This class is a subclass of the class \texttt{parameter-group}.
+
+\Defclass {explicit-multi-parameter-group}
+
+This class is the root class of all classes that represent parameter
+groups that are introduced by a lambda-list keyword, and that can take
+an arbitrary number of parameters.
+
+This class is a subclass of the class named
+\texttt{explicit-parameter-group} and of the class named
+\texttt{multi-parameter-group-mixin}
 
 \Defclass {ordinary-required-parameter-group}
 
