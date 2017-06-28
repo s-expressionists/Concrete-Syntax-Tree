@@ -18,6 +18,12 @@
 (defclass parameter-group (grammar-symbol)
   ((%parameters :initarg :parameters :reader parameters)))
 
+(defclass singleton-parameter-group-mixin ()
+  ((%parameter :initarg :parameter :reader parameter)))
+
+(defclass multi-parameter-group-mixin ()
+  ((%parameters :initarg :parameters :reader parameters)))
+
 ;;; An instance of this class represents a parameter group that does
 ;;; not have any associated lambda-list keyword.  Every different kind
 ;;; of required parameter group is a subclass of this class.
