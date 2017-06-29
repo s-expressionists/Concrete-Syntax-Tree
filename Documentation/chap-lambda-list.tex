@@ -243,37 +243,82 @@ This class is a subclass of the class \texttt{singleton-parameter-group}.
 
 \Defclass {parameter}
 
+This class is the root class of all classes that represent individual
+lambda-list parameters.
+
 This class is a subclass of the class \texttt{grammar-symbol}.
 
 \Defclass {simple-variable}
+
+This class represents lambda-list parameters that must be simple
+variables, for example the required parameters in an ordinary lambda
+list, or the parameter following the \texttt{\&environment}
+lambda-list keyword.
 
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {ordinary-optional-parameter}
 
+This class represents an optional parameter of the form that is
+allowed in an ordinary lambda list, i.e., a parameter that, in
+addition to the parameter name, can have a form representing the
+default value and an associated \texttt{supplied-p} parameter.
+
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {ordinary-key-parameter}
+
+This class represents a \texttt{\&key} parameter of the form that is
+allowed in an ordinary lambda list, i.e., a parameter that, in
+addition to the parameter name, can have a keyword, a form
+representing the default value, and an associated \texttt{supplied-p}
+parameter.
 
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {generic-function-key-parameter}
 
+This class represents a \texttt{\&key} parameter of the form that is
+allowed in a generic-function lambda list, i.e., a parameter that, in
+addition to the parameter name, can have a keyword, but no form
+representing the default value, and no associated \texttt{supplied-p}
+parameter.
+
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {aux-parameter}
+
+This class represents an \texttt{\&aux} parameter, i.e., a parameter
+that, in addition to the parameter name, can have a form representing
+the default value.
 
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {generic-function-optional-parameter}
 
+This class represents an optional parameter of the form that is
+allowed in an ordinary lambda list, i.e., a parameter that can only
+have a name, but that name can optionally be the element of a
+singleton list, which is why it is distinct from a parameter of type
+\texttt{simple-variable}.
+
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {specialized-required-parameter}
 
+This class represents the kind of required parameter that can appear
+in a specialized lambda list, i.e. a lambda list in a
+\texttt{defmethod} form.  A parameter of this type may optionally have
+a \emph{specializer} in the form of a class name or an \texttt{eql}
+specializer associated with it.
+
 This class is a subclass of the class \texttt{parameter}.
 
 \Defclass {destructuring-parameter}
+
+This class represents all parameters that can be either simple
+variables or a pattern in the form of a (possibly dotted) list, or
+even a destructuring lambda list.
 
 This class is a subclass of the class \texttt{grammar-symbol}. ())
 
