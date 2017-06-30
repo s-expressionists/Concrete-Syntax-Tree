@@ -473,6 +473,22 @@ This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {specialized-lambda-list}
 
+Applying the function \texttt{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{specialized-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
+
 This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {macro-lambda-list}
@@ -644,23 +660,20 @@ definition:
 \Defvar {*specialized-lambda-list*}
 
 This variable defines a grammar rule for the grammar-symbol class
-named \texttt{specialized-lambda-list}.
+named \texttt{specialized-lambda-list}.  It has the following
+definition:
 
-This rule defines a specialized lambda list as sequence of the
-following items:
+\begin{verbatim}
+(defparameter *specialized-lambda-list*
+  '((specialized-lambda-list <-
+     specialized-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+\end{verbatim}
 
-\begin{enumerate}
-\item A mandatory instance of the grammar-symbol class named\\
-  \texttt{specialized-required-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-  \texttt{ordinary-optional-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-rest-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-key-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{aux-parameter-group}.
-\end{enumerate}
+\Defvar {*defsetf-lambda-list*}
 
 This variable defines a grammar rule for the grammar-symbol class
 named \texttt{defsetf-lambda-list}.
