@@ -326,37 +326,95 @@ This class is a subclass of the class \texttt{grammar-symbol}. ())
 
 \Defclass {lambda-list-keyword}
 
+This class is the root class of all classes representing lambda-list
+keywords.
+
 This class is a subclass of the class \texttt{grammar-symbol}.
 
+\Defgeneric {name} {lambda-list-keyword}
+
+This generic function returns the concrete syntax tree corresponding
+to the lambda-list keyword in the original lambda list.  It is
+applicable to every instantiable subclass of the class
+\texttt{lambda-list-keyword}.
+
 \Defclass {keyword-optional}
+
+This class represents the lambda-list keyword \texttt{\&optional}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&optional}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&optional}.
 
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-rest}
 
+This class represents the lambda-list keyword \texttt{\&rest}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&rest}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&rest}.
+
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-body}
+
+This class represents the lambda-list keyword \texttt{\&body}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&body}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&body}.
 
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-key}
 
+This class represents the lambda-list keyword \texttt{\&key}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&key}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&key}.
+
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-allow-other-keys}
+
+This class represents the lambda-list keyword \texttt{\&allow-other-keys}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&allow-other-keys}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&allow-other-keys}.
 
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-aux}
 
+This class represents the lambda-list keyword \texttt{\&aux}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&aux}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&aux}.
+
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-environment}
 
+This class represents the lambda-list keyword \texttt{\&environment}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&environment}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&environment}.
+
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 \Defclass {keyword-whole}
+
+This class represents the lambda-list keyword \texttt{\&whole}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as \texttt{\&whole}, an instance of
+this class always represents the lambda-list keyword
+\texttt{\&whole}.
 
 This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
