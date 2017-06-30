@@ -15,6 +15,7 @@ containing these additional keywords should be parsed.
 This class is the root of all grammar-symbol classes.
 
 \subsection{Classes for parameter groups}
+\label{sec-parsing-lambda-lists-parameter-groups}
 
 \Defclass {parameter-group}
 
@@ -320,7 +321,7 @@ This class represents all parameters that can be either simple
 variables or a pattern in the form of a (possibly dotted) list, or
 even a destructuring lambda list.
 
-This class is a subclass of the class \texttt{grammar-symbol}. ())
+This class is a subclass of the class \texttt{grammar-symbol}.
 
 \subsection{Classes for lambda-list keywords}
 
@@ -346,7 +347,7 @@ that is used in the same way as \texttt{\&optional}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&optional}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-rest}
 
@@ -356,7 +357,7 @@ that is used in the same way as \texttt{\&rest}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&rest}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-body}
 
@@ -366,7 +367,7 @@ that is used in the same way as \texttt{\&body}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&body}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-key}
 
@@ -376,7 +377,7 @@ that is used in the same way as \texttt{\&key}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&key}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-allow-other-keys}
 
@@ -386,7 +387,7 @@ that is used in the same way as \texttt{\&allow-other-keys}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&allow-other-keys}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-aux}
 
@@ -396,7 +397,7 @@ that is used in the same way as \texttt{\&aux}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&aux}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-environment}
 
@@ -406,7 +407,7 @@ that is used in the same way as \texttt{\&environment}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&environment}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \Defclass {keyword-whole}
 
@@ -416,7 +417,7 @@ that is used in the same way as \texttt{\&whole}, an instance of
 this class always represents the lambda-list keyword
 \texttt{\&whole}.
 
-This class is a subclass of the class \texttt{lambda-list-keyword}. ())
+This class is a subclass of the class \texttt{lambda-list-keyword}.
 
 \subsection{Classes for entire lambda lists}
 
@@ -424,45 +425,51 @@ This class is a subclass of the class \texttt{lambda-list-keyword}. ())
 
 This class is a subclass of the class \texttt{grammar-symbol}.
 
+\Defgeneric {children} {lambda-list-type}
+
+This generic function returns a (possibly empty) list of instances of
+(some subclass of) the class \texttt{parameter-group} as described in
+\refSec{sec-parsing-lambda-lists-parameter-groups}.
+
 \Defclass {ordinary-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {generic-function-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {specialized-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {macro-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {destructuring-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {boa-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {defsetf-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {deftype-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {define-modify-macro-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {define-method-combination-lambda-list}
 
-This class is a subclass of the class \texttt{lambda-list-type}. ())
+This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {target}
 
