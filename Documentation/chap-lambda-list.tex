@@ -453,6 +453,22 @@ This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {generic-function-lambda-list}
 
+Applying the function \texttt{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{generic-function-optional-parameter-group},
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{generic-function-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
+
 This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {specialized-lambda-list}
@@ -613,23 +629,17 @@ named \texttt{ordinary-lambda-list}.  It has the following definition:
 \Defvar {*generic-function-lambda-list*}
 
 This variable defines a grammar rule for the grammar-symbol class
-named \texttt{generic-function-lambda-list}.
+named \texttt{generic-function-lambda-list}.  It has the following
+definition:
 
-This rule defines a generic-function lambda list as sequence of the
-following items:
-
-\begin{enumerate}
-\item A mandatory instance of the grammar-symbol class named\\
-  \texttt{ordinary-required-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{generic-function-optional-parameter-group},
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-rest-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{generic-function-key-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{aux-parameter-group}.
-\end{enumerate}
+\begin{verbatim}
+(defparameter *generic-function-lambda-list*
+  '((generic-function-lambda-list <-
+     ordinary-required-parameter-group
+     (? generic-function-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? generic-function-key-parameter-group))))
+\end{verbatim}
 
 \Defvar {*specialized-lambda-list*}
 
