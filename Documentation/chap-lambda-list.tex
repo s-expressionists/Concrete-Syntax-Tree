@@ -491,6 +491,26 @@ returns a list with the following elements (in that order):
 
 This class is a subclass of the class \texttt{lambda-list-type}.
 
+\Defclass {defsetf-lambda-list}
+
+Applying the function \texttt{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+\begin{enumerate}
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{environment-parameter-group}.
+\end{enumerate}
+
+This class is a subclass of the class \texttt{lambda-list-type}.
+
 \Defclass {macro-lambda-list}
 
 This class is a subclass of the class \texttt{lambda-list-type}.
@@ -500,10 +520,6 @@ This class is a subclass of the class \texttt{lambda-list-type}.
 This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {boa-lambda-list}
-
-This class is a subclass of the class \texttt{lambda-list-type}.
-
-\Defclass {defsetf-lambda-list}
 
 This class is a subclass of the class \texttt{lambda-list-type}.
 
@@ -676,23 +692,18 @@ definition:
 \Defvar {*defsetf-lambda-list*}
 
 This variable defines a grammar rule for the grammar-symbol class
-named \texttt{defsetf-lambda-list}.
+named \texttt{defsetf-lambda-list}.  It has the following
+definition:
 
-This rule defines a defsetf lambda list as sequence of the following
-items:
-
-\begin{enumerate}
-\item A mandatory instance of the grammar-symbol class named\\
-  \texttt{ordinary-required-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-  \texttt{ordinary-optional-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-rest-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-key-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{environment-parameter-group}.
-\end{enumerate}
+\begin{verbatim}
+(defparameter *defsetf-lambda-list*
+  '((defsetf-lambda-list <-
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? environment-parameter-group))))
+\end{verbatim}
 
 \Defvar {*define-modify-macro-lambda-list*}
 
