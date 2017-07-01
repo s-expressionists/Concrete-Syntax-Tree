@@ -530,6 +530,28 @@ returns a list with the following elements (in that order):
 
 This class is a subclass of the class \texttt{lambda-list-type}.
 
+\Defclass {define-method-combination-lambda-list}
+
+Applying the function \texttt{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+\begin{enumerate}
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{whole-parameter-group}.
+\item A mandatory instance of the grammar-symbol class named\\
+  \texttt{ordinary-required-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+  \texttt{ordinary-optional-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-rest-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{ordinary-key-parameter-group}.
+\item An optional instance of the grammar-symbol class named\\
+\texttt{aux-parameter-group}.
+\end{enumerate}
+
+This class is a subclass of the class \texttt{lambda-list-type}.
+
 \Defclass {macro-lambda-list}
 
 This class is a subclass of the class \texttt{lambda-list-type}.
@@ -539,10 +561,6 @@ This class is a subclass of the class \texttt{lambda-list-type}.
 This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {deftype-lambda-list}
-
-This class is a subclass of the class \texttt{lambda-list-type}.
-
-\Defclass {define-method-combination-lambda-list}
 
 This class is a subclass of the class \texttt{lambda-list-type}.
 
@@ -733,25 +751,19 @@ definition:
 \Defvar {*define-method-combination-lambda-list*}
 
 This variable defines a grammar rule for the grammar-symbol class
-named \texttt{define-method-combination-lambda-list}.
+named \texttt{define-method-combination-lambda-list}.  It has the
+following definition:
 
-This rule defines a define-method-combination lambda list as sequence
-of the following items:
-
-\begin{enumerate}
-\item An optional instance of the grammar-symbol class named\\
-  \texttt{whole-parameter-group}.
-\item A mandatory instance of the grammar-symbol class named\\
-  \texttt{ordinary-required-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-  \texttt{ordinary-optional-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-rest-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{ordinary-key-parameter-group}.
-\item An optional instance of the grammar-symbol class named\\
-\texttt{aux-parameter-group}.
-\end{enumerate}
+\begin{verbatim}
+(defparameter *define-method-combination-lambda-list*
+  '((define-method-combination-lambda-list <-
+     (? whole-parameter-group)
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+\end{verbatim}
 
 \Defvar {*destructuring-lambda-list*}
 
