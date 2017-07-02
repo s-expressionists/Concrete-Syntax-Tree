@@ -47,10 +47,9 @@
      (tree2 cst::ordinary-optional-parameter))
   (and (eq (cst:raw (cst::name tree1))
            (cst:raw (cst::name tree2)))
-       (equal (cst:raw (cst::form tree1))
-              (cst:raw (cst::form tree2)))
-       (or (and (null (symbol-package (cst:raw (cst::supplied-p tree1))))
-                (null (symbol-package (cst:raw (cst::supplied-p tree2)))))
+       (or (equal (cst::form tree1) (cst::form tree2))
+           (equal (cst:raw (cst::form tree1)) (cst:raw (cst::form tree2))))
+       (or (equal (cst::supplied-p tree1) (cst::supplied-p tree2))
            (eq (cst:raw (cst::supplied-p tree1))
                (cst:raw (cst::supplied-p tree2))))))
 
