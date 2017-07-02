@@ -44,12 +44,8 @@
     (name &key (form nil form-p) (supplied-p nil supplied-p-p))
   (make-instance 'ordinary-optional-parameter
     :name name
-    :form (if form-p
-              form
-              (cst-from-expression nil))
-    :supplied-p (if supplied-p-p
-                    supplied-p
-                    (cst-from-expression (gensym)))))
+    :form (if form-p form nil)
+    :supplied-p (if supplied-p-p supplied-p nil)))
 
 ;;; If PARAMETER can be parsed as an ordinary optional parameter, then
 ;;; return an instance of ORDINARY-OPTIONAL-PARAMETER with the various
