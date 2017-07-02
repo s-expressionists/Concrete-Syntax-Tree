@@ -422,7 +422,9 @@ This class is a subclass of the class \texttt{lambda-list-keyword}.
 \subsection{Classes for entire lambda lists}
 
 Notice that there is no class for the boa lambda list, since it is
-syntactically equivalent to an ordinary lambda list.
+syntactically equivalent to an ordinary lambda list.  Similarly, there
+is no \texttt{deftype} lambda list because it is syntactically
+equivalent to a macro lambda list.
 
 \Defclass {lambda-list-type}
 
@@ -557,10 +559,6 @@ This class is a subclass of the class \texttt{lambda-list-type}.
 This class is a subclass of the class \texttt{lambda-list-type}.
 
 \Defclass {destructuring-lambda-list}
-
-This class is a subclass of the class \texttt{lambda-list-type}.
-
-\Defclass {deftype-lambda-list}
 
 This class is a subclass of the class \texttt{lambda-list-type}.
 
