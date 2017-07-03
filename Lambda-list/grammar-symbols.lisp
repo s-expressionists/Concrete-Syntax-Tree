@@ -131,17 +131,21 @@
 (defclass supplied-p-mixin ()
   ((%supplied-p :initarg :supplied-p :reader supplied-p)))
 
+(defclass keyword-mixin ()
+  ((%keyword :initarg :keyword :reader keyword)))
+
 (defclass simple-variable (parameter)
   ())
 
 (defclass ordinary-optional-parameter (parameter form-mixin supplied-p-mixin)
   ())
 
-(defclass ordinary-key-parameter (parameter form-mixin supplied-p-mixin)
-  ((%keyword :initarg :keyword :reader keyword)))
+(defclass ordinary-key-parameter
+    (parameter form-mixin supplied-p-mixin keyword-mixin)
+  ())
 
-(defclass generic-function-key-parameter (parameter)
-  ((%keyword :initarg :keyword :reader keyword)))
+(defclass generic-function-key-parameter (parameter keyword-mixin)
+  ())
 
 (defclass aux-parameter (parameter form-mixin)
   ())
