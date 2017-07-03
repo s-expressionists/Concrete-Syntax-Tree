@@ -126,12 +126,8 @@
                  keyword
                  (cst-from-expression (intern (symbol-name (raw name))
                                               '#:keyword)))
-    :form (if form-p
-              form
-              (cst-from-expression nil))
-    :supplied-p (if supplied-p-p
-                    supplied-p
-                    (cst-from-expression (gensym)))))
+    :form (if form-p form nil)
+    :supplied-p (if supplied-p-p supplied-p nil)))
 
 (defun parse-ordinary-key-parameter (parameter)
   (cond ((shapep parameter 'symbol)
