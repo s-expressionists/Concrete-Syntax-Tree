@@ -125,6 +125,9 @@
 (defclass parameter (grammar-symbol)
   ((%name :initarg :name :reader name)))
 
+(defclass form-mixin ()
+  ((%form :initarg :form :reader form)))
+
 (defclass simple-variable (parameter)
   ())
 
