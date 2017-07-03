@@ -134,12 +134,11 @@
 (defclass simple-variable (parameter)
   ())
 
-(defclass ordinary-optional-parameter (parameter form-mixin)
-  ((%supplied-p :initarg :supplied-p :reader supplied-p)))
+(defclass ordinary-optional-parameter (parameter form-mixin supplied-p-mixin)
+  ())
 
-(defclass ordinary-key-parameter (parameter form-mixin)
-  ((%keyword :initarg :keyword :reader keyword)
-   (%supplied-p :initarg :supplied-p :reader supplied-p)))
+(defclass ordinary-key-parameter (parameter form-mixin supplied-p-mixin)
+  ((%keyword :initarg :keyword :reader keyword)))
 
 (defclass generic-function-key-parameter (parameter)
   ((%keyword :initarg :keyword :reader keyword)))
