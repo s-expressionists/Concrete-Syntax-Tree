@@ -273,6 +273,29 @@ the class \texttt{form-mixin}.  It returns the value that was supplied
 using the \texttt{:form} initialization argument when the instance was
 created.
 
+\Defclass {supplied-p-mixin}
+
+This mixin class is a superclass of subclasses of \texttt{parameter}
+that allow for an optional supplied-p parameter to be supplied.  At
+run-time, the value of this parameter indicates whether an explicit
+argument was supplied that provides a value for the parameter.
+
+\Definitarg {:supplied-p}
+
+This initialization argument can be used when an instance of (a
+subclass of) the class \texttt{supplied-p-mixin} is created.  The
+value of this initialization argument is either a concrete syntax tree
+representing the supplied-p parameter that was given in the lambda
+list, or \texttt{nil}, indicating that no supplied-p parameter was
+given.
+
+\Defgeneric {supplied-p} {supplied-p-mixin}
+
+This generic function can be applied to instances of all subclasses of
+the class \texttt{supplied-p-mixin}.  It returns the value that was provided
+using the \texttt{:supplied-p} initialization argument when the instance was
+created.
+
 \Defclass {simple-variable}
 
 This class represents lambda-list parameters that must be simple
