@@ -242,12 +242,36 @@ This class is a subclass of the class \texttt{singleton-parameter-group}.
 
 \subsection{Classes for individual parameters}
 
+\Defgeneric {name} {parameter}
+
 \Defclass {parameter}
 
 This class is the root class of all classes that represent individual
 lambda-list parameters.
 
 This class is a subclass of the class \texttt{grammar-symbol}.
+
+\Defclass {form-mixin}
+
+This mixin class is a superclass of subclasses of \texttt{parameter}
+that allow for an optional form to be supplied, which will be
+evaluated to supply a value for a parameter that is not explicitly
+passed as an argument.
+
+\Definitarg {:form}
+
+This initialization argument can be used when an instance of
+(a subclass of) the class \texttt{form-mixin} is created.  The value
+of this initialization argument is either a concrete syntax tree
+representing the form that was supplied in the lambda list, or
+\texttt{nil}, indicating that no form was supplied.
+
+\Defgeneric {form} {form-mixin}
+
+This generic function can be applied to instances of all subclasses of
+the class \texttt{form-mixin}.  It returns the value that was supplied
+using the \texttt{:form} initialization argument when the instance was
+created.
 
 \Defclass {simple-variable}
 
