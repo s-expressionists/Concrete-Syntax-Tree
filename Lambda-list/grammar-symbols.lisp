@@ -128,6 +128,9 @@
 (defclass form-mixin ()
   ((%form :initarg :form :reader form)))
 
+(defclass supplied-p-mixin ()
+  ((%supplied-p :initarg :supplied-p :reader supplied-p)))
+
 (defclass simple-variable (parameter)
   ())
 
