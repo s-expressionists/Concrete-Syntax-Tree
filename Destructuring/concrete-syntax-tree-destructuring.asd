@@ -10,4 +10,5 @@
    (:file "rest-parameters")
    (:file "key-parameters")
    (:file "aux-parameters")
+   (:file "lambda-list")
    (:file "parse-macro")))
