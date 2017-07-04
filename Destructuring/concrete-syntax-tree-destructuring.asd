@@ -4,4 +4,6 @@
   :depends-on (:concrete-syntax-tree-lambda-list)
   :serial t
   :components
-  ((:file "parse-macro")))
+  ((:file "generic-functions")
+   (:file "required-parameters")
+   (:file "parse-macro")))
