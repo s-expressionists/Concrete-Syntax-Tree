@@ -7,4 +7,5 @@
   ((:file "generic-functions")
    (:file "required-parameters")
    (:file "optional-parameters")
+   (:file "key-parameters")
    (:file "parse-macro")))
