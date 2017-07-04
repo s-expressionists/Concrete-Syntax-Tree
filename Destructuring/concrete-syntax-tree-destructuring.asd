@@ -9,4 +9,5 @@
    (:file "optional-parameters")
    (:file "rest-parameters")
    (:file "key-parameters")
+   (:file "aux-parameters")
    (:file "parse-macro")))
