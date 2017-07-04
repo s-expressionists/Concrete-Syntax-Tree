@@ -6,4 +6,5 @@
   :components
   ((:file "generic-functions")
    (:file "required-parameters")
+   (:file "optional-parameters")
    (:file "parse-macro")))
