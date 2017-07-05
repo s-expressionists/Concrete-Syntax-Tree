@@ -32,6 +32,11 @@
 (defgeneric destructure-lambda-list
     (client lambda-list argument-variable tail-variable body))
 
+;;; Wrap BODY in a LET form corresponding to a single &AUX parameter.
+;;; Since &AUX parameters are independent of the macro-call argument,
+;;; there is no need for an ARGUMENT-VARIABLE.  The &AUX parameter
+;;; itself provides all the information required for to determine the
+;;; LET binding.
 (defgeneric destructure-aux-parameter (client aux-parameter body))
 
 (defgeneric destructure-aux-parameters (client parameters body))
