@@ -1,5 +1,31 @@
 (cl:in-package #:concrete-syntax-tree)
 
+;;;; Generally speaking, these functions collectively take a macro
+;;;; lambda list and a BODY form, and wraps the body form in a bunch
+;;;; of LET bindings, for the purpose of creating a lambda expression
+;;;; corresponding to a macro function.
+
+;;;; Every function defined here wraps a BODY form in some LET
+;;;; bindings.  These LET bindings are determined by the parameters of
+;;;; a lambda list.  Each function handles a different part of the
+;;;; lambda list.  CLIENT is some object representing the client.  It
+;;;; is used among other things to determine which condition class to
+;;;; use when a a condition needs to be signaled.  ARGUMENT-VARIABLE
+;;;; is a symbol that, when the resulting macro function is executed
+;;;; on some compound form corresponding to a macro call, will hold
+;;;; the remaining part of the arguments of that macro call yet to be
+;;;; processed.
+
+;;;; Some functions have an argument called TAIL-VARIABLE, which is
+;;;; also a symbol that is going to be used in subsequent
+;;;; destructuring functions for the same purpose as
+;;;; ARGUMENT-VARIABLE.  Such a function is responsible for creating
+;;;; an innermost LET form that binds the TAIL-VARIABLE symbol to the
+;;;; part of the argument list that remains after the function has
+;;;; done its processing.  Some functions do not need such a variable,
+;;;; because they do not consume any arguments, so the remaining
+;;;; argument list is the same as the initial one.
+
 (defgeneric destructure-lambda-list
     (client lambda-list argument-variable tail-variable body))
 
