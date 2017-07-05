@@ -68,9 +68,15 @@
 (defgeneric destructure-rest-parameter
     (client parameter argument-variable body))
 
+;;; Wrap BODY in a LET form corresponding to a single &OPTIONAL
+;;; parameter.
 (defgeneric destructure-optional-parameter
     (client optional-parameter argument-variable body))
 
+;;; Wrap BODY in nested LET forms, each corresponding to a single
+;;; &OPTIONAL parameter in a list of such &OPTIONAL parameters.  Since
+;;; every &OPTIONAL parameters DOES consume an argument, this function
+;;; does take a TAIL-VARIABLE argument as described above.
 (defgeneric destructure-optional-parameters
     (client parameters argument-variable tail-variable body))
 
