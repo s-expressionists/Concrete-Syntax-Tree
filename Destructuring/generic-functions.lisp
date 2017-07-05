@@ -39,23 +39,32 @@
 ;;; binding.
 (defgeneric destructure-aux-parameter (client aux-parameter body))
 
-;;; Wrap BODY in a nested LET forms, each corresponding to a single
-;;; &AUX parameter in the list of &AUX parameters PARAMETERS.  Since
-;;; &AUX parameters are independent of the macro-call argument, there
-;;; is no need for an ARGUMENT-VARIABLE.  Each &AUX parameter in
-;;; PARAMETERS itself provides all the information required to
-;;; determine the LET binding.
+;;; Wrap BODY in nested LET forms, each corresponding to a single &AUX
+;;; parameter in the list of &AUX parameters PARAMETERS.  Since &AUX
+;;; parameters are independent of the macro-call argument, there is no
+;;; need for an ARGUMENT-VARIABLE.  Each &AUX parameter in PARAMETERS
+;;; itself provides all the information required to determine the LET
+;;; binding.
 (defgeneric destructure-aux-parameters (client parameters body))
 
-(defgeneric destructure-parameter-group
-    (client parameter-group argument-variable tail-variable body))
-  
+;;; Wrap BODY in a LET form corresponding to a single &KEY parameter.
 (defgeneric destructure-key-parameter
     (client key-parameter argument-variable body))
 
+;;; Wrap BODY in nested LET forms, each corresponding to a single &KEY
+;;; parameter in a list of such &KEY parameters.  Since &KEY
+;;; parameters do not consume any arguments, the list of arguments is
+;;; the same before and after the &KEY parameters have been processed.
+;;; As a consequence, we do not need a TAIL-VARIABLE for &KEY
+;;; parameters.
 (defgeneric destructure-key-parameters
     (client parameters argument-variable body))
 
+;;; Wrap body in a LET form corresponding to a &REST parameter.  Since
+;;; &REST parameters do not consume any arguments, the list of
+;;; arguments is the same before and after the &REST parameter has
+;;; been processed.  As a consequence, we do not need a TAIL-VARIABLE
+;;; for &REST parameters.
 (defgeneric destructure-rest-parameter
     (client parameter argument-variable body))
 
@@ -70,6 +79,9 @@
 
 (defgeneric destructure-required-parameters
     (client parameters argument-variable tail-variable body))
+
+(defgeneric destructure-parameter-group
+    (client parameter-group argument-variable tail-variable body))
 
 (defgeneric destructure-parameter-groups
     (client parameter-groups argument-variable tail-variable body))
