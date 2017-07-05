@@ -35,10 +35,16 @@
 ;;; Wrap BODY in a LET form corresponding to a single &AUX parameter.
 ;;; Since &AUX parameters are independent of the macro-call argument,
 ;;; there is no need for an ARGUMENT-VARIABLE.  The &AUX parameter
-;;; itself provides all the information required for to determine the
-;;; LET binding.
+;;; itself provides all the information required to determine the LET
+;;; binding.
 (defgeneric destructure-aux-parameter (client aux-parameter body))
 
+;;; Wrap BODY in a nested LET forms, each corresponding to a single
+;;; &AUX parameter in the list of &AUX parameters PARAMETERS.  Since
+;;; &AUX parameters are independent of the macro-call argument, there
+;;; is no need for an ARGUMENT-VARIABLE.  Each &AUX parameter in
+;;; PARAMETERS itself provides all the information required to
+;;; determine the LET binding.
 (defgeneric destructure-aux-parameters (client parameters body))
 
 (defgeneric destructure-parameter-group
