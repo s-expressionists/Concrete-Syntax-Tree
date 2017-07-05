@@ -75,14 +75,20 @@
 
 ;;; Wrap BODY in nested LET forms, each corresponding to a single
 ;;; &OPTIONAL parameter in a list of such &OPTIONAL parameters.  Since
-;;; every &OPTIONAL parameters DOES consume an argument, this function
+;;; every &OPTIONAL parameter DOES consume an argument, this function
 ;;; does take a TAIL-VARIABLE argument as described above.
 (defgeneric destructure-optional-parameters
     (client parameters argument-variable tail-variable body))
 
+;;; Wrap BODY in a LET form corresponding to a single required
+;;; parameter.
 (defgeneric destructure-required-parameter
     (client parameter argument-variable body))
 
+;;; Wrap BODY in nested LET forms, corresponding to the list of
+;;; required parameters in the list of required parameters PARAMETERS.
+;;; Since every required parameter DOES consume an argument, this
+;;; function does take a TAIL-VARIABLE argument as described above.
 (defgeneric destructure-required-parameters
     (client parameters argument-variable tail-variable body))
 
