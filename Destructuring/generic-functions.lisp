@@ -26,6 +26,9 @@
 ;;;; because they do not consume any arguments, so the remaining
 ;;;; argument list is the same as the initial one.
 
+;;; Given an entire lambda list, which can be a macro lambda list or a
+;;; destructuring lambda list, Wrap BODY in a bunch of nested LET
+;;; bindings according to the parameters of the lambda list.
 (defgeneric destructure-lambda-list
     (client lambda-list argument-variable tail-variable body))
 
