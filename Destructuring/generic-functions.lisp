@@ -80,8 +80,9 @@
 (defgeneric destructure-optional-parameters
     (client parameters argument-variable tail-variable body))
 
-;;; Wrap BODY in a LET form corresponding to a single required
-;;; parameter.
+;;; Wrap BODY in one or more LET forms corresponding to a single
+;;; required parameter, depending on whether the required parameter is
+;;; a simple variable or a destructuring lambda list.
 (defgeneric destructure-required-parameter
     (client parameter argument-variable body))
 
@@ -92,8 +93,12 @@
 (defgeneric destructure-required-parameters
     (client parameters argument-variable tail-variable body))
 
+;;; Wrap BODY in nested LET forms, corresponding to the parameters in
+;;; PARAMETER-GROUP.
 (defgeneric destructure-parameter-group
     (client parameter-group argument-variable tail-variable body))
 
+;;; Wrap BODY in nested LET forms, corresponding to the parameters in
+;;; the list of parameter groups PARAMETER-GROUPS.
 (defgeneric destructure-parameter-groups
     (client parameter-groups argument-variable tail-variable body))
