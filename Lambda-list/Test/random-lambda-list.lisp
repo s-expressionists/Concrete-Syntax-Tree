@@ -199,8 +199,9 @@
 (defun random-destructuring-rest-parameter-group ()
   (let ((x (random 1d0)))
     (if (< x 0.5d0)
-        '()
-        (list '&rest (random-destructuring-parameter)))))
+	'()
+	(list (if (< x 0.25) '&rest '&body)
+	      (random-destructuring-parameter)))))
 
 (defun random-destructuring-lambda-list ()
   (append (random-whole-parameter-group)
