@@ -103,6 +103,9 @@
 (defparameter *destructuring-rest-parameter-group*
   '((destructuring-rest-parameter-group <-
      keyword-rest
+     destructuring-parameter)
+    (destructuring-rest-parameter-group <-
+     keyword-body
      destructuring-parameter)))
 
 (defparameter *destructuring-lambda-list*
