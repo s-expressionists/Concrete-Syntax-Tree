@@ -200,7 +200,7 @@
   (let ((x (random 1d0)))
     (if (< x 0.5d0)
 	'()
-	(list (if (< x 0.25) '&rest '&body)
+	(list (if (< x 0.75) '&rest '&body)
 	      (random-destructuring-parameter)))))
 
 (defun random-destructuring-lambda-list ()
