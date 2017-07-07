@@ -139,4 +139,5 @@
            #:*define-method-combination-lambda-list-grammar*
            #:*destructuring-lambda-list-grammar*
            #:*macro-lambda-list-grammar*
+           #:parse-macro
            #:db))
