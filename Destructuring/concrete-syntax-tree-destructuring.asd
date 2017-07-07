@@ -11,4 +11,5 @@
    (:file "key-parameters")
    (:file "aux-parameters")
    (:file "lambda-list")
-   (:file "parse-macro")))
+   (:file "parse-macro")
+   (:file "db-defmacro")))
