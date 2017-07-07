@@ -107,10 +107,13 @@
                          :keyword (car children)
                          :parameter (cadr children)))
 
-(defclass ordinary-rest-parameter-group (singleton-parameter-group)
+(defclass rest-parameter-group (singleton-parameter-group)
   ())
 
-(defclass destructuring-rest-parameter-group (singleton-parameter-group)
+(defclass ordinary-rest-parameter-group (rest-parameter-group)
+  ())
+
+(defclass destructuring-rest-parameter-group (rest-parameter-group)
   ())
 
 (defclass environment-parameter-group (singleton-parameter-group)
