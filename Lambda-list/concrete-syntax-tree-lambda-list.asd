@@ -4,6 +4,7 @@
   :serial t
   :components
   ((:file "client")
+   (:file "ensure-proper")
    (:file "grammar-symbols")
    (:file "lambda-list-keywords")
    (:file "grammar")
