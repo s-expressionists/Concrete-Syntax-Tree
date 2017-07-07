@@ -278,8 +278,9 @@
                    item
                    (make-simple-variable input))))
         ((shapep input 'cl:cons)
-         (let ((parse-tree (parse-destructuring-lambda-list
-                            client input :error-p nil)))
+         (let* ((proper (ensure-proper input))
+                (parse-tree (parse-destructuring-lambda-list
+                             client proper :error-p nil)))
            (if (cl:null parse-tree)
                '()
                (cl:list (advance-dot-position item parse-tree)))))
