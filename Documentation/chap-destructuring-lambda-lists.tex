@@ -65,7 +65,17 @@ determine the \texttt{let} binding.
 
 \Defgeneric {destructure-key-parameter} {client parameter av body}
 
+Wrap \textit{body} in a \texttt{let} form corresponding to a single
+\texttt{key} parameter.
+
 \Defgeneric {destructure-key-parameters} {client parameters av body}
+
+Wrap \textit{body} in nested \texttt{let} forms, each corresponding to
+a single \texttt{key} parameter in a list of such \texttt{key}
+parameters.  Since \texttt{key} parameters do not consume any
+arguments, the list of arguments is the same before and after the
+\texttt{key} parameters have been processed.  As a consequence, we do
+not need a \textit{tail-variable} for \texttt{key} parameters.
 
 \Defgeneric {destructure-rest-parameter} {client parameter av body}
 
