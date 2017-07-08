@@ -40,6 +40,10 @@ so the remaining argument list is the same as the initial one.
 
 \Defgeneric {destructure-lambda-list} {client lambda-list av tv body}
 
+Given an entire lambda list, which can be a macro lambda list or a
+destructuring lambda list, Wrap \textit{body} in a bunch of nested
+\texttt{let} bindings according to the parameters of the lambda list.
+
 \Defgeneric {destructure-aux-parameter} {client parameter body}
 
 \Defgeneric {destructure-aux-parameters} {client parameters body}
