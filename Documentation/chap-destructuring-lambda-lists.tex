@@ -101,7 +101,17 @@ a single \texttt{optional} parameter in a list of such
 
 \Defgeneric {destructure-required-parameter} {client parameter av body}
 
+Wrap \textit{body} in one or more \texttt{let} forms corresponding to
+a single required parameter, depending on whether the required
+parameter is a simple variable or a destructuring lambda list.
+
 \Defgeneric {destructure-required-parameters} {client parameters av tv body}
+
+Wrap \textit{body} in nested \texttt{let} forms, corresponding to the
+list of required parameters in the list of required parameters
+\textit{parameters}.  Since every required parameter \textit{does}
+consume an argument, this function does take a \texttt{tail-variable}
+argument as described above.
 
 \Defgeneric {destructure-parameter-group} {client group av tv body}
 
