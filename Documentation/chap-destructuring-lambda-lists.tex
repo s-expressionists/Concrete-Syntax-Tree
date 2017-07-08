@@ -17,6 +17,27 @@ certain macros are expanded.  In particular \texttt{defmacro} and
 \texttt{lambda} expression for the \emph{macro function}.  This lambda
 expression is then compiled to create the final macro function.
 
+Every function defined here wraps a \textit{body} form in some
+\texttt{let} bindings.  These \texttt{let} bindings are determined by
+the parameters of a lambda list.  Each function handles a different
+part of the lambda list.  The \textit{client} parameter is some object
+representing the client.  It is used among other things to determine
+which condition class to use when a a condition needs to be signaled.
+The \textit{argument-variable} parameter (abbreviated \textit{av} is a
+symbol that, when the resulting macro function is executed on some
+compound form corresponding to a macro call, will hold the remaining
+part of the arguments of that macro call yet to be processed.
+
+Some functions have an argument called \textit{tail-variable}
+(abbreviated \textit{tv}), which is also a symbol that is going to be
+used in subsequent destructuring functions for the same purpose as
+\textit{argument-variable}.  Such a function is responsible for
+creating an innermost \texttt{let} form that binds the
+\textit{tail-variable} symbol to the part of the argument list that
+remains after the function has done its processing.  Some functions do
+not need such a variable, because they do not consume any arguments,
+so the remaining argument list is the same as the initial one.
+
 \Defgeneric {destructure-lambda-list} {client lambda-list av tv body}
 
 \Defgeneric {destructure-aux-parameter} {client parameter body}
