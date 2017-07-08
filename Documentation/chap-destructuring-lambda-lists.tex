@@ -93,6 +93,12 @@ Wrap \textit{body} in a \texttt{let} form corresponding to a single
 
 \Defgeneric {destructure-optional-parameters} {client parameters av tv body}
 
+Wrap \textit{body} in nested \texttt{let} forms, each corresponding to
+a single \texttt{optional} parameter in a list of such
+\texttt{optional} parameters.  Since every \texttt{optional} parameter
+\textit{does} consume an argument, this function does take a
+\texttt{tail-variable} argument as described above.
+
 \Defgeneric {destructure-required-parameter} {client parameter av body}
 
 \Defgeneric {destructure-required-parameters} {client parameters av tv body}
