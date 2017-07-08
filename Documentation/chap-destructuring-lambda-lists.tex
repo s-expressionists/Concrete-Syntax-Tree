@@ -46,7 +46,22 @@ destructuring lambda list, Wrap \textit{body} in a bunch of nested
 
 \Defgeneric {destructure-aux-parameter} {client parameter body}
 
+Wrap \textit{body} in a \texttt{let} form corresponding to a single
+\texttt{aux} parameter.  Since \texttt{aux} parameters are independent
+of the macro-call arguments, there is no need for an
+\texttt{argument-variable}.  The \texttt{aux} parameter itself
+provides all the information required to determine the \texttt{let}
+binding.
+
 \Defgeneric {destructure-aux-parameters} {client parameters body}
+
+Wrap \textit{body} in nested \texttt{let} forms, each corresponding to
+a single \texttt{aux} parameter in the list of \texttt{aux} parameters
+\textit{parameters}.  Since \texttt{aux} parameters are independent of
+the macro-call argument, there is no need for an
+\textit{argument-variable}.  Each \texttt{aux} parameter in
+\textit{parameters} itself provides all the information required to
+determine the \texttt{let} binding.
 
 \Defgeneric {destructure-key-parameter} {client parameter av body}
 
