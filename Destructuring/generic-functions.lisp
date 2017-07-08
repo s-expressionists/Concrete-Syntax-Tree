@@ -33,7 +33,7 @@
     (client lambda-list argument-variable tail-variable body))
 
 ;;; Wrap BODY in a LET form corresponding to a single &AUX parameter.
-;;; Since &AUX parameters are independent of the macro-call argument,
+;;; Since &AUX parameters are independent of the macro-call arguments,
 ;;; there is no need for an ARGUMENT-VARIABLE.  The &AUX parameter
 ;;; itself provides all the information required to determine the LET
 ;;; binding.
