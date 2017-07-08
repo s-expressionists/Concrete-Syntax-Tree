@@ -1,0 +1,19 @@
+\chapter{Destructuring lambda lists}
+\label{chap-destructuring-lambda-lists}
+
+When applied to lambda lists, the term ``destructuring'' means to
+match its parameters against an argument list, and to generate a set
+of nested \texttt{let} bindings.  A binding will bind a parameter of
+the lambda list to its corresponding value in the argument list, or it
+will bind some temporary variable.  The argument list is not known at
+the time of the destructuring, so the \emph{form} of each binding will
+consist of calls to destructuring functions such as \texttt{car} and
+\texttt{cdr}, starting with a variable that holds the entire argument
+list as its value.
+
+This kind of destructuring is used at macro-expansion time when
+certain macros are expanded.  In particular \texttt{defmacro} and
+\texttt{define-compiler-macro}.  The result of the destructuring is a
+\texttt{lambda} expression for the \emph{macro function}.  This lambda
+expression is then compiled to create the final macro function.
+
