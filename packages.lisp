@@ -139,5 +139,16 @@
            #:*define-method-combination-lambda-list-grammar*
            #:*destructuring-lambda-list-grammar*
            #:*macro-lambda-list-grammar*
+           #:destructure-lambda-list
+           #:destructure-aux-parameter
+           #:destructure-aux-parameters
+           #:destructure-key-parameter
+           #:destructure-key-parameters
+           #:destructure-rest-parameter
+           #:destructure-optional-parameter
+           #:destructure-optional-parameters
+           #:destructure-required-parameter
+           #:destructure-required-parameters
+           #:destructure-parameter-group
            #:parse-macro
            #:db))
