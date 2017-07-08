@@ -79,7 +79,17 @@ not need a \textit{tail-variable} for \texttt{key} parameters.
 
 \Defgeneric {destructure-rest-parameter} {client parameter av body}
 
+Wrap \textit{body} in a \texttt{let} form corresponding to a
+\texttt{rest} parameter.  Since \texttt{rest} parameters do not
+consume any arguments, the list of arguments is the same before and
+after the \texttt{rest} parameter has been processed.  As a
+consequence, we do not need a \textit{tail-variable} for \texttt{rest}
+parameters.
+
 \Defgeneric {destructure-optional-parameter} {client parameter av body}
+
+Wrap \textit{body} in a \texttt{let} form corresponding to a single
+\texttt{optional} parameter.
 
 \Defgeneric {destructure-optional-parameters} {client parameters av tv body}
 
