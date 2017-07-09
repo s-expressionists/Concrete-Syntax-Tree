@@ -25,7 +25,7 @@
 (defun destructure-variables (tree form)
   (let ((bindings '()))
     (labels ((traverse (tree form)
-	       (cond ((null tree)
+	       (cond ((cl:null tree)
 		      nil)
 		     ((symbolp tree)
 		      (push `(,tree ,form) bindings))
@@ -35,8 +35,8 @@
 		     (t
 		      (let ((temp (gensym)))
 			(push `(,temp ,form) bindings)
-			(traverse (first tree) `(first ,temp))
-			(traverse (rest tree) `(rest ,temp)))))))
+			(traverse (cl:first tree) `(first ,temp))
+			(traverse (cl:rest tree) `(rest ,temp)))))))
       (traverse tree form)
       (reverse bindings))))
 
