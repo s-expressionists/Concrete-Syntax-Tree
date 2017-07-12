@@ -1,5 +1,17 @@
 (cl:in-package #:concrete-syntax-tree)
 
+;;; This function has four parameters.  The first parameter identifies
+;;; the client system.  We do not specialize on that parameter, but
+;;; client code can customize the behavior by overriding or extending
+;;; the behavior of the methods defined here.  The second parameter is
+;;; the declaration identifier.  It is a symbol that identifies what
+;;; kind of declaration we are dealing with.  The third parameter is
+;;; the CST version of the declaration identifier.  The fourth
+;;; parameter is the declaration data, i.e. whatever follows the
+;;; declaration identifier in a declaration.  This function returns an
+;;; ordinary Common Lisp list of CSTs.  Each CST represents a list of
+;;; the declaration identifier given as an argument, and a single item
+;;; in the declaration data.
 (defgeneric canonicalize-declaration-specifier
     (system declaration-identifier declaration-identifier-cst declaration-data))
 
