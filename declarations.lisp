@@ -62,6 +62,19 @@
         until (null remaining)
         collect (list declaration-identifier-cst type (first remaining))))
 
+(defun canonicalize-declaration-specifiers (system declaration-specifiers)
+  (reduce #'append
+          (mapcar (lambda (specifier)
+                    (let ((declaration-identifier-cst (first specifier))
+                          (declaration-data-cst (rest specifier)))
+                      (canonicalize-declaration-specifier
+                       system
+                       (raw declaration-identifier-cst)
+                       declaration-identifier-cst
+                       declaration-data-cst)))
+                  declaration-specifiers)
+          :from-end t))
+
 ;;; Given an ordinary Common Lisp list of declarations, each
 ;;; declaration being represented as a CST, return an ordinary Common
 ;;; Lisp list of all the declaration specifiers.  The raw form of a
