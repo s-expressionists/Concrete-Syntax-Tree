@@ -61,3 +61,15 @@
         for remaining = (rest declaration-data) then (rest remaining)
         until (null remaining)
         collect (list declaration-identifier-cst type (first remaining))))
+
+;;; Given an ordinary Common Lisp list of declarations, each
+;;; declaration being represented as a CST, return an ordinary Common
+;;; Lisp list of all the declaration specifiers.  The raw form of a
+;;; CST of the input is:
+;;;
+;;;  (DECLARE <declaration-specifier> ... <declaration-specifier>)
+(defun declaration-specifiers (declaration-csts)
+  (loop for declaration-cst in declaration-csts
+        append (loop for cst = (rest declaration-cst) then (rest cst)
+                     until (null cst)
+                     collect (first cst))))
