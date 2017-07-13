@@ -86,3 +86,11 @@
         append (loop for cst = (rest declaration-cst) then (rest cst)
                      until (null cst)
                      collect (first cst))))
+
+;;; Given an ordinary Common Lisp list of declarations, each being
+;;; represented as a CST, return a list of canonicalized declaration
+;;; specifiers of all the declarations.
+(defun canonicalize-declarations (declarations env)
+  (cleavir-code-utilities:canonicalize-declaration-specifiers
+   (declaration-specifiers declarations)
+   (cleavir-env:declarations env)))
