@@ -53,6 +53,7 @@
            #:proper-list-p
            #:cst-from-expression
            #:canonicalize-declaration-specifier
+           #:canonicalize-declaration-specifiers
            #:declaration-specifiers
            #:reconstruct
            #:parser
