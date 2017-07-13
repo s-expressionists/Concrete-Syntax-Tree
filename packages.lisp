@@ -54,6 +54,7 @@
            #:cst-from-expression
            #:canonicalize-declaration-specifier
            #:canonicalize-declaration-specifiers
+           #:canonicalize-declarations
            #:declaration-specifiers
            #:reconstruct
            #:parser
