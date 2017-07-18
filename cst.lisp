@@ -22,10 +22,6 @@
   (declare (ignorable cst))
   nil)
 
-(defmethod raw (cst)
-  (error 'expression-cst-required
-         :cst cst))
-
 (defmethod first (cst)
   (error 'cons-cst-required
          :cst cst))
