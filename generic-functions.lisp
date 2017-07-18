@@ -17,9 +17,8 @@
 ;;; Return true if and only if CST represents a CONS expression.
 (defgeneric consp (cst))
 
-;;; Given an EXPRESSION-CST, return the underlying Common Lisp
-;;; expression.
-(defgeneric raw (expression-cst))
+;;; Given a CST, return the underlying Common Lisp expression.
+(defgeneric raw (cst))
 
 ;;; Given a CONS-CST, return the FIRST of that CST.  If some other CST
 ;;; type is given, including an ATOM-CST representing NIL, then an
