@@ -6,7 +6,9 @@
    (%parent :initarg :parent :accessor parent)
    ;; This slot contains client-supplied information about the origin
    ;; of this CST.
-   (%source :initform nil :initarg :source :accessor source)))
+   (%source :initform nil :initarg :source :accessor source)
+   ;; This slot contains the raw expression that this CST represents.
+   (%raw :initarg :raw :reader raw)))
 
 (defmethod null ((cst cst))
   (declare (ignorable cst))
@@ -39,14 +41,9 @@
   (declare (ignorable cst))
   t)
 
-;;; An instance of this class is used to represent a Common Lisp
-;;; expression.
-(defclass expression-cst (cst)
-  ((%raw :initarg :raw :reader raw)))
-
 ;;; This class is used to represent expressions that are atoms.  It is
 ;;; not used to represent the end of a chain of CSTs.
-(defclass atom-cst (expression-cst)
+(defclass atom-cst (cst)
   ())
 
 (defmethod atom ((cst atom-cst))

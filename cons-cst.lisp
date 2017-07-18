@@ -1,6 +1,6 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defclass cons-cst (expression-cst)
+(defclass cons-cst (cst)
   (;; This slot contains a CST that represents the CAR of the
    ;; corresponding expression.
    (%first :initform nil :initarg :first :reader first)
