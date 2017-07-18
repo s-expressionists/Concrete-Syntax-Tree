@@ -9,6 +9,18 @@ provides for manipulating concrete syntax trees.
 
 This class is the base class for all concrete syntax trees.
 
+\Definitarg {:raw}
+
+The value of this initialization argument is the raw \commonlisp{}
+expression that this concrete syntax tree represents.
+
+\Defgeneric {raw} {cst}
+
+This generic function returns the raw \commonlisp{} expression that is
+represented by \textit{cst} as provide by the
+initialization argument \texttt{:raw} when \textit{cst} was
+created.
+
 \Definitarg {:parent}
 
 This initialization argument is accepted by all subclasses of concrete
@@ -51,26 +63,9 @@ This generic function returns \emph{true} if and only if \textit{cst}
 is an instance of the class \texttt{null-cst}.  Otherwise, it returns
 \emph{false}.
 
-\Defclass {expression-cst}
-
-This class is a subclass of the class \texttt{cst}.  It is used for
-concrete syntax trees that represent \commonlisp{} expressions.
-
-\Definitarg {:raw}
-
-The value of this initialization argument is the raw \commonlisp{}
-expression that this concrete syntax tree represents.
-
-\Defgeneric {raw} {expression-cst}
-
-This generic function returns the raw \commonlisp{} expression that is
-represented by \textit{expression-cst} as provide by the
-initialization argument \texttt{:raw} when \textit{expression-cst} was
-created.
-
 \Defclass {cons-cst}
 
-This class is a subclass of the class \texttt{expression-cst}.
+This class is a subclass of the class \texttt{cst}.
 
 \Definitarg {:first}
 
