@@ -32,8 +32,7 @@
   (error 'cons-cst-required
          :cst cst))
 
-;;; This class is used as a terminator of a chain of CSTs.  It does
-;;; NOT represent NIL in other situations.
+;;; This class represents the atom NIL.
 (defclass null-cst (cst) ())
 
 (defmethod null ((cst null-cst))
