@@ -3,7 +3,7 @@
 (defmethod separate-ordinary-body ((body cons-cst))
   (loop with declarations = '()
         for remaining = body then (rest remaining)
-        until (or (typep remaining 'null-cst)
+        until (or (null remaining)
                   (atom (first remaining))
                   (not (eq (raw (first (first remaining))) 'declare)))
         do (push (first remaining) declarations)
@@ -14,7 +14,7 @@
   (loop with declarations = '()
         with documentation = nil
         for remaining = body then (rest remaining)
-        until (or (typep remaining 'null-cst)
+        until (or (null remaining)
                   (and (atom (first remaining))
                        (not (stringp (raw (first remaining)))))
                   (and (stringp (raw (first remaining)))
