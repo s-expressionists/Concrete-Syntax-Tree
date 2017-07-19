@@ -15,3 +15,9 @@
              (or (cl:null (cdr raw))
                  (and (cl:consp (cdr raw))
                       (cl:null (cddr raw))))))))
+
+;;; Check whether a single binding in the form of a CST represents a
+;;; canonical binding.  It is assumed that the binding is valid as
+;;; checked by VALID-BINDING-P.
+(defun canonical-binding-p (binding-cst)
+  (= (length (raw binding-cst)) 2))
