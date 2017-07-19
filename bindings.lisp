@@ -58,4 +58,12 @@
                       :first (make-instance 'null-cst :raw nil)
                       :rest (make-instance 'null-cst :raw nil)))))))
 
+;;; Check whether each binding in a list of bindings represented as a
+;;; CST is canonical.  It is assumed that the bindings have been
+;;; checked for validity as reported by VALID-BINDINGS-P.
+(defun canonical-bindings-p (bindings-cst)
+  (loop for rest = bindings-cst then (rest rest)
+        until (null rest)
+        always (canonical-binding-p (first rest))))
+
 ;;;  LocalWords:  canonicalized, canonicalize
