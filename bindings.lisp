@@ -12,6 +12,7 @@
   (let ((raw (raw binding-cst)))
     (or (symbolp raw)
         (and (cl:consp raw)
+             (symbolp (car raw))
              (or (cl:null (cdr raw))
                  (and (cl:consp (cdr raw))
                       (cl:null (cddr raw))))))))
