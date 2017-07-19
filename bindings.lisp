@@ -85,4 +85,18 @@
                 :first new-first
                 :rest rest))))))
 
+;;; Given a list of bindings represented as a CST, return a list of
+;;; the variables bound in those bindings, also as a CST.  This
+;;; function is useful for turning a LET form into a LAMBDA form.  It
+;;; is assumed that the list of bindings is canonical.
+(defun binding-variables (bindings-cst)
+  (if (null bindings-cst)
+      bindings-cst
+      (let ((rest (binding-variables (rest bindings-cst))))
+        (make-instance 'cons-cst
+          :raw (cl:cons (raw (car (first bindings-cst))) (raw rest))
+          :source nil
+          :first (first (first bindings-cst))
+          :rest rest))))
+
 ;;;  LocalWords:  canonicalized, canonicalize
