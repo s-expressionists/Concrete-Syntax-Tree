@@ -66,4 +66,23 @@
         until (null rest)
         always (canonical-binding-p (first rest))))
 
+;;; Canonicalize a list of bindings represented as a CST.  If the list
+;;; of bindings is already canonical, it is returned as is.  Otherwise
+;;; a new CST is constructed in which each binding has been
+;;; canonicalized.  It is assumed that the bindings have been checked
+;;; for validity as reported by VALID-BINDINGS-P.
+(defun canonicalize-bindings (bindings-cst)
+  (if (null bindings-cst)
+      bindings-cst
+      (let ((rest (canonicalize-bindings (rest bindings-cst))))
+        (if (and (eq rest (rest bindings-cst))
+                 (canonical-binding-p (first bindings-cst)))
+            bindings-cst
+            (let ((new-first (canonicalize-binding (first bindings-cst))))
+              (make-instance 'cons-cst
+                :raw (cl:cons (raw new-first) (raw rest))
+                :source (source bindings-cst)
+                :first new-first
+                :rest rest))))))
+
 ;;;  LocalWords:  canonicalized, canonicalize
