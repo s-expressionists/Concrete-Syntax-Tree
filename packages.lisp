@@ -157,4 +157,12 @@
            #:destructure-required-parameters
            #:destructure-parameter-group
            #:parse-macro
-           #:db))
+           #:db
+           #:valid-binding-p
+           #:valid-bindings-p
+           #:canoncial-binding-p
+           #:canoncial-bindings-p
+           #:canonicalize-binding
+           #:canonicalize-bindings
+           #:binding-variables
+           #:binding-init-forms))
