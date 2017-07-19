@@ -12,7 +12,7 @@
 ;;;; the form of a CST.  Client code that uses functions of this
 ;;;; system must therefore be sure that CSTs are being used.
 
-(defsystem :concrete-syntax-tree
+(defsystem :concrete-syntax-tree-base
   :depends-on (:alexandria :acclimation)
   :serial t
   :components
