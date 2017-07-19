@@ -30,3 +30,32 @@
 ;;; checked by VALID-BINDING-P.
 (defun canonical-binding-p (binding-cst)
   (= (length (raw binding-cst)) 2))
+
+;;; Canonicalize a single binding represented as a CST.  It is assumed
+;;; that the binding is valid, but we do not know whether the binding
+;;; is already canonical.  If it is canonical, we return it as is.  If
+;;; not, we return a canonicalized version of it.
+(defun canonicalize-binding (binding-cst)
+  (if (canonical-binding-p binding-cst)
+      binding-cst
+      (if (atom binding-cst)
+          (let ((raw (cl:list (raw binding-cst) nil)))
+            (make-instance 'cons-cst
+              :raw raw
+              :source (source binding-cst)
+              :first binding-cst
+              :rest (make-instance 'cons-cst
+                      :raw (cdr raw)
+                      :first (make-instance 'null-cst :raw nil)
+                      :rest (make-instance 'null-cst :raw nil))))
+          (let ((raw (cl:list (car (raw binding-cst)) nil)))
+            (make-instance 'cons-cst
+              :raw raw
+              :source (source binding-cst)
+              :first (first binding-cst)
+              :rest (make-instance 'cons-cst
+                      :raw (cdr raw)
+                      :first (make-instance 'null-cst :raw nil)
+                      :rest (make-instance 'null-cst :raw nil)))))))
+
+;;;  LocalWords:  canonicalized, canonicalize
