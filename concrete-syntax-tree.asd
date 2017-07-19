@@ -26,4 +26,5 @@
    (:file "declarations")
    (:file "body")
    (:file "list-structure")
+   (:file "bindings")
    (:file "conditions")))
