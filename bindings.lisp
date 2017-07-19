@@ -94,9 +94,23 @@
       bindings-cst
       (let ((rest (binding-variables (rest bindings-cst))))
         (make-instance 'cons-cst
-          :raw (cl:cons (raw (car (first bindings-cst))) (raw rest))
+          :raw (cl:cons (car (raw (first bindings-cst))) (raw rest))
           :source nil
           :first (first (first bindings-cst))
+          :rest rest))))
+
+;;; Given a list of bindings represented as a CST, return a list of
+;;; the initialization forms of those bindings, also as a CST.  This
+;;; function is useful for turning a LET form into a LAMBDA form.  It
+;;; is assumed that the list of bindings is canonical.
+(defun binding-init-forms (bindings-cst)
+  (if (null bindings-cst)
+      bindings-cst
+      (let ((rest (binding-init-forms (rest bindings-cst))))
+        (make-instance 'cons-cst
+          :raw (cl:cons (cadr (raw (first bindings-cst))) (raw rest))
+          :source nil
+          :first (second (first bindings-cst))
           :rest rest))))
 
 ;;;  LocalWords:  canonicalized, canonicalize
