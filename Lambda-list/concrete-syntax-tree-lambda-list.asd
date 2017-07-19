@@ -1,6 +1,7 @@
 (cl:in-package #:asdf-user)
 
 (defsystem #:concrete-syntax-tree-lambda-list
+  :depends-on (:concrete-syntax-tree-base)
   :serial t
   :components
   ((:file "client")
