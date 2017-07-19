@@ -16,6 +16,14 @@
                  (and (cl:consp (cdr raw))
                       (cl:null (cddr raw))))))))
 
+;;; Check whether each binding in a list of bindings represented as a
+;;; CST is valid.
+(defun valid-bindings-p (bindings-cst)
+  (and (proper-list-p bindings-cst)
+       (loop for rest = bindings-cst then (rest rest)
+             until (null rest)
+             always (valid-binding-p (first rest)))))
+
 ;;; Check whether a single binding in the form of a CST represents a
 ;;; canonical binding.  It is assumed that the binding is valid as
 ;;; checked by VALID-BINDING-P.
