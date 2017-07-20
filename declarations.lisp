@@ -90,7 +90,6 @@
 ;;; Given an ordinary Common Lisp list of declarations, each being
 ;;; represented as a CST, return a list of canonicalized declaration
 ;;; specifiers of all the declarations.
-(defun canonicalize-declarations (declarations env)
-  (cleavir-code-utilities:canonicalize-declaration-specifiers
-   (declaration-specifiers declarations)
-   (cleavir-env:declarations env)))
+(defun canonicalize-declarations (system declarations)
+  (canonicalize-declaration-specifiers
+   system (declaration-specifiers declarations)))
