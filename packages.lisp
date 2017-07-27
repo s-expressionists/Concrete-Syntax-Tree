@@ -83,8 +83,10 @@
            #:whole-parameter-group
            #:parameter
            #:simple-variable
+           #:name
            #:ordinary-optional-parameter
            #:ordinary-key-parameter
+           #:supplied-p
            #:generic-function-key-parameter
            #:aux-parameter
            #:generic-function-optional-parameter
