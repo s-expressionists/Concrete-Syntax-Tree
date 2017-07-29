@@ -82,6 +82,7 @@
            #:environment-parameter-group
            #:whole-parameter-group
            #:parameter
+           #:parameters
            #:simple-variable
            #:name
            #:ordinary-optional-parameter
