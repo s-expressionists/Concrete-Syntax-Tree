@@ -5,9 +5,6 @@
 
 (defgeneric random-sources (cst))
 
-(defmethod random-sources ((cst cst:null-cst))
-  cst)
-
 (defmethod random-sources ((cst cst:atom-cst))
   (reinitialize-instance cst :source (gensym))
   cst)

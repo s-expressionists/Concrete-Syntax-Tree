@@ -46,8 +46,8 @@
               :first binding-cst
               :rest (make-instance 'cons-cst
                       :raw (cdr raw)
-                      :first (make-instance 'null-cst :raw nil)
-                      :rest (make-instance 'null-cst :raw nil))))
+                      :first (make-instance 'atom-cst :raw nil)
+                      :rest (make-instance 'atom-cst :raw nil))))
           (let ((raw (cl:list (car (raw binding-cst)) nil)))
             (make-instance 'cons-cst
               :raw raw
@@ -55,8 +55,8 @@
               :first (first binding-cst)
               :rest (make-instance 'cons-cst
                       :raw (cdr raw)
-                      :first (make-instance 'null-cst :raw nil)
-                      :rest (make-instance 'null-cst :raw nil)))))))
+                      :first (make-instance 'atom-cst :raw nil)
+                      :rest (make-instance 'atom-cst :raw nil)))))))
 
 ;;; Check whether each binding in a list of bindings represented as a
 ;;; CST is canonical.  It is assumed that the bindings have been

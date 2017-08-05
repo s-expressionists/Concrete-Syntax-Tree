@@ -15,9 +15,7 @@
 (defgeneric cons (first rest))
 
 (defun raw-or-nil (cst)
-  (if (typep cst 'null-cst)
-      nil
-      (raw cst)))
+  (raw cst))
 
 (defmethod cons (first rest)
   (let ((result (make-instance 'cons-cst
@@ -29,7 +27,7 @@
     result))
 
 (defun list (&rest csts)
-  (loop for result = (make-instance 'null-cst) then (cons cst result)
+  (loop for result = (make-instance 'atom-cst :raw nil) then (cons cst result)
         for cst in (reverse csts)
         finally (return result)))
 

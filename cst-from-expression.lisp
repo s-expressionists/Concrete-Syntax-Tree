@@ -18,7 +18,7 @@
     (cond ((not (cl:null existing))
            existing)
           ((cl:null expression)
-           (make-instance 'null-cst))
+           (make-instance 'atom-cst :raw nil))
           ((cl:atom expression)
            (setf (gethash expression *table*)
                  (make-instance 'atom-cst

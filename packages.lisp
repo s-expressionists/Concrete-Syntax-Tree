@@ -23,7 +23,6 @@
            #:keyword)
   (:export #:cst
            #:cons-cst
-           #:null-cst
            #:atom-cst
            #:parent
            #:source

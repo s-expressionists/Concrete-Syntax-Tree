@@ -2,12 +2,9 @@
 
 (defgeneric ensure-proper (lambda-list))
 
-(defmethod ensure-proper ((lambda-list null-cst))
-  lambda-list)
-
 (defmethod ensure-proper ((lambda-list atom-cst))
-  (if (null (source lambda-list))
-      (make-instance 'null-cst)
+  (if (null lambda-list)
+      (make-instance 'atom-cst :raw nil)
       (list (make-instance 'atom-cst :raw '&rest)
             lambda-list)))
 

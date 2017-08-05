@@ -30,13 +30,6 @@
   (error 'cons-cst-required
          :cst cst))
 
-;;; This class represents the atom NIL.
-(defclass null-cst (cst) ())
-
-(defmethod null ((cst null-cst))
-  (declare (ignorable cst))
-  t)
-
 ;;; This class is used to represent expressions that are atoms.  It is
 ;;; not used to represent the end of a chain of CSTs.
 (defclass atom-cst (cst)
@@ -45,3 +38,7 @@
 (defmethod atom ((cst atom-cst))
   (declare (ignorable cst))
   t)
+
+(defmethod null ((cst atom-cst))
+  (cl:null (raw cst)))
+
