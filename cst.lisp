@@ -41,4 +41,3 @@
 
 (defmethod null ((cst atom-cst))
   (cl:null (raw cst)))
-
