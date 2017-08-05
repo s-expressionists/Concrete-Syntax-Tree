@@ -51,17 +51,11 @@ This generic function returns the origin information of \textit{cst}
 as provide by the initialization argument \texttt{:source} when
 \textit{cst} was created.
 
-\Defclass {null-cst}
-
-This class represents the end of a list of concrete syntax trees.  It
-does \emph{not} represent the \commonlisp{} symbol \texttt{nil} in
-other situations.
-
 \Defgeneric {null} {cst}
 
 This generic function returns \emph{true} if and only if \textit{cst}
-is an instance of the class \texttt{null-cst}.  Otherwise, it returns
-\emph{false}.
+is an instance of the class \texttt{atom-cst} that has \texttt{nil} as
+its raw value.  Otherwise, it returns \emph{false}.
 
 \Defclass {cons-cst}
 
