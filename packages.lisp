@@ -82,6 +82,8 @@
            #:whole-parameter-group
            #:parameter
            #:parameters
+           #:keyword
+           #:allow-other-keys
            #:simple-variable
            #:name
            #:ordinary-optional-parameter
