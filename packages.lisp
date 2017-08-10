@@ -88,6 +88,7 @@
            #:name
            #:ordinary-optional-parameter
            #:ordinary-key-parameter
+           #:form
            #:supplied-p
            #:generic-function-key-parameter
            #:aux-parameter
