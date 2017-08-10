@@ -129,10 +129,10 @@
   ((%name :initarg :name :reader name)))
 
 (defclass form-mixin ()
-  ((%form :initarg :form :reader form)))
+  ((%form :initform nil :initarg :form :reader form)))
 
 (defclass supplied-p-mixin ()
-  ((%supplied-p :initarg :supplied-p :reader supplied-p)))
+  ((%supplied-p :initform nil :initarg :supplied-p :reader supplied-p)))
 
 (defclass keyword-mixin ()
   ((%keyword :initarg :keyword :reader keyword)))
