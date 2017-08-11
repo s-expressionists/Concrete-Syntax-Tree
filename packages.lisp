@@ -82,6 +82,7 @@
            #:whole-parameter-group
            #:parameter
            #:parameters
+           #:children
            #:keyword
            #:allow-other-keys
            #:simple-variable
