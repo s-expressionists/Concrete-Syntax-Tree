@@ -1,5 +1,9 @@
 (cl:in-package #:concrete-syntax-tree)
 
+(defmethod separate-ordinary-body ((body atom-cst))
+  (assert (null body))
+  (values '() '()))
+
 (defmethod separate-ordinary-body ((body cons-cst))
   (loop with declarations = '()
         for remaining = body then (rest remaining)
@@ -9,6 +13,10 @@
         do (push (first remaining) declarations)
         finally (return (values (reverse declarations)
                                 (listify remaining)))))
+
+(defmethod separate-function-body ((body atom-cst))
+  (assert (null body))
+  (values '() '()))
 
 (defmethod separate-function-body ((body cons-cst))
   (loop with declarations = '()
