@@ -192,6 +192,10 @@
 (defclass lambda-list-type (grammar-symbol)
   ((%children :initarg :children :reader children)))
 
+(defmethod print-object ((object lambda-list-type) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (format stream "children: ~s" (children object))))
+
 (defclass ordinary-lambda-list (lambda-list-type) ())
 
 (defclass generic-function-lambda-list (lambda-list-type) ())
