@@ -21,6 +21,7 @@
    (:file "cst")
    (:file "cons-cst")
    (:file "listify")
+   (:file "cstify")
    (:file "cst-from-expression")
    (:file "reconstruct")
    (:file "declarations")
