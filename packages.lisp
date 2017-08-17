@@ -46,6 +46,7 @@
            #:null
            #:raw
            #:listify
+           #:cstify
            #:separate-ordinary-body
            #:separate-function-body
            #:list-structure
