@@ -10,6 +10,10 @@
    ;; This slot contains the raw expression that this CST represents.
    (%raw :initarg :raw :reader raw)))
 
+(defmethod print-object ((object cst) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (format stream "raw: ~s" (raw object))))
+
 (defmethod null ((cst cst))
   (declare (ignorable cst))
   nil)
