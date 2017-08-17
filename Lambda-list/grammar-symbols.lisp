@@ -18,6 +18,10 @@
 (defclass singleton-parameter-group-mixin ()
   ((%parameter :initarg :parameter :reader parameter)))
 
+(defmethod print-object ((object singleton-parameter-group-mixin) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (format stream "parameter: ~s" (parameter object))))
+
 (defclass multi-parameter-group-mixin ()
   ((%parameters :initarg :parameters :reader parameters)))
 
