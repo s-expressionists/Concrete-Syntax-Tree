@@ -17,8 +17,7 @@
 
 (defun parse-macro (client name lambda-list body &optional environment)
   (declare (ignore name environment)) ; For now.
-  (let* ((cst-lambda-list (cst-from-expression lambda-list))
-         (parsed-lambda-list (parse-macro-lambda-list client cst-lambda-list))
+  (let* ((parsed-lambda-list (parse-macro-lambda-list client lambda-list))
 	 (env-var (find-var parsed-lambda-list 'environment-parameter-group))
 	 (final-env-var (if (cl:null env-var) (gensym) env-var))
 	 (form-var (find-var parsed-lambda-list 'whole-parameter-group))
