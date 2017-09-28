@@ -4,7 +4,7 @@
     (client (parameter simple-variable) argument-variable body)
   `(if (cl:null ,argument-variable)
        (error "too few arguments")
-       (let (,(raw (name parameter)) (car ,argument-variable))
+       (let ((,(raw (name parameter)) (car ,argument-variable)))
          ,body)))
 
 (defmethod destructure-required-parameter
