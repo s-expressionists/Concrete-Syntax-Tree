@@ -79,11 +79,14 @@
 
 (defmethod initialize-instance :after
     ((parameter-group key-parameter-group) &key children)
-  (when (typep (car (last children)) 'keyword-allow-other-keys)
-    (reinitialize-instance parameter-group
-                           :keyword (car children)
-                           :parameters (cdr (butlast children))
-                           :allow-other-keys (car (last children)))))
+  (let ((allow-other-keys (car (last children))))
+    (reinitialize-instance
+     parameter-group
+     :keyword (car children)
+     :parameters (cdr (butlast children))
+     :allow-other-keys (if (typep allow-other-keys 'keyword-allow-other-keys)
+                           allow-other-keys
+                           nil))))
 
 (defclass generic-function-key-parameter-group (key-parameter-group)
   ())
