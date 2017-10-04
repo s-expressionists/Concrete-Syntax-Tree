@@ -83,7 +83,9 @@
     (reinitialize-instance
      parameter-group
      :keyword (car children)
-     :parameters (cdr (butlast children))
+     :parameters (cdr (if (typep allow-other-keys 'keyword-allow-other-keys)
+                          (butlast children)
+                          children))
      :allow-other-keys (if (typep allow-other-keys 'keyword-allow-other-keys)
                            allow-other-keys
                            nil))))
