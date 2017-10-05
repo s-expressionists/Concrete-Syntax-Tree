@@ -34,6 +34,7 @@
 	       `((declare (ignore ,final-env-var)))
 	       `())
 	 (let ((,args-var (cdr ,final-form-var)))
+           (declare (ignorable ,args-var))
            ,(destructure-lambda-list client
                                      parsed-lambda-list
                                      args-var

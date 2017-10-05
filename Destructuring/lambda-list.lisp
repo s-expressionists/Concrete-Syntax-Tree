@@ -3,6 +3,7 @@
 (defmethod destructure-parameter-groups
     (client (parameter-groups cl:null) argument-variable tail-variable body)
   `(let ((,tail-variable ,argument-variable))
+     (declare (ignorable ,tail-variable))
      ,body))
 
 (defmethod destructure-parameter-groups
