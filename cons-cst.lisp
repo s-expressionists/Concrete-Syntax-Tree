@@ -12,14 +12,15 @@
   (declare (ignorable cst))
   t)
 
-(defgeneric cons (first rest))
+(defgeneric cons (first rest &key source))
 
 (defun raw-or-nil (cst)
   (raw cst))
 
-(defmethod cons (first rest)
+(defmethod cons (first rest &key source)
   (let ((result (make-instance 'cons-cst
                   :raw (cl:cons (raw-or-nil first) (raw-or-nil rest))
+                  :source source
                   :first first
                   :rest rest)))
     (setf (parent first) result)
