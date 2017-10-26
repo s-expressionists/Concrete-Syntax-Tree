@@ -8,7 +8,7 @@
 ;;;; arbitrary lambda list; only a trees of variables, similar to the
 ;;;; destructuring done by LOOP.  Also, DB does not destructure an
 ;;;; ordinary Common Lisp tree, and instead works on a concrete syntax
-;;;; tree.  Finally, DP takes an additional argument (the first one)
+;;;; tree.  Finally, DB takes an additional argument (the first one)
 ;;;; compared to DESTRUCTURING-BIND.  That argument is a variable that
 ;;;; will be bound to the SOURCE slot of the CST.
 

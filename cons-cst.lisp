@@ -60,7 +60,7 @@
 (defmethod seventh ((cst cons-cst))
   (nth 6 cst))
 
-(defmethod eigth ((cst cons-cst))
+(defmethod eighth ((cst cons-cst))
   (nth 7 cst))
 
 (defmethod ninth ((cst cons-cst))
