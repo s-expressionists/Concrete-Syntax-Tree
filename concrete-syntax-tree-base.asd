@@ -13,7 +13,7 @@
 ;;;; system must therefore be sure that CSTs are being used.
 
 (defsystem :concrete-syntax-tree-base
-  :depends-on (:alexandria :acclimation)
+  :depends-on (:acclimation)
   :serial t
   :components
   ((:file "packages")
