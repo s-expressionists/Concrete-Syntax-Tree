@@ -7,5 +7,5 @@
   (let ((rest (cstify (cdr list))))
     (make-instance 'cons-cst
       :first (car list)
-      :rest (cstify (cdr list))
+      :rest rest
       :raw (cl:cons (raw (car list)) (raw rest)))))
