@@ -172,4 +172,9 @@
            #:canonicalize-binding
            #:canonicalize-bindings
            #:binding-variables
-           #:binding-init-forms))
+           #:binding-init-forms
+           #:define-keyword-scanner-action
+           #:?
+           #:<-
+           #:lambda-list-keyword
+           #:lambda-list-type))
