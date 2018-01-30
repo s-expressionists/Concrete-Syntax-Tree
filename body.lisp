@@ -26,7 +26,7 @@
                   (and (atom (first remaining))
                        (not (stringp (raw (first remaining)))))
                   (and (stringp (raw (first remaining)))
-                       (not (null documentation)))
+                       (not (cl:null documentation)))
                   (and (consp (first remaining))
                        (not (eq (raw (first (first remaining))) 'declare))))
         do (if (stringp (raw (first remaining)))
