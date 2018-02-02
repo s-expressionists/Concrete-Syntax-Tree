@@ -2,7 +2,7 @@
 
 (defmethod destructure-rest-parameter
     (client (parameter simple-variable) argument-variable body)
-  `(let ((,(raw (name parameter))) ',argument-variable)
+  `(let ((,(raw (name parameter)) ,argument-variable))
      ,body))
 
 (defmethod destructure-rest-parameter

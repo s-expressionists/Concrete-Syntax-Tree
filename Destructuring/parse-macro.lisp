@@ -5,7 +5,7 @@
                          (children parsed-lambda-list))))
     (if (cl:null group)
         nil
-        (raw (parameter group)))))
+        (name (parameter group)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
