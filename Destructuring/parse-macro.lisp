@@ -5,7 +5,7 @@
                          (children parsed-lambda-list))))
     (if (cl:null group)
         nil
-        (name (parameter group)))))
+        (raw (name (parameter group))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -22,6 +22,13 @@
 	 (final-env-var (if (cl:null env-var) (gensym) env-var))
 	 (form-var (find-var parsed-lambda-list 'whole-parameter-group))
 	 (final-form-var (if (cl:null form-var) (gensym) form-var))
+         (children (children parsed-lambda-list))
+         (relevant-children
+           (remove-if (lambda (x) (typep x 'environment-parameter-group))
+                      (remove-if (lambda (x) (typep x 'whole-parameter-group))
+                                 children)))
+         (relevant-lambda-list
+           (make-instance 'cst:macro-lambda-list :children relevant-children))
 	 (args-var (gensym))
          (tail-var (gensym)))
       `(lambda (,final-form-var ,final-env-var)
@@ -36,7 +43,7 @@
 	 (let ((,args-var (cdr ,final-form-var)))
            (declare (ignorable ,args-var))
            ,(destructure-lambda-list client
-                                     parsed-lambda-list
+                                     relevant-lambda-list
                                      args-var
                                      tail-var
                                      body)))))
