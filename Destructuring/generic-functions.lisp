@@ -1,7 +1,7 @@
 (cl:in-package #:concrete-syntax-tree)
 
 ;;;; Generally speaking, these functions collectively take a macro
-;;;; lambda list and a BODY form, and wraps the body form in a bunch
+;;;; lambda list and a BODY form, and wrap the body form in a bunch
 ;;;; of LET bindings, for the purpose of creating a lambda expression
 ;;;; corresponding to a macro function.
 
