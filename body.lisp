@@ -26,7 +26,9 @@
                   (and (atom (first remaining))
                        (not (stringp (raw (first remaining)))))
                   (and (stringp (raw (first remaining)))
-                       (not (cl:null documentation)))
+                       (or (not (cl:null documentation))
+                           ;; if a string is the last form, it's not a docstring
+                           (null (rest remaining))))
                   (and (consp (first remaining))
                        (not (eq (raw (first (first remaining))) 'declare))))
         do (if (stringp (raw (first remaining)))
