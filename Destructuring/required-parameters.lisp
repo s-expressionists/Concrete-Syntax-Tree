@@ -9,7 +9,7 @@
 
 (defmethod destructure-required-parameter
     (client (parameter destructuring-lambda-list) argument-variable body)
-  (let ((new-argument-variable)
+  (let ((new-argument-variable (gensym))
         (tail-variable (gensym))
         (temp (gensym)))
   `(if (cl:null ,argument-variable)
