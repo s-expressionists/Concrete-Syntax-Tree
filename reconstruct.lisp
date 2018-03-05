@@ -91,7 +91,7 @@
 ;;; build a CST from the expression in such a way that if an
 ;;; expression is encountered that has a mapping in the table, then
 ;;; the corresponding CST in the table is used.
-(defun build-cst (expression table)
+(defun build-cst (expression table default-source)
   (let ((cons-table (make-hash-table :test #'eq)))
     (labels ((traverse (expression)
                (multiple-value-bind (value found-p)
@@ -105,7 +105,7 @@
                                existing
                                (let ((cst (make-instance 'cons-cst
                                             :raw expression
-                                            :source nil)))
+                                            :source default-source)))
                                  (setf (gethash expression cons-table) cst)
                                  (let ((first (traverse (car expression)))
                                        (rest (traverse (cdr expression))))
@@ -115,15 +115,15 @@
                                  cst)))
                          (make-instance 'atom-cst
                            :raw expression
-                           :source nil))))))
+                           :source default-source))))))
       (traverse expression))))
 
 ;;; Given a CST and an expression that is presumably some transformed
 ;;; version of the raw version of the CST, create a new CST that tries
 ;;; to reuse as much as possible of the given CST, so as to preserve
 ;;; source information.
-(defun reconstruct (expression cst)
+(defmethod reconstruct (expression cst client &key default-source)
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (add-atoms cst referenced-cons-table)
-    (build-cst expression referenced-cons-table)))
+    (build-cst expression referenced-cons-table default-source)))
