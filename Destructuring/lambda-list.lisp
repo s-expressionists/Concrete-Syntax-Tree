@@ -33,3 +33,16 @@
    argument-variable
    tail-variable
    body))
+
+(defmethod destructure-lambda-list
+    (client
+     (lambda-list destructuring-lambda-list)
+     argument-variable
+     tail-variable
+     body)
+  (destructure-parameter-groups
+   client
+   (children lambda-list)
+   argument-variable
+   tail-variable
+   body))

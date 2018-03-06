@@ -54,3 +54,9 @@
 ;;; list, but the elements are CSTs.  It is assumed that the input has
 ;;; already been determined to be a proper list represented as a CST.
 (defgeneric separate-function-body (body-cst))
+
+;;; Given a CST and an expression that is presumably some transformed
+;;; version of the raw version of the CST, create a new CST that tries
+;;; to reuse as much as possible of the given CST, so as to preserve
+;;; source information.
+(defgeneric reconstruct (expression cst client &key default-source))
