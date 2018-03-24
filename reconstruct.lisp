@@ -10,6 +10,16 @@
 ;;; concrete syntax tree for S in E to be identical to the concrete
 ;;; syntax tree for S in T as much as possible.
 ;;;
+;;;   CST    T                   T'
+;;;          │                   ▲
+;;;          │ raw               │ reconstruct
+;;;          ▼                   │
+;;;   s-expr R ───macroexpand──▶ E
+;;;          │                   │
+;;;          │ subexpression     │ subexpression
+;;;          ▼                   ▼
+;;;   s-expr S                   S
+;;;
 ;;; Clearly what we want to accomplish can not always be precise.  It
 ;;; can only be precise when S is a CONS and E contains the identical
 ;;; (in the sense of EQ) CONS.  For atoms, we just have to guess.
