@@ -10,6 +10,16 @@
 ;;; concrete syntax tree for S in E to be identical to the concrete
 ;;; syntax tree for S in T as much as possible.
 ;;;
+;;;   CST    T                   T'
+;;;          │                   ▲
+;;;          │ raw               │ reconstruct
+;;;          ▼                   │
+;;;   s-expr R ───macroexpand──▶ E
+;;;          │                   │
+;;;          │ subexpression     │ subexpression
+;;;          ▼                   ▼
+;;;   s-expr S                   S
+;;;
 ;;; Clearly what we want to accomplish can not always be precise.  It
 ;;; can only be precise when S is a CONS and E contains the identical
 ;;; (in the sense of EQ) CONS.  For atoms, we just have to guess.
@@ -38,15 +48,14 @@
 ;;; is not unique.  In this case, we just pick the first corresponding
 ;;; CST we encounter.  By doing it this way, we also avoid infinite
 ;;; computations when the expression contains cycles.
-(defun cons-table (cst)
-  (let ((table (make-hash-table :test #'eq)))
-    (labels ((traverse (cst)
-               (when (and (consp cst) (cl:null (gethash (raw cst) table)))
-                 (setf (gethash (raw cst) table) cst)
-                 (traverse (first cst))
-                 (traverse (rest cst)))))
-      (traverse cst))
-    table))
+(defun cons-table (cst &optional (table (make-hash-table :test #'eq)))
+  (labels ((traverse (cst)
+             (when (and (consp cst) (cl:null (gethash (raw cst) table)))
+               (setf (gethash (raw cst) table) cst)
+               (traverse (first cst))
+               (traverse (rest cst)))))
+    (traverse cst))
+  table)
 
 ;;; Given an expression E and a hash table H1 mapping CONS cells to
 ;;; CSTs, return a new EQL hash table H2 that contains the subset of
@@ -85,7 +94,8 @@
                          (when (not (nth-value 1 (gethash (raw cst) table)))
                            (setf (gethash (raw cst) table) cst))
                          (setf (gethash (raw cst) table) cst))))))
-      (traverse cst nil))))
+      (traverse cst nil)))
+  table)
 
 ;;; Given an expression and a hash table mapping expressions to CSTs,
 ;;; build a CST from the expression in such a way that if an
@@ -118,12 +128,16 @@
                            :source default-source))))))
       (traverse expression))))
 
-;;; Given a CST and an expression that is presumably some transformed
-;;; version of the raw version of the CST, create a new CST that tries
-;;; to reuse as much as possible of the given CST, so as to preserve
-;;; source information.
-(defmethod reconstruct (expression cst client &key default-source)
+(defmethod reconstruct (expression (cst cst) client &key default-source)
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (add-atoms cst referenced-cons-table)
+    (build-cst expression referenced-cons-table default-source)))
+
+(defmethod reconstruct (expression (cst cl:sequence) client &key default-source)
+  (let* ((cons-table (reduce #'cons-table cst
+                             :initial-value (make-hash-table :test #'eq)
+                             :from-end t))
+         (referenced-cons-table (referenced-cons-table expression cons-table)))
+    (reduce #'add-atoms cst :initial-value referenced-cons-table :from-end t)
     (build-cst expression referenced-cons-table default-source)))
