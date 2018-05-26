@@ -10,7 +10,7 @@
                            nil
                            (raw default-form-cst)))
          (supplied-p-cst (supplied-p parameter))
-         (default-for-getf (cl:list nil))
+         (default-for-getf '(cl:list nil))
          (default-var (gensym))
          (form-variable (gensym)))
     `(let* ((,default-var ,default-for-getf)
