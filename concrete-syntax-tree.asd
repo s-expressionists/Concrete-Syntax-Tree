@@ -3,6 +3,6 @@
 (defsystem :concrete-syntax-tree
   :description "Library for parsing Common Lisp code into a concrete syntax tree."
   :author "Robert Strandh <robert.strandh@gmail.com>"
-  :license "FreeBSD, see file LICENSE.text"
+  :license "FreeBSD" ; See file LICENSE.text.
   :depends-on (:concrete-syntax-tree-base
                :concrete-syntax-tree-lambda-list))
