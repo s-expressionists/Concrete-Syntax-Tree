@@ -30,7 +30,7 @@
   (error 'cons-cst-required
          :cst cst))
 
-(defmethod second (cst)
+(defmethod rest (cst)
   (error 'cons-cst-required
          :cst cst))
 
