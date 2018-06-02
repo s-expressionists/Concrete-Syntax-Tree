@@ -96,6 +96,7 @@
            #:aux-parameter
            #:generic-function-optional-parameter
            #:specialized-required-parameter
+           #:specializer
            #:destructuring-parameter
            #:lambda-list-keyword
            #:keyword-optional
