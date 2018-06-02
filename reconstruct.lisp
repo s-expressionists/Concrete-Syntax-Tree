@@ -106,26 +106,28 @@
     (labels ((traverse (expression)
                (multiple-value-bind (value found-p)
                    (gethash expression table)
-                 (if found-p
-                     value
-                     (if (cl:consp expression)
-                         (multiple-value-bind (existing found-p)
-                             (gethash expression cons-table)
-                           (if found-p
-                               existing
-                               (let ((cst (make-instance 'cons-cst
-                                            :raw expression
-                                            :source default-source)))
-                                 (setf (gethash expression cons-table) cst)
-                                 (let ((first (traverse (car expression)))
-                                       (rest (traverse (cdr expression))))
-                                   (reinitialize-instance cst
-                                                          :first first
-                                                          :rest rest))
-                                 cst)))
-                         (make-instance 'atom-cst
-                           :raw expression
-                           :source default-source))))))
+                 (cond
+                   (found-p
+                    value)
+                   ((cl:consp expression)
+                    (multiple-value-bind (existing found-p)
+                        (gethash expression cons-table)
+                      (if found-p
+                          existing
+                          (let ((cst (make-instance 'cons-cst
+                                                    :raw expression
+                                                    :source default-source)))
+                            (setf (gethash expression cons-table) cst)
+                            (let ((first (traverse (car expression)))
+                                  (rest (traverse (cdr expression))))
+                              (reinitialize-instance cst
+                                                     :first first
+                                                     :rest rest))
+                            cst))))
+                   (t
+                    (make-instance 'atom-cst
+                                   :raw expression
+                                   :source default-source))))))
       (traverse expression))))
 
 (defmethod reconstruct (expression (cst cst) client &key default-source)

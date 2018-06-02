@@ -12,17 +12,17 @@
   (let ((new-argument-variable (gensym))
         (tail-variable (gensym))
         (temp (gensym)))
-  `(if (cl:null ,argument-variable)
-       (error "too few arguments")
-       (let ((,new-argument-variable (car ,argument-variable)))
-         ,(destructure-lambda-list
-           client
-           parameter
-           new-argument-variable
-           tail-variable
-           `(let ((,temp ,tail-variable))
-              (declare (ignore ,temp))
-              ,body))))))
+    `(if (cl:null ,argument-variable)
+         (error "too few arguments")
+         (let ((,new-argument-variable (car ,argument-variable)))
+           ,(destructure-lambda-list
+             client
+             parameter
+             new-argument-variable
+             tail-variable
+             `(let ((,temp ,tail-variable))
+                (declare (ignore ,temp))
+                ,body))))))
 
 (defmethod destructure-required-parameters
     (client (parameters cl:null) argument-variable tail-variable body)
@@ -48,7 +48,7 @@
 
 (defmethod destructure-parameter-group
     (client
-     (parameter-group destructuring-required-parameter-group) 
+     (parameter-group destructuring-required-parameter-group)
      argument-variable
      tail-variable
      body)
