@@ -21,6 +21,8 @@
            #:list
            #:null
            #:keyword)
+  ;; Conditions
+  (:export #:cons-cst-required)
   (:export #:cst
            #:cons-cst
            #:atom-cst
