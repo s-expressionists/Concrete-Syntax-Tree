@@ -1,5 +1,28 @@
 (cl:in-package #:concrete-syntax-tree)
 
+(defun %null-or-lose (cst whole-cst pattern)
+  (unless (null cst)
+    (error 'null-structure-mismatch-error
+           :pattern pattern
+           :whole-cst whole-cst
+           :cst cst)))
+
+(defun %first-or-lose (cst whole-cst pattern)
+  (if (consp cst)
+      (first cst)
+      (error 'cons-structure-mismatch-error
+             :pattern pattern
+             :whole-cst whole-cst
+             :cst cst)))
+
+(defun %rest-or-lose (cst whole-cst pattern)
+  (if (consp cst)
+      (rest cst)
+      (error 'cons-structure-mismatch-error
+             :pattern pattern
+             :whole-cst whole-cst
+             :cst cst)))
+
 ;;;; The purpose of the functions and the macro in this file is to
 ;;;; help handle source-tracking information.  The main entry point in
 ;;;; this file is the macro DB which is very similar to the standard
@@ -23,27 +46,37 @@
 ;;; and CST:REST so that an error is signaled whenever the
 ;;; corresponding place in the value tree is not a CONS-CST
 (defun destructure-variables (tree form)
-  (let ((bindings '()))
-    (labels ((traverse (tree form)
-	       (cond ((cl:null tree)
-		      nil)
-		     ((symbolp tree)
-		      (push `(,tree ,form) bindings))
-		     ((not (cl:consp tree))
-		      (error 'expectetree-but-found
-			     :found tree))
-		     (t
-		      (let ((temp (gensym)))
-			(push `(,temp ,form) bindings)
-			(traverse (cl:first tree) `(first ,temp))
-			(traverse (cl:rest tree) `(rest ,temp)))))))
-      (traverse tree form)
-      (reverse bindings))))
+  (let ((bindings '())
+        (body-forms '()))
+    (labels ((traverse (sub-tree sub-form)
+               (cond ((cl:null sub-tree)
+                      (push `(%null-or-lose ,sub-form ,form ',tree)
+                            body-forms))
+                     ((symbolp sub-tree)
+                      (push `(,sub-tree ,sub-form) bindings))
+                     ((not (cl:consp sub-tree))
+                      (error 'expectetree-but-found ; TODO undefined?
+                             :found sub-tree))
+                     (t
+                      (let ((temp (gensym)))
+                        (push `(,temp ,sub-form) bindings)
+                        (traverse (cl:first sub-tree)
+                                  `(%first-or-lose ,temp ,form ',tree))
+                        (traverse (cl:rest sub-tree)
+                                  `(%rest-or-lose ,temp ,form ',tree)))))))
+      (traverse tree form))
+    (values (reverse bindings) (nreverse body-forms))))
 
 (defmacro db (source-var tree form &body body)
-  (let ((form-var (gensym)))
-    `(let* ((,form-var ,form)
-	    (,source-var (source ,form-var))
-            ,@(destructure-variables tree form-var))
-       (declare (ignorable ,source-var))
-       ,@body)))
+  ;; We use the DUMMY-VAR hack so we can execute BODY-FORMS after
+  ;; BINDINGS but before BODY without messing with BODY's
+  ;; declarations.
+  (let ((form-var (gensym)) (dummy-var (gensym)))
+    (multiple-value-bind (bindings body-forms)
+        (destructure-variables tree form-var)
+      `(let* ((,form-var ,form)
+              (,source-var (source ,form-var))
+              ,@bindings
+              (,dummy-var ,@body-forms))
+         (declare (ignorable ,source-var ,dummy-var))
+         ,@body))))
