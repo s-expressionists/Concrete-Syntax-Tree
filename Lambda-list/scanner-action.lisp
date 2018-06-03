@@ -219,13 +219,13 @@
                                               '#:keyword)))))
 
 (defun parse-generic-function-key-parameter (parameter)
-  (cond ((cst::shapep parameter 'symbol)
+  (cond ((shapep parameter 'symbol)
          (make-generic-function-key-parameter
           parameter))
-        ((cst::shapep parameter '(symbol))
+        ((shapep parameter '(symbol))
          (make-generic-function-key-parameter
           (path parameter '(0))))
-        ((cst::shapep parameter '((symbol symbol)))
+        ((shapep parameter '((symbol symbol)))
          (make-generic-function-key-parameter
           (path parameter '(0 1))
           :keyword (path parameter '(0 0))))
