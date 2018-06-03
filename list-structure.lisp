@@ -38,7 +38,7 @@
 	  finally (return (values (hash-table-count table)
                                   (cond ((null remaining) :proper)
                                         ((atom remaining) :dotted)
-                                        (t :circulat)))))))
+                                        (t :circular)))))))
 
 (defun proper-list-p (cst)
   (eq (nth-value 1 (list-structure cst)) :proper))
