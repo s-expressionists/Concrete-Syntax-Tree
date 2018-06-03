@@ -28,4 +28,6 @@
    (:file "body")
    (:file "list-structure")
    (:file "bindings")
-   (:file "conditions")))
+   (:file "conditions")
+
+   (:file "condition-reporters-english")))
