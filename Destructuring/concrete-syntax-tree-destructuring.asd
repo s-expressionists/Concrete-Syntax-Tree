@@ -5,6 +5,7 @@
   :serial t
   :components
   ((:file "generic-functions")
+   (:file "conditions")
    (:file "required-parameters")
    (:file "optional-parameters")
    (:file "rest-parameters")
@@ -12,4 +13,6 @@
    (:file "aux-parameters")
    (:file "lambda-list")
    (:file "parse-macro")
-   (:file "db-defmacro")))
+   (:file "db-defmacro")
+
+   (:file "condition-reporters-english")))

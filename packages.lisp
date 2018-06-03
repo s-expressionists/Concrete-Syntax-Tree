@@ -21,6 +21,15 @@
            #:list
            #:null
            #:keyword)
+  ;; Conditions
+  (:export #:null-cst-required
+           #:cons-cst-required
+
+           #:structure-mismatch-error
+           #:pattern
+           #:whole-cst
+           #:null-structure-mismatch-error
+           #:cons-structure-mismatch-error)
   (:export #:cst
            #:cons-cst
            #:atom-cst
