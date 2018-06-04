@@ -39,20 +39,23 @@
 (defgeneric cstify (list))
 
 ;;; Given a body in the form of a CST that may contain declarations
-;;; but not a documentation string, return two values, a list of the
-;;; declarations and a list of the forms in the body.  Each return
-;;; value is an ordinary Common Lisp list, but the elements are CSTs.
+;;; but not a documentation string, return two values
+;;; 1) an ordinary Common Lisp list of CST instances representing the
+;;;    declarations
+;;; 2) a CST instance representing the forms in the body.
 ;;; It is assumed that the input has already been determined to be a
 ;;; proper list represented as a CST.
 (defgeneric separate-ordinary-body (body-cst))
 
 ;;; Given a body in the form of a CST that may contain both
-;;; declarations and a documentation string, return three values, a
-;;; list of the declarations, a documentation string (or NIL if no
-;;; documentation string is present in the body) and a list of the
-;;; forms in the body.  Each return value is an ordinary Common Lisp
-;;; list, but the elements are CSTs.  It is assumed that the input has
-;;; already been determined to be a proper list represented as a CST.
+;;; declarations and a documentation string, return three values
+;;; 1) an ordinary Common Lisp list of CST instances representing the
+;;;    declarations
+;;; 2) an ATOM-CST representing the documentation string (or NIL if no
+;;;    documentation string is present in the body)
+;;; 3) a CST instance representing the forms in the body.
+;;; It is assumed that the input has already been determined to be a
+;;; proper list represented as a CST.
 (defgeneric separate-function-body (body-cst))
 
 ;;; Given a CST and an expression that is presumably some transformed
