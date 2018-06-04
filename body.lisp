@@ -16,7 +16,7 @@
 
 (defmethod separate-function-body ((body atom-cst))
   (assert (null body))
-  (values '() '()))
+  (values '() nil '()))
 
 (defmethod separate-function-body ((body cons-cst))
   (loop with declarations = '()
