@@ -2,7 +2,7 @@
 
 (defmethod separate-ordinary-body ((body atom-cst))
   (assert (null body))
-  (values '() '()))
+  (values '() (make-instance 'atom-cst :raw nil)))
 
 (defmethod separate-ordinary-body ((body cons-cst))
   (loop with declarations = '()
@@ -11,12 +11,11 @@
                   (atom (first remaining))
                   (not (eq (raw (first (first remaining))) 'declare)))
         do (push (first remaining) declarations)
-        finally (return (values (reverse declarations)
-                                (listify remaining)))))
+        finally (return (values (reverse declarations) remaining))))
 
 (defmethod separate-function-body ((body atom-cst))
   (assert (null body))
-  (values '() nil '()))
+  (values '() nil (make-instance 'atom-cst :raw nil)))
 
 (defmethod separate-function-body ((body cons-cst))
   (loop with declarations = '()
@@ -36,4 +35,4 @@
                (push (first remaining) declarations))
         finally (return (values (reverse declarations)
                                 documentation
-                                (listify remaining)))))
+                                remaining))))
