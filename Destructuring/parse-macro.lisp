@@ -19,9 +19,9 @@
   (declare (ignore name environment)) ; For now.
   (let* ((parsed-lambda-list (parse-macro-lambda-list client lambda-list))
 	 (env-var (find-var parsed-lambda-list 'environment-parameter-group))
-	 (final-env-var (if (cl:null env-var) (gensym) env-var))
+	 (final-env-var (if (cl:null env-var) (gensym "ENV") env-var))
 	 (form-var (find-var parsed-lambda-list 'whole-parameter-group))
-	 (final-form-var (if (cl:null form-var) (gensym) form-var))
+	 (final-form-var (if (cl:null form-var) (gensym "WHOLE") form-var))
          (children (children parsed-lambda-list))
          (relevant-children
            (remove-if (lambda (x) (typep x 'environment-parameter-group))
@@ -29,8 +29,7 @@
                                  children)))
          (relevant-lambda-list
            (make-instance 'cst:macro-lambda-list :children relevant-children))
-	 (args-var (gensym))
-         (tail-var (gensym)))
+	 (args-var (gensym)))
       `(lambda (,final-form-var ,final-env-var)
 	 ;; If the lambda list does not contain &environment, then
 	 ;; we IGNORE the GENSYMed parameter to avoid warnings.
@@ -40,10 +39,8 @@
 	 ,@(if (cl:null env-var)
 	       `((declare (ignore ,final-env-var)))
 	       `())
-	 (let ((,args-var (cdr ,final-form-var)))
+         (let* ((,args-var (cdr ,final-form-var))
+                ,@(destructuring-lambda-list-bindings client relevant-lambda-list
+                                                      args-var))
            (declare (ignorable ,args-var))
-           ,(destructure-lambda-list client
-                                     relevant-lambda-list
-                                     args-var
-                                     tail-var
-                                     body)))))
+           ,@body))))

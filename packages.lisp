@@ -162,17 +162,17 @@
            #:*define-method-combination-lambda-list-grammar*
            #:*destructuring-lambda-list-grammar*
            #:*macro-lambda-list-grammar*
-           #:destructure-lambda-list
-           #:destructure-aux-parameter
-           #:destructure-aux-parameters
-           #:destructure-key-parameter
-           #:destructure-key-parameters
-           #:destructure-rest-parameter
-           #:destructure-optional-parameter
-           #:destructure-optional-parameters
-           #:destructure-required-parameter
-           #:destructure-required-parameters
-           #:destructure-parameter-group
+           #:destructuring-lambda-list-bindings
+           #:parameter-groups-bindings
+           #:aux-parameter-bindings
+           #:aux-parameters-bindings
+           #:key-parameter-bindings
+           #:key-parameters-bindings
+           #:rest-parameter-bindings
+           #:optional-parameter-bindings
+           #:optional-parameters-bindings
+           #:required-parameter-bindings
+           #:required-parameters-bindings)
            #:parse-macro
            #:db
            #:valid-binding-p

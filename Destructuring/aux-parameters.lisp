@@ -1,33 +1,24 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defmethod destructure-aux-parameter
-    (client (parameter aux-parameter) body)
+(defmethod aux-parameter-bindings
+    (client (parameter aux-parameter))
   (declare (ignore client))
-  (let ((name (name parameter))
+  (let ((name (raw (name parameter)))
         (form (form parameter)))
-    `(let ((,(raw name) ,(if (cl:null form) cl:nil (raw form))))
-       ,body)))
+    `((,name ,(if (cl:null form) cl:nil (raw form))))))
 
-(defmethod destructure-aux-parameters
-    (client (parameters cl:null) body)
+(defmethod aux-parameters-bindings
+    (client (parameters cl:null))
   (declare (ignore client))
-  body)
+  nil)
 
-(defmethod destructure-aux-parameters
-    (client (parameters cl:cons) body)
-  (destructure-aux-parameter
-   client
-   (car parameters)
-   (destructure-aux-parameters client (cdr parameters) body)))
-                                   
-(defmethod destructure-parameter-group
-    (client
-     (parameter-group aux-parameter-group)
-     argument-variable
-     tail-variable
-     body)
-  (destructure-aux-parameters
-   client
-   (parameters parameter-group)
-   `(let ((,tail-variable ,argument-variable))
-      ,body)))
+(defmethod aux-parameters-bindings
+    (client (parameters cl:cons))
+  (loop for parameter in parameters
+        appending (aux-parameter-bindings client parameter)))
+
+(defmethod parameter-group-bindings
+    (client (parameter-group aux-parameter-group)
+     argument-variable)
+  (declare (ignore argument-variable))
+  (aux-parameters-bindings client (parameters parameter-group)))
