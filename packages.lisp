@@ -172,7 +172,7 @@
            #:optional-parameter-bindings
            #:optional-parameters-bindings
            #:required-parameter-bindings
-           #:required-parameters-bindings)
+           #:required-parameters-bindings
            #:parse-macro
            #:db
            #:valid-binding-p
