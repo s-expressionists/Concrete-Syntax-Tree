@@ -4,10 +4,6 @@
 ;;; location is represented by a client-defined object.
 (defgeneric source (cst))
 
-;;; Return the parent of CST.  If CST does not have a parent, then NIL
-;;; is returned instead.
-(defgeneric parent (cst))
-
 ;;; Return true if and only if CST is an instance of NULL-CST.
 (defgeneric null (cst))
 

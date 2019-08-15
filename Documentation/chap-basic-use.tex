@@ -21,14 +21,6 @@ represented by \textit{cst} as provide by the
 initialization argument \texttt{:raw} when \textit{cst} was
 created.
 
-\Definitarg {:parent}
-
-This initialization argument is accepted by all subclasses of concrete
-syntax trees.  If the syntax tree is a top-level syntax tree, then
-\texttt{nil} should be provided as the value for this initialization
-argument.  Otherwise, the value should be the concrete syntax tree
-that is the parent of this one.
-
 \Definitarg {:source}
 
 This initialization argument is accepted by all subclasses of concrete
@@ -38,12 +30,6 @@ represented by this concrete syntax tree.  A value of \texttt{nil}
 indicates that the origin of the source code represented by this concrete
 syntax tree is unknown.  The default value (if this initialization
 argument is not provided) is \texttt{nil}.
-
-\Defgeneric {parent} {cst}
-
-This generic function returns the parent of \textit{cst} as provide by
-the initialization argument \texttt{:parent} when \textit{cst} was
-created.
 
 \Defgeneric {source} {cst}
 

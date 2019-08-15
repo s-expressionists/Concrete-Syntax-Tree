@@ -33,7 +33,6 @@
   (:export #:cst
            #:cons-cst
            #:atom-cst
-           #:parent
            #:source
            #:first
            #:second
