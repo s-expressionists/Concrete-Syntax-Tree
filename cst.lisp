@@ -1,10 +1,7 @@
 (cl:in-package #:concrete-syntax-tree)
 
 (defclass cst ()
-  (;; This slot contains either another CST, namely the parent of this
-   ;; one, or NIL if this is a top-level CST.
-   (%parent :initarg :parent :accessor parent)
-   ;; This slot contains client-supplied information about the origin
+  (;; This slot contains client-supplied information about the origin
    ;; of this CST.
    (%source :initform nil :initarg :source :accessor source)
    ;; This slot contains the raw expression that this CST represents.
