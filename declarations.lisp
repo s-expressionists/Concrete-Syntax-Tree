@@ -68,6 +68,8 @@
         until (null remaining)
         collect (list declaration-identifier-cst type (first remaining))))
 
+;;; IGNORE-DECLS is a list of symbols. These symbols are declaration identifiers
+;;; that CST should ignore, i.e., these declarations will be canonicalized as NIL.
 (defun canonicalize-declaration-specifiers (system ignore-decls declaration-specifiers)
   (reduce #'append
           (mapcar (lambda (specifier)
