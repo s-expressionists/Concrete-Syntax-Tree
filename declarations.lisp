@@ -17,7 +17,13 @@
 
 (defmethod  canonicalize-declaration-specifier
     (system declaration-identifier declaration-identifier-cst declaration-data)
-  '())
+  ;; Treat as a type declaration.
+  ;; Declarations from PROCLAIM DECLARATION will have already been filtered out
+  ;; in CANONICALIZE-DECLARATION-SPECIFIERS, below.
+  (canonicalize-declaration-specifier
+   system 'type
+   (make-instance 'atom-cst :raw 'type :source (source declaration-identifier-cst))
+   (cons declaration-identifier-cst declaration-data)))
 
 ;;; Given a PREFIX P and a list of ITEMS, say (I1 I2 ... In), return a
 ;;; list of the items prefixed with P, i.e. ((P I1) (P I2) ... (P
@@ -62,16 +68,21 @@
         until (null remaining)
         collect (list declaration-identifier-cst type (first remaining))))
 
-(defun canonicalize-declaration-specifiers (system declaration-specifiers)
+(defun canonicalize-declaration-specifiers (system ignore-decls declaration-specifiers)
   (reduce #'append
           (mapcar (lambda (specifier)
-                    (let ((declaration-identifier-cst (first specifier))
-                          (declaration-data-cst (rest specifier)))
-                      (canonicalize-declaration-specifier
-                       system
-                       (raw declaration-identifier-cst)
-                       declaration-identifier-cst
-                       declaration-data-cst)))
+                    (let* ((declaration-identifier-cst (first specifier))
+                           (declaration-data-cst (rest specifier))
+                           (declaration-identifier (raw declaration-identifier-cst)))
+                      ;; Filter out ignored declarations.
+                      ;; (Intended for PROCLAIM DECLARATION.)
+                      (if (member declaration-identifier ignore-decls :test #'eq)
+                          nil
+                          (canonicalize-declaration-specifier
+                           system
+                           declaration-identifier
+                           declaration-identifier-cst
+                           declaration-data-cst))))
                   declaration-specifiers)
           :from-end t))
 
@@ -90,6 +101,6 @@
 ;;; Given an ordinary Common Lisp list of declarations, each being
 ;;; represented as a CST, return a list of canonicalized declaration
 ;;; specifiers of all the declarations.
-(defun canonicalize-declarations (system declarations)
+(defun canonicalize-declarations (system ignore-decls declarations)
   (canonicalize-declaration-specifiers
-   system (declaration-specifiers declarations)))
+   system ignore-decls (declaration-specifiers declarations)))
