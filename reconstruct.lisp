@@ -85,6 +85,7 @@
     (labels ((traverse (cst inside-p)
                (if (consp cst)
                    (unless (gethash cst seen)
+                     (setf (gethash cst seen) t)
                      (let ((new-inside-p (or (gethash (raw cst) table)
                                              inside-p)))
                        (traverse (first cst) new-inside-p)
