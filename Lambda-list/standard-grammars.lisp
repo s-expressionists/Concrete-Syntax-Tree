@@ -100,6 +100,17 @@
   '((destructuring-required-parameter-group <-
      (* destructuring-parameter))))
 
+(defparameter *destructuring-optional-parameter-group*
+  '((destructuring-optional-parameter-group <-
+     keyword-optional
+     (* destructuring-optional-parameter))))
+
+(defparameter *destructuring-key-parameter-group*
+  '((destructuring-key-parameter-group <-
+     keyword-key
+     (* destructuring-key-parameter)
+     (? keyword-allow-other-keys))))
+
 (defparameter *destructuring-rest-parameter-group*
   '((destructuring-rest-parameter-group <-
      keyword-rest
@@ -123,11 +134,11 @@
      (? environment-parameter-group)
      destructuring-required-parameter-group
      (? environment-parameter-group)
-     (? ordinary-optional-parameter-group)
+     (? destructuring-optional-parameter-group)
      (? environment-parameter-group)
      (? destructuring-rest-parameter-group)
      (? environment-parameter-group)
-     (? ordinary-key-parameter-group)
+     (? destructuring-key-parameter-group)
      (? environment-parameter-group)
      (? aux-parameter-group)
      (? environment-parameter-group))))
@@ -150,6 +161,8 @@
 	  *whole-parameter-group*
           *define-method-combination-lambda-list*
           *destructuring-required-parameter-group*
+          *destructuring-optional-parameter-group*
+          *destructuring-key-parameter-group*
           *destructuring-rest-parameter-group*
           *destructuring-lambda-list*
           *macro-lambda-list*))

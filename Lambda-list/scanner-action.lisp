@@ -287,6 +287,110 @@
         (t
          '())))
 
+(defun make-destructuring-optional-parameter (tree &key form supplied-p)
+  (make-instance 'destructuring-optional-parameter
+    :name tree :form form :supplied-p supplied-p))
+
+(defmethod scanner-action
+    (client item lambda-list (terminal destructuring-optional-parameter) input)
+  (flet ((ordinary (param &rest kwargs &key form supplied-p)
+           (declare (ignore form supplied-p))
+           (cl:list
+            (advance-dot-position
+             item
+             (apply #'make-ordinary-optional-parameter param kwargs))))
+         (destructuring (tree &rest kwargs &key form supplied-p)
+           (declare (ignore form supplied-p))
+           (let* ((proper (ensure-proper tree))
+                  (parse-tree
+                    (parse-destructuring-lambda-list
+                     client proper :error-p nil)))
+             (if (cl:null parse-tree)
+                 '()
+                 (cl:list
+                  (advance-dot-position
+                   item
+                   (apply #'make-destructuring-optional-parameter
+                          parse-tree kwargs)))))))
+  (cond ((and (shapep input 'symbol)
+              (not (allowed-keyword-p input client lambda-list)))
+         (ordinary input))
+        ((shapep input '(symbol))
+         (ordinary (path input '(0))))
+        ((shapep input '(symbol t))
+         (ordinary (path input '(0)) :form (path input '(1))))
+        ((shapep input '(symbol t symbol))
+         (ordinary (path input '(0))
+                   :form (path input '(1))
+                   :supplied-p (path input '(2))))
+        ((shapep input '(cl:cons))
+         (destructuring (path input '(0))))
+        ((shapep input '(cl:cons t))
+         (destructuring (path input '(0)) :form (path input '(1))))
+        ((shapep input '(cl:cons t symbol))
+         (destructuring (path input '(0))
+                        :form (path input '(1))
+                        :supplied-p (path input '(2)))))))
+
+(defun make-destructuring-key-parameter (tree keyword
+                                         &key form supplied-p)
+  (make-instance 'destructuring-key-parameter
+    :name tree :keyword keyword :form form :supplied-p supplied-p))
+
+(defmethod scanner-action
+    (client item lambda-list (terminal destructuring-key-parameter) input)
+  (flet ((ordinary (param &rest kwargs &key keyword form supplied-p)
+           (declare (ignore keyword form supplied-p))
+           (cl:list
+            (advance-dot-position
+             item
+             (apply #'make-ordinary-key-parameter param kwargs))))
+         (destructuring (tree keyword &rest kwargs &key form supplied-p)
+           (declare (ignore form supplied-p))
+           (let* ((proper (ensure-proper tree))
+                  (parse-tree
+                    (parse-destructuring-lambda-list
+                     client proper :error-p nil)))
+             (if (cl:null parse-tree)
+                 '()
+                 (cl:list
+                  (advance-dot-position
+                   item
+                   (apply #'make-destructuring-key-parameter
+                          parse-tree keyword kwargs)))))))
+  (cond ((and (shapep input 'symbol)
+              (not (allowed-keyword-p input client lambda-list)))
+         (ordinary input))
+        ((shapep input '(symbol))
+         (ordinary (path input '(0))))
+        ((shapep input '((symbol symbol)))
+         (ordinary (path input '(0 1))
+                   :keyword (path input '(0 0))))
+        ((shapep input '(symbol t))
+         (ordinary (path input '(0)) :form (path input '(1))))
+        ((shapep input '((symbol symbol) t))
+         (ordinary (path input '(0 1))
+                   :form (path input '(1))
+                   :keyword (path input '(0 0))))
+        ((shapep input '(symbol t symbol))
+         (ordinary (path input '(0))
+                   :form (path input '(1))
+                   :supplied-p (path input '(2))))
+        ((shapep input '((symbol symbol) t symbol))
+         (ordinary (path input '(0 1))
+                   :form (path input '(1))
+                   :keyword (path input '(0 0))
+                   :supplied-p (path input '(2))))
+        ((shapep input '((symbol cl:cons)))
+         (destructuring (path input '(0 1)) (path input '(0 0))))
+        ((shapep input '((symbol cl:cons) t))
+         (destructuring (path input '(0 1)) (path input '(0 0))
+                        :form (path input '(1))))
+        ((shapep input '((symbol cl:cons) t symbol))
+         (destructuring (path input '(0 1)) (path input '(0 0))
+                        :form (path input '(1))
+                        :supplied-p (path input '(2)))))))
+
 (defmacro define-keyword-scanner-action (keyword-class-name symbol)
   `(defmethod scanner-action
        (client item lambda-list (terminal ,keyword-class-name) input)

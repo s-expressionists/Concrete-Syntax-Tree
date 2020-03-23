@@ -105,6 +105,12 @@
 (defclass destructuring-required-parameter-group (implicit-parameter-group)
   ())
 
+(defclass destructuring-optional-parameter-group (optional-parameter-group)
+  ())
+
+(defclass destructuring-key-parameter-group (key-parameter-group)
+  ())
+
 ;;; This class is the root class of parameter groups that take a
 ;;; keyword and a single parameter, such as &WHOLE, &ENVIRONMENT,
 ;;; &REST, &BODY.
@@ -139,6 +145,10 @@
 ;;; individual parameters.  Instance of (subclasses of) this class are
 ;;; handled by the scanner.
 (defclass parameter (grammar-symbol)
+  ;; NAME can be either an atom, or a nested destructuring-lambda-list,
+  ;; depending on the actual class. I.e., a simple-variable will always
+  ;; have an atom, but a destructuring-key-parameter will have a
+  ;; destructuring-lambda-list.
   ((%name :initarg :name :reader name)))
 
 (defclass form-mixin ()
@@ -182,6 +192,15 @@
 ;;; recursively parses the list as a DESTRUCTURING-LAMBDA-LIST which
 ;;; then becomes the resulting parse tree.
 (defclass destructuring-parameter (grammar-symbol) ())
+
+;;; These two classes do show up in parse trees.
+(defclass destructuring-optional-parameter
+    (parameter form-mixin supplied-p-mixin)
+  ())
+
+(defclass destructuring-key-parameter
+    (parameter form-mixin supplied-p-mixin keyword-mixin)
+  ())
 
 (defclass lambda-list-keyword (grammar-symbol)
   ((%name :initarg :name :reader name)))

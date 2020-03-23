@@ -85,6 +85,8 @@
            #:specialized-required-parameter-group
            #:destructuring-required-parameter-group
            #:singleton-parameter-group
+           #:destructuring-optional-parameter-group
+           #:destructuring-key-parameter-group
            #:ordinary-rest-parameter-group
            #:destructuring-rest-parameter-group
            #:environment-parameter-group
@@ -106,6 +108,8 @@
            #:specialized-required-parameter
            #:specializer
            #:destructuring-parameter
+           #:destructuring-optional-parameter
+           #:destructuring-key-parameter
            #:lambda-list-keyword
            #:keyword-optional
            #:keyword-rest
@@ -149,6 +153,8 @@
            #:*whole-parameter-group*
            #:*define-method-combination-lambda-list*
            #:*destructuring-required-parameter-group*
+           #:*destructuring-optional-parameter-group*
+           #:*destructuring-key-parameter-group*
            #:*destructuring-rest-parameter-group*
            #:*destructuring-lambda-list*
            #:*macro-lambda-list*
