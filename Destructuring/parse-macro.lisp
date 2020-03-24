@@ -34,7 +34,7 @@
         (destructuring-lambda-list-bindings
          client relevant-lambda-list args-var)
       `(lambda (,final-form-var ,final-env-var)
-         (block ,name
+         (block ,(raw name)
            (let* ((,args-var (cdr ,final-form-var))
                   ,@bindings
                   ;; We rebind the whole and environment variables
