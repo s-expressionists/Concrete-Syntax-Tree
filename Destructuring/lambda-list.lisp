@@ -2,12 +2,13 @@
 
 (defmethod parameter-groups-bindings
     (client (parameter-groups cl:null) argument-variable)
-  (declare (ignore client argument-variable))
-  nil)
+  (declare (ignore client))
+  (values nil (cl:list argument-variable)))
 
 (defmethod parameter-groups-bindings
     (client (parameter-groups cl:cons) argument-variable)
-  (loop with all-binds = nil with all-ignorables = nil
+  (loop with all-binds = nil
+        with all-ignorables = (cl:list argument-variable)
         for parameter-group in parameter-groups
         do (multiple-value-bind (binds ignorables)
                (parameter-group-bindings client parameter-group

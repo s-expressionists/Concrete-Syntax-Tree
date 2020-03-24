@@ -47,7 +47,7 @@
                       `()
                       `((,final-form-var ,final-form-var)))
                 (,final-env-var ,final-env-var))
-           (declare (ignorable ,args-var ,@ignorables)
+           (declare (ignorable ,@ignorables)
                     ;; If the lambda list does not contain &environment, then
                     ;; we IGNORE the GENSYMed parameter to avoid warnings.
                     ;; If the lambda list does contain &environment, we do

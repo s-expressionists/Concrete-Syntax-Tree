@@ -12,15 +12,17 @@
 (defmethod required-parameter-bindings
     (client (parameter destructuring-lambda-list) argument-variable)
   (let ((new-argument-variable (gensym)))
-    (values
-     `((,new-argument-variable
-        (if (cl:consp ,argument-variable)
-            (car ,argument-variable)
-            (error "too few arguments")))
-       ,@(destructuring-lambda-list-bindings client parameter
-                                             new-argument-variable)
-       (,argument-variable (cl:cdr ,argument-variable)))
-     (cl:list new-argument-variable))))
+    (multiple-value-bind (d-l-l-bindings d-l-l-ignorables)
+        (destructuring-lambda-list-bindings
+         client parameter new-argument-variable)
+      (values
+       `((,new-argument-variable
+          (if (cl:consp ,argument-variable)
+              (car ,argument-variable)
+              (error "too few arguments")))
+         ,@d-l-l-bindings
+         (,argument-variable (cl:cdr ,argument-variable)))
+       d-l-l-ignorables))))
 
 (defmethod required-parameters-bindings
     (client (parameters cl:null) argument-variable)

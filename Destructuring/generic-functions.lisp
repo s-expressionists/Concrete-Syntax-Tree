@@ -7,11 +7,6 @@
 ;;;; bound in the bindings that need to be declared IGNORABLE as a
 ;;;; second value.
 
-;;;; The list of IGNORABLE variables is mainly for nested
-;;;; destructuring lambda lists. The argument-variable passed in
-;;;; should also be declared IGNORABLE, but it will not be returned
-;;;; as part of the second value.
-
 ;;;; Each function handles a different part of the lambda list.
 ;;;; CLIENT is some object representing the client. ARGUMENT-VARIABLE
 ;;;; is a symbol that, when the resulting macro function is executed
