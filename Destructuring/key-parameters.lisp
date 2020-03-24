@@ -63,7 +63,7 @@
         for parameter in parameters
         do (multiple-value-bind (binds ignorables)
                (key-parameter-bindings client parameter argument-variable)
-             (setf all-binds (append binds all-binds)
+             (setf all-binds (append all-binds binds)
                    all-ignorables (append ignorables all-ignorables)))
         finally (return (values all-binds all-ignorables))))
 
