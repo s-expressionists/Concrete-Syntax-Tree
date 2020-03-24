@@ -7,9 +7,14 @@
 
 (defmethod parameter-groups-bindings
     (client (parameter-groups cl:cons) argument-variable)
-  (loop for parameter-group in parameter-groups
-        appending (parameter-group-bindings client parameter-group
-                                            argument-variable)))
+  (loop with all-binds = nil with all-ignorables = nil
+        for parameter-group in parameter-groups
+        do (multiple-value-bind (binds ignorables)
+               (parameter-group-bindings client parameter-group
+                                         argument-variable)
+             (setf all-binds (append binds all-binds)
+                   all-ignorables (append ignorables all-ignorables)))
+           finally (return (values all-binds all-ignorables))))
 
 (defmethod destructuring-lambda-list-bindings
     (client (lambda-list macro-lambda-list) argument-variable)

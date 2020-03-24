@@ -30,6 +30,9 @@
          (relevant-lambda-list
            (make-instance 'cst:macro-lambda-list :children relevant-children))
 	 (args-var (gensym)))
+    (multiple-value-bind (bindings ignorables)
+        (destructuring-lambda-list-bindings
+         client relevant-lambda-list args-var)
       `(lambda (,final-form-var ,final-env-var)
 	 ;; If the lambda list does not contain &environment, then
 	 ;; we IGNORE the GENSYMed parameter to avoid warnings.
@@ -40,7 +43,6 @@
 	       `((declare (ignore ,final-env-var)))
 	       `())
          (let* ((,args-var (cdr ,final-form-var))
-                ,@(destructuring-lambda-list-bindings client relevant-lambda-list
-                                                      args-var))
-           (declare (ignorable ,args-var))
-           ,@body))))
+                ,@bindings)
+           (declare (ignorable ,args-var ,@ignorables))
+           ,@body)))))

@@ -30,15 +30,17 @@
          (suppliedp-cst (supplied-p parameter))
          ;; the suppliedp is not bound for the default form, so we do this.
          (suppliedp-dummy (gensym "SUPPLIEDP")))
-    `((,suppliedp-dummy (cl:consp ,argument-variable))
-      (,new-argument-variable
-       (if ,suppliedp-dummy (cl:car ,argument-variable) ,default-form))
-      ,@(destructuring-lambda-list-bindings client tree new-argument-variable)
-      ,@(unless (cl:null suppliedp-cst)
-          `((,(raw suppliedp-cst) ,suppliedp-dummy)))
-      (,argument-variable (if ,suppliedp-dummy
-                              (cl:cdr ,argument-variable)
-                              ,argument-variable)))))
+    (values
+     `((,suppliedp-dummy (cl:consp ,argument-variable))
+       (,new-argument-variable
+        (if ,suppliedp-dummy (cl:car ,argument-variable) ,default-form))
+       ,@(destructuring-lambda-list-bindings client tree new-argument-variable)
+       ,@(unless (cl:null suppliedp-cst)
+           `((,(raw suppliedp-cst) ,suppliedp-dummy)))
+       (,argument-variable (if ,suppliedp-dummy
+                               (cl:cdr ,argument-variable)
+                               ,argument-variable)))
+     (cl:list new-argument-variable))))
 
 (defmethod optional-parameters-bindings
     (client (parameters cl:null) argument-variable)
@@ -47,9 +49,13 @@
 
 (defmethod optional-parameters-bindings
     (client (parameters cl:cons) argument-variable)
-  (loop for parameter in parameters
-        appending (optional-parameter-bindings client parameter
-                                               argument-variable)))
+  (loop with all-binds = nil with all-ignorables = nil
+        for parameter in parameters
+        do (multiple-value-bind (binds ignorables)
+               (optional-parameter-bindings client parameter argument-variable)
+             (setf all-binds (append binds all-binds)
+                   all-ignorables (append ignorables all-ignorables)))
+        finally (return (values all-binds all-ignorables))))
 
 (defmethod parameter-group-bindings
     (client (parameter-group optional-parameter-group)
