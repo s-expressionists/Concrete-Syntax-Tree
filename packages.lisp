@@ -69,6 +69,7 @@
            #:parse
            #:grammar-symbol
            #:parameter-group
+           #:parameter-group-varargs-p
            #:singleton-parameter-group-mixin
            #:multi-parameter-group-mixin
            #:implicit-parameter-group
