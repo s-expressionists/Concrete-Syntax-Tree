@@ -34,15 +34,26 @@
         (destructuring-lambda-list-bindings
          client relevant-lambda-list args-var)
       `(lambda (,final-form-var ,final-env-var)
-	 ;; If the lambda list does not contain &environment, then
-	 ;; we IGNORE the GENSYMed parameter to avoid warnings.
-	 ;; If the lambda list does contain &environment, we do
-	 ;; not want to make it IGNORABLE because we would want a
-	 ;; warning if it is not used then.
-	 ,@(if (cl:null env-var)
-	       `((declare (ignore ,final-env-var)))
-	       `())
          (let* ((,args-var (cdr ,final-form-var))
-                ,@bindings)
-           (declare (ignorable ,args-var ,@ignorables))
+                ,@bindings
+                ;; We rebind the whole and environment variables
+                ;; here, so that any user declarations for them
+                ;; are scoped, properly.
+                ;; We do this AFTER the args-var binding so that
+                ;; if, e.g., a &whole is declared ignore, the
+                ;; compiler does not complain that it was used
+                ;; for the args-var binding.
+                ,@(if (cl:null form-var)
+                      `()
+                      `((,final-form-var ,final-form-var)))
+                (,final-env-var ,final-env-var))
+           (declare (ignorable ,args-var ,@ignorables)
+                    ;; If the lambda list does not contain &environment, then
+                    ;; we IGNORE the GENSYMed parameter to avoid warnings.
+                    ;; If the lambda list does contain &environment, we do
+                    ;; not want to make it IGNORABLE because we would want a
+                    ;; warning if it is not used then.
+                    ,@(if (cl:null env-var)
+                          `((ignore ,final-env-var))
+                          `()))
            ,@body)))))
