@@ -16,7 +16,7 @@
 ;;; lambda-list keywords.
 
 (defun parse-macro (client name lambda-list body &optional environment)
-  (declare (ignore name environment)) ; For now.
+  (declare (ignore environment)) ; For now.
   (let* ((parsed-lambda-list (parse-macro-lambda-list client lambda-list))
 	 (env-var (find-var parsed-lambda-list 'environment-parameter-group))
 	 (final-env-var (if (cl:null env-var) (gensym "ENV") env-var))
@@ -30,17 +30,31 @@
          (relevant-lambda-list
            (make-instance 'cst:macro-lambda-list :children relevant-children))
 	 (args-var (gensym)))
+    (multiple-value-bind (bindings ignorables)
+        (destructuring-lambda-list-bindings
+         client relevant-lambda-list args-var)
       `(lambda (,final-form-var ,final-env-var)
-	 ;; If the lambda list does not contain &environment, then
-	 ;; we IGNORE the GENSYMed parameter to avoid warnings.
-	 ;; If the lambda list does contain &environment, we do
-	 ;; not want to make it IGNORABLE because we would want a
-	 ;; warning if it is not used then.
-	 ,@(if (cl:null env-var)
-	       `((declare (ignore ,final-env-var)))
-	       `())
-         (let* ((,args-var (cdr ,final-form-var))
-                ,@(destructuring-lambda-list-bindings client relevant-lambda-list
-                                                      args-var))
-           (declare (ignorable ,args-var))
-           ,@body))))
+         (block ,(raw name)
+           (let* ((,args-var (cdr ,final-form-var))
+                  ,@bindings
+                  ;; We rebind the whole and environment variables
+                  ;; here, so that any user declarations for them
+                  ;; are scoped, properly.
+                  ;; We do this AFTER the args-var binding so that
+                  ;; if, e.g., a &whole is declared ignore, the
+                  ;; compiler does not complain that it was used
+                  ;; for the args-var binding.
+                  ,@(if (cl:null form-var)
+                        `()
+                        `((,final-form-var ,final-form-var)))
+                  (,final-env-var ,final-env-var))
+             (declare (ignorable ,@ignorables)
+                      ;; If the lambda list does not contain &environment, then
+                      ;; we IGNORE the GENSYMed parameter to avoid warnings.
+                      ;; If the lambda list does contain &environment, we do
+                      ;; not want to make it IGNORABLE because we would want a
+                      ;; warning if it is not used then.
+                      ,@(if (cl:null env-var)
+                            `((ignore ,final-env-var))
+                            `()))
+             ,@body))))))

@@ -3,9 +3,11 @@
 ;;;; Generally speaking, these functions collectively take a macro
 ;;;; lambda list and a variable, and return a list of LET* bindings
 ;;;; that will bind the variables in that lambda list to the value
-;;;; in that variable.
+;;;; in that variable as their first value, and a list of variables
+;;;; bound in the bindings that need to be declared IGNORABLE as a
+;;;; second value.
 
-;;;; Each function rhandles a different part of the lambda list.
+;;;; Each function handles a different part of the lambda list.
 ;;;; CLIENT is some object representing the client. ARGUMENT-VARIABLE
 ;;;; is a symbol that, when the resulting macro function is executed
 ;;;; on some compound form corresponding to a macro call, will hold
@@ -22,6 +24,8 @@
 
 ;;; Return LET* bindings corresponding to the parameters in the list
 ;;; of parameter groups, PARAMETER-GROUPS.
+;;; As a second variable, return a list of any variables that need
+;;; to be declared IGNORABLE.
 (defgeneric parameter-groups-bindings
     (client parameter-groups argument-variable))
 

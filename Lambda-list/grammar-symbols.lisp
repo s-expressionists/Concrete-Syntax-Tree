@@ -15,6 +15,11 @@
 (defclass parameter-group (grammar-symbol)
   ())
 
+;;; Returns true iff the given parameter group accepts a variable
+;;; number of arguments. This is consulted to see whether a check
+;;; for too many arguments should be inserted when constructing bindings.
+(defgeneric parameter-group-varargs-p (client parameter-group))
+
 (defclass singleton-parameter-group-mixin ()
   ((%parameter :initarg :parameter :reader parameter)))
 
@@ -34,6 +39,11 @@
 ;;; of required parameter group is a subclass of this class.
 (defclass implicit-parameter-group (parameter-group multi-parameter-group-mixin)
   ())
+
+(defmethod parameter-group-varargs-p
+    (client (parameter-group implicit-parameter-group))
+  (declare (ignore client))
+  nil)
 
 ;;; When an instance of an implicit parameter group is created, we
 ;;; initialize the parameters from the CHILDREN keyword passed by the
@@ -66,6 +76,11 @@
 (defclass optional-parameter-group (explicit-multi-parameter-group)
   ())
 
+(defmethod parameter-group-varargs-p
+    (client (parameter-group optional-parameter-group))
+  (declare (ignore client))
+  nil)
+
 (defclass ordinary-optional-parameter-group (optional-parameter-group)
   ())
 
@@ -73,6 +88,11 @@
   (;; This slot can be either &ALLOW-OTHER-KEYS, if that lambda-list
    ;; keyword is present, or NIL if it is absent.
    (%allow-other-keys :initarg :allow-other-keys :reader allow-other-keys)))
+
+(defmethod parameter-group-varargs-p
+    (client (parameter-group key-parameter-group))
+  (declare (ignore client))
+  t)
 
 (defclass ordinary-key-parameter-group (key-parameter-group)
   ())
@@ -96,6 +116,11 @@
 (defclass aux-parameter-group (explicit-multi-parameter-group)
   ())
 
+(defmethod parameter-group-varargs-p
+    (client (parameter-group aux-parameter-group))
+  (declare (ignore client))
+  nil)
+
 (defclass generic-function-optional-parameter-group (optional-parameter-group)
   ())
 
@@ -103,6 +128,12 @@
   ())
 
 (defclass destructuring-required-parameter-group (implicit-parameter-group)
+  ())
+
+(defclass destructuring-optional-parameter-group (optional-parameter-group)
+  ())
+
+(defclass destructuring-key-parameter-group (key-parameter-group)
   ())
 
 ;;; This class is the root class of parameter groups that take a
@@ -123,6 +154,11 @@
 (defclass rest-parameter-group (singleton-parameter-group)
   ())
 
+(defmethod parameter-group-varargs-p
+    (client (parameter-group rest-parameter-group))
+  (declare (ignore client))
+  t)
+
 (defclass ordinary-rest-parameter-group (rest-parameter-group)
   ())
 
@@ -132,13 +168,27 @@
 (defclass environment-parameter-group (singleton-parameter-group)
   ())
 
+(defmethod parameter-group-varargs-p
+    (client (parameter-group environment-parameter-group))
+  (declare (ignore client))
+  nil)
+
 (defclass whole-parameter-group (singleton-parameter-group)
   ())
+
+(defmethod parameter-group-varargs-p
+    (client (parameter-group whole-parameter-group))
+  (declare (ignore client))
+  nil)
 
 ;;; This class is the root of all classes that correspond to
 ;;; individual parameters.  Instance of (subclasses of) this class are
 ;;; handled by the scanner.
 (defclass parameter (grammar-symbol)
+  ;; NAME can be either an atom, or a nested destructuring-lambda-list,
+  ;; depending on the actual class. I.e., a simple-variable will always
+  ;; have an atom, but a destructuring-key-parameter will have a
+  ;; destructuring-lambda-list.
   ((%name :initarg :name :reader name)))
 
 (defclass form-mixin ()
@@ -182,6 +232,15 @@
 ;;; recursively parses the list as a DESTRUCTURING-LAMBDA-LIST which
 ;;; then becomes the resulting parse tree.
 (defclass destructuring-parameter (grammar-symbol) ())
+
+;;; These two classes do show up in parse trees.
+(defclass destructuring-optional-parameter
+    (parameter form-mixin supplied-p-mixin)
+  ())
+
+(defclass destructuring-key-parameter
+    (parameter form-mixin supplied-p-mixin keyword-mixin)
+  ())
 
 (defclass lambda-list-keyword (grammar-symbol)
   ((%name :initarg :name :reader name)))
