@@ -19,13 +19,30 @@
   (and (cl:consp right-hand-side-element)
        (member (car right-hand-side-element) '(? *) :test #'eq)))
 
-(defun generate-grammar (target-rule rules)
-  (make-instance 'grammar
-                 :target-rule (make-instance 'rule
-                                             :left-hand-side 'target
-                                             :right-hand-side (cl:list target-rule))
-                 :rules (mapcar (lambda (rule)
-                                  (make-instance 'rule
-                                                 :left-hand-side (car rule)
-                                                 :right-hand-side (cddr rule)))
-                                rules)))
+;;; Generate a grammar from a target and description, making sure to
+;;; prune out all rules irrelevant to the target, so that no extra
+;;; effort is expended while parsing. This function should only be
+;;; called at grammar generation time.
+(defun generate-grammar (target grammar-description)
+  (let ((relevant-rule-descriptions '())
+        (relevant-symbols (cl:list target)))
+    (loop (unless relevant-symbols
+            (return))
+          (let* ((symbol (cl:pop relevant-symbols))
+                 (description (find symbol grammar-description :key #'car)))
+            (when description
+              (push description relevant-rule-descriptions)
+              (dolist (item (cddr description))
+                (pushnew (if (symbolp item)
+                             item
+                             (cl:second item))
+                         relevant-symbols)))))
+    (make-instance 'grammar
+                   :target-rule (make-instance 'rule
+                                               :left-hand-side 'target
+                                               :right-hand-side (cl:list target))
+                   :rules (mapcar (lambda (rule-description)
+                                    (make-instance 'rule
+                                                   :left-hand-side (car rule-description)
+                                                   :right-hand-side (cddr rule-description)))
+                                  relevant-rule-descriptions))))
