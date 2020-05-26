@@ -168,25 +168,25 @@
           *macro-lambda-list*))
 
 (defparameter *ordinary-lambda-list-grammar*
-  (cl:cons '(target <- ordinary-lambda-list) *standard-grammar*))
+  (generate-grammar 'ordinary-lambda-list *standard-grammar*))
 
 (defparameter *generic-function-lambda-list-grammar*
-  (cl:cons '(target <- generic-function-lambda-list) *standard-grammar*))
+  (generate-grammar 'generic-function-lambda-list *standard-grammar*))
 
 (defparameter *specialized-lambda-list-grammar*
-  (cl:cons '(target <- specialized-lambda-list) *standard-grammar*))
+  (generate-grammar 'specialized-lambda-list *standard-grammar*))
 
 (defparameter *defsetf-lambda-list-grammar*
-  (cl:cons '(target <- defsetf-lambda-list) *standard-grammar*))
+  (generate-grammar 'defsetf-lambda-list *standard-grammar*))
 
 (defparameter *define-modify-macro-lambda-list-grammar*
-  (cl:cons '(target <- define-modify-macro-lambda-list) *standard-grammar*))
+  (generate-grammar 'define-modify-macro-lambda-list *standard-grammar*))
 
 (defparameter *define-method-combination-lambda-list-grammar*
-  (cl:cons '(target <- define-method-combination-lambda-list) *standard-grammar*))
+  (generate-grammar 'define-method-combination-lambda-list *standard-grammar*))
 
 (defparameter *destructuring-lambda-list-grammar*
-  (cl:cons '(target <- destructuring-lambda-list) *standard-grammar*))
+  (generate-grammar 'destructuring-lambda-list *standard-grammar*))
 
 (defparameter *macro-lambda-list-grammar*
-  (cl:cons '(target <- macro-lambda-list) *standard-grammar*))
+  (generate-grammar 'macro-lambda-list *standard-grammar*))

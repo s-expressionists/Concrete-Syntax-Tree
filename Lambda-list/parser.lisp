@@ -9,11 +9,10 @@
    (%remaining-states :initarg :states :accessor remaining-states)
    (%remaining-input :initarg :input :accessor remaining-input)))
 
-(defmethod initialize-instance :after ((object parser) &key rules)
+(defmethod initialize-instance :after ((object parser) &key)
   (let* ((states (loop repeat (1+ (length (raw (all-input object))))
                        collect (make-instance 'earley-state)))
-         (grammar (make-instance 'grammar :rules rules))
-         (target-rule (find 'target (rules grammar) :key #'left-hand-side))
+         (target-rule (target-rule (grammar object)))
          (item (make-instance 'earley-item
                  :parse-trees '()
                  :origin (car states)
@@ -22,8 +21,7 @@
     (push item (items (car states)))
     (reinitialize-instance
      object
-     :states states
-     :grammar grammar)))
+     :states states)))
 
 (defun find-final-item (parser)
   (let ((initial-state (car (all-states parser)))

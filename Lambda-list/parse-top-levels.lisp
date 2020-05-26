@@ -1,8 +1,8 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defun parse-top-level (client rules class lambda-list &key (error-p t))
+(defun parse-top-level (client grammar class lambda-list &key (error-p t))
   (let ((p (make-instance 'cst::parser
-             :rules rules
+             :grammar grammar
              :input lambda-list
              :lambda-list (make-instance class)
              :client client)))

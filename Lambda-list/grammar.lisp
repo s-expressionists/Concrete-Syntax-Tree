@@ -18,7 +18,8 @@
             append (extract-symbols element))))
 
 (defclass grammar ()
-  ((%rules :initarg :rules :reader rules)))
+  ((%target-rule :initarg :target-rule :reader target-rule)
+   (%rules :initarg :rules :reader rules)))
 
 (defun compute-all-symbols (grammar)
   (let ((symbols (make-hash-table :test #'eq)))
@@ -33,11 +34,13 @@
   (and (cl:consp right-hand-side-element)
        (member (car right-hand-side-element) '(? *) :test #'eq)))
 
-(defmethod initialize-instance :after ((object grammar) &key rules)
-  (let ((new-rules (loop for rule in rules
-                         collect (make-instance 'rule
-                                   :left-hand-side (car rule)
-                                   :right-hand-side (cddr rule)))))
-    (reinitialize-instance
-     object
-     :rules new-rules)))
+(defun generate-grammar (target-rule rules)
+  (make-instance 'grammar
+                 :target-rule (make-instance 'rule
+                                             :left-hand-side 'target
+                                             :right-hand-side (cl:list target-rule))
+                 :rules (mapcar (lambda (rule)
+                                  (make-instance 'rule
+                                                 :left-hand-side (car rule)
+                                                 :right-hand-side (cddr rule)))
+                                rules)))
