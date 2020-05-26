@@ -11,24 +11,9 @@
           do (format stream "~s " symbol))
     (terpri stream)))
 
-(defun extract-symbols (right-hand-side-element)
-  (if (symbolp right-hand-side-element)
-      (list right-hand-side-element)
-      (loop for element in (cdr right-hand-side-element)
-            append (extract-symbols element))))
-
 (defclass grammar ()
   ((%target-rule :initarg :target-rule :reader target-rule)
    (%rules :initarg :rules :reader rules)))
-
-(defun compute-all-symbols (grammar)
-  (let ((symbols (make-hash-table :test #'eq)))
-    (loop for rule in (rules grammar)
-          do (setf (gethash (left-hand-side rule) symbols) t)
-             (loop for element in (right-hand-side rule)
-                   do (loop for symbol in (extract-symbols element)
-                            do (setf (gethash symbol symbols) t))))
-    symbols))
 
 (defun nullable-p (right-hand-side-element)
   (and (cl:consp right-hand-side-element)
