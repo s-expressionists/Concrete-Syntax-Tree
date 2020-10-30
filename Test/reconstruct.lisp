@@ -9,5 +9,5 @@
 (defun test-reconstruct-1 ()
   (let* ((cons (cons 'a 'c))
          (thing (cst:cst-from-expression cons)))
-    (eq (cst:first (cst:rest (cst:reconstruct (list 'b cons) thing nil)))
-        thing)))
+    (assert (eq (cst:first (cst:rest (cst:reconstruct (list 'b cons) thing nil)))
+                thing))))
