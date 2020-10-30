@@ -37,8 +37,10 @@
 ;;; in H2, we always replace a (or create a new) mapping when we see
 ;;; an atom.  If we are inside a CONS in H2, we only create a mapping
 ;;; when one does not already exist.  This way, preference is given to
-;;; atoms outside of any CONS that is common between E and R.
-;;; Finally, we build T' recursively by traversing E.  When a mapping
+;;; atoms outside of any CONS that is common between E and R, so that
+;;; we get somewhat better source information for the atom in E which
+;;; is not in a shared cons.
+;;; Finally, we build T' recursively by traversing E, When a mapping
 ;;; in H2 is found, we return it.  Otherwise we create a new concrete
 ;;; syntax tree for it.
 
@@ -67,11 +69,17 @@
                (when (and (cl:consp expression)
                           (not (gethash expression seen)))
                  (setf (gethash expression seen) t)
-                 (let ((original-cst (gethash expression cons-table)))
-                   (unless (cl:null original-cst)
-                     (setf (gethash expression table) original-cst)))
-                 (traverse (car expression))
-                 (traverse (cdr expression)))))
+                 (multiple-value-bind (original-cst foundp)
+                     (gethash expression cons-table)
+                   (cond ((not foundp)
+                          (traverse (car expression))
+                          (traverse (cdr expression)))
+                         ;; We don't need to key sub-conses of a cons
+                         ;; that was found in the table, since we'll
+                         ;; always use or substitute the full cons
+                         ;; when building the final cst.
+                         ((cl:null original-cst))
+                         (t (setf (gethash expression table) original-cst)))))))
       (traverse expression))
     table))
 
@@ -86,8 +94,8 @@
                (if (consp cst)
                    (unless (gethash cst seen)
                      (setf (gethash cst seen) t)
-                     (let ((new-inside-p (or (gethash (raw cst) table)
-                                             inside-p)))
+                     (let ((new-inside-p (or inside-p
+                                             (gethash (raw cst) table))))
                        (traverse (first cst) new-inside-p)
                        (traverse (rest cst) new-inside-p)))
                    (when (atom cst)
