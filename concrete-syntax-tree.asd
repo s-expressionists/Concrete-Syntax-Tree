@@ -15,5 +15,4 @@
                (:file "random-sources")
                (:file "reconstruct"))
   :perform (test-op (operation component)
-             (uiop:symbol-call '#:concrete-syntax-tree-test '#:test-cst-from-expression)
-             (uiop:symbol-call '#:concrete-syntax-tree-test '#:test-reconstruct)))
+             (uiop:symbol-call '#:concrete-syntax-tree-test '#:run-tests)))
