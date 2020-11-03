@@ -132,12 +132,14 @@
       (traverse expression))))
 
 (defmethod reconstruct (expression (cst cst) client &key default-source)
+  (declare (ignore client))
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (add-atoms cst referenced-cons-table)
     (build-cst expression referenced-cons-table default-source)))
 
 (defmethod reconstruct (expression (cst cl:sequence) client &key default-source)
+  (declare (ignore client))
   (let* ((cons-table (reduce #'cons-table cst
                              :initial-value (make-hash-table :test #'eq)
                              :from-end t))
