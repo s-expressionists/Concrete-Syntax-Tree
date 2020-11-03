@@ -17,6 +17,7 @@
 
 (defmethod  canonicalize-declaration-specifier
     (system declaration-identifier declaration-identifier-cst declaration-data)
+  (declare (ignore declaration-identifier))
   ;; Treat as a type declaration.
   ;; Declarations from PROCLAIM DECLARATION will have already been filtered out
   ;; in CANONICALIZE-DECLARATION-SPECIFIERS, below.
@@ -40,6 +41,7 @@
         (declaration-identifier (eql ',declaration-identifier))
         declaration-identifier-cst
         declaration-data)
+     (declare (ignore system))
      (map-prefix declaration-identifier-cst declaration-data)))
 
 (progn
@@ -53,6 +55,7 @@
      (declaration-identifier (eql 'ftype))
      declaration-identifier-cst
      declaration-data)
+  (declare (ignore system))
   (loop with type = (first declaration-data)
         for remaining = (rest declaration-data) then (rest remaining)
         until (null remaining)
@@ -63,6 +66,7 @@
      (declaration-identifier (eql 'type))
      declaration-identifier-cst
      declaration-data)
+  (declare (ignore system))
   (loop with type = (first declaration-data)
         for remaining = (rest declaration-data) then (rest remaining)
         until (null remaining)

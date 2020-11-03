@@ -4,6 +4,7 @@
   (:method-combination append))
 
 (defmethod all-lambda-list-keywords append (client)
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -22,6 +23,7 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list ordinary-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -30,6 +32,7 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list generic-function-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -37,6 +40,7 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list specialized-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -45,6 +49,7 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list macro-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -56,6 +61,7 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list destructuring-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -66,6 +72,7 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list defsetf-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
@@ -74,11 +81,13 @@
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list define-modify-macro-lambda-list))
+  (declare (ignore client))
   '(&optional
     &rest))
 
 (defmethod allowed-lambda-list-keywords append
     (client (lambda-list define-method-combination-lambda-list))
+  (declare (ignore client))
   '(&optional
     &key
     &allow-other-keys
