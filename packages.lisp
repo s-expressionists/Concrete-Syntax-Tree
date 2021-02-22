@@ -136,6 +136,8 @@
            #:parse-define-method-combination-lambda-list
            #:parse-destructuring-lambda-list
            #:parse-macro-lambda-list
+           #:unparse-lambda-list
+           #:unparse-parameter-group #:unparse-parameter
            #:target
            #:*ordinary-required-parameter-group*
            #:*ordinary-optional-parameter-group*
