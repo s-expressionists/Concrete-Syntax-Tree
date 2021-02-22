@@ -18,6 +18,9 @@
 (defun parse-macro (client name lambda-list body &optional environment)
   (declare (ignore environment)) ; For now.
   (let* ((parsed-lambda-list (parse-macro-lambda-list client lambda-list))
+         (*current-lambda-list* parsed-lambda-list)
+         (raw-name (raw name))
+         (*current-macro-name* raw-name) 
 	 (env-var (find-var parsed-lambda-list 'environment-parameter-group))
 	 (final-env-var (if (cl:null env-var) (gensym "ENV") env-var))
 	 (form-var (find-var parsed-lambda-list 'whole-parameter-group))
@@ -34,7 +37,7 @@
         (destructuring-lambda-list-bindings
          client relevant-lambda-list args-var)
       `(lambda (,final-form-var ,final-env-var)
-         (block ,(raw name)
+         (block ,raw-name
            (let* ((,args-var (cdr ,final-form-var))
                   ,@bindings
                   ;; We rebind the whole and environment variables

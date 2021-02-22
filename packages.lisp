@@ -182,6 +182,8 @@
            #:required-parameter-bindings
            #:required-parameters-bindings
            #:whole-parameter-bindings
+           #:too-many-arguments-error #:too-few-arguments-error
+           #:odd-keywords-error #:unknown-keywords-error
            #:parse-macro
            #:db
            #:valid-binding-p

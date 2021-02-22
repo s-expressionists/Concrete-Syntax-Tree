@@ -2,11 +2,12 @@
 
 (defmethod parameter-groups-bindings
     (client (parameter-groups cl:null) argument-variable)
-  (declare (ignore client))
   (values `((,argument-variable
              (if (cl:null ,argument-variable)
                  ,argument-variable
-                 (error "too many arguments"))))
+                 ,(too-many-arguments-error client *current-lambda-list*
+                                            argument-variable
+                                            *current-macro-name*))))
           (cl:list argument-variable)))
 
 (defmethod parameter-groups-bindings
@@ -21,7 +22,9 @@
                 `((,argument-variable
                    (if (cl:null ,argument-variable)
                        ,argument-variable
-                       (error "too many arguments")))))
+                       ,(too-many-arguments-error client *current-lambda-list*
+                                                  argument-variable
+                                                  *current-macro-name*)))))
         for parameter-group in parameter-groups
         do (multiple-value-bind (binds ignorables)
                (parameter-group-bindings client parameter-group
@@ -34,10 +37,16 @@
 
 (defmethod destructuring-lambda-list-bindings
     (client (lambda-list macro-lambda-list) argument-variable)
-  (parameter-groups-bindings client (children lambda-list)
-                             argument-variable))
+  (let (;; Make sure *current-lambda-list* is bound, but allow callers to
+        ;; make it some other lambda list if they want by not overriding.
+        (*current-lambda-list* (if (boundp '*current-lambda-list*)
+                                   *current-lambda-list*
+                                   lambda-list)))
+    (parameter-groups-bindings client (children lambda-list)
+                               argument-variable)))
 
 (defmethod destructuring-lambda-list-bindings
     (client (lambda-list destructuring-lambda-list) argument-variable)
-  (parameter-groups-bindings client (children lambda-list)
-                             argument-variable))
+  (let ((*current-lambda-list* lambda-list))
+    (parameter-groups-bindings client (children lambda-list)
+                               argument-variable)))

@@ -2,11 +2,11 @@
 
 (defmethod required-parameter-bindings
     (client (parameter simple-variable) argument-variable)
-  (declare (ignore client))
   `((,(raw (name parameter))
      (if (cl:consp ,argument-variable)
          (car ,argument-variable)
-         (error "too few arguments")))
+         ,(too-few-arguments-error client *current-lambda-list*
+                                   argument-variable *current-macro-name*)))
     (,argument-variable (cl:cdr ,argument-variable))))
 
 (defmethod required-parameter-bindings
@@ -19,7 +19,9 @@
        `((,new-argument-variable
           (if (cl:consp ,argument-variable)
               (car ,argument-variable)
-              (error "too few arguments")))
+              ,(too-few-arguments-error client *current-lambda-list*
+                                        argument-variable
+                                        *current-macro-name*)))
          ,@d-l-l-bindings
          (,argument-variable (cl:cdr ,argument-variable)))
        d-l-l-ignorables))))

@@ -4,9 +4,11 @@
   :depends-on (:concrete-syntax-tree-lambda-list)
   :serial t
   :components
-  ((:file "generic-functions")
+  ((:file "variables")
+   (:file "generic-functions")
    (:file "conditions")
    (:file "whole-parameters")
+   (:file "condition-generation")
    (:file "required-parameters")
    (:file "optional-parameters")
    (:file "rest-parameters")
