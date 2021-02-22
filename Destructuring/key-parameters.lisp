@@ -67,8 +67,50 @@
                    all-ignorables (append ignorables all-ignorables)))
         finally (return (values all-binds all-ignorables))))
 
+(defmethod key-validation-bindings
+    (client (parameter-group key-parameter-group) argument-variable)
+  (declare (ignore client))
+  (let ((glength-check (gensym "LENGTH-CHECK-DUMMY"))
+        (length-check-form
+          `(unless (evenp (cl:length ,argument-variable))
+             (error "odd number of keyword parameters"))))
+    (if (allow-other-keys parameter-group)
+        (values `((,glength-check ,length-check-form)) `(,glength-check))
+        (let* ((unknowns (gensym "UNKNOWN-KEYWORDS"))
+               (known-keywords
+                 (loop for parameter in (parameters parameter-group)
+                       collect (raw (keyword parameter))))
+               (unknowns-form
+                 `(loop with seen-allow-other-keys-p = nil
+                        with allow-other-keys = nil
+                        for (key value) on ,argument-variable by #'cl:cddr
+                        ;; :allow-other-keys is always acceptable, so we have
+                        ;; to be careful here to never include it in the
+                        ;; unknowns list.
+                        if (eq key :allow-other-keys)
+                          do (unless seen-allow-other-keys-p
+                               (setf allow-other-keys value
+                                     seen-allow-other-keys-p t))
+                        else unless (member key ',known-keywords :test #'eq)
+                               collect key into unknowns
+                        finally (unless allow-other-keys
+                                  (return unknowns))))
+               (unknown-check (gensym "UNKNOWN-KEYWORDS-DUMMY"))
+               (unknown-check-form
+                 `(unless (cl:null ,unknowns)
+                    (error "unknown keywords ~a" ,unknowns))))
+          (values `((,glength-check ,length-check-form)
+                    (,unknowns ,unknowns-form)
+                    (,unknown-check ,unknown-check-form))
+                  `(,glength-check ,unknown-check))))))
+
 (defmethod parameter-group-bindings
     (client (parameter-group key-parameter-group)
      argument-variable)
-  (key-parameters-bindings client (parameters parameter-group)
-                           argument-variable))
+  (multiple-value-bind (validation-binds validation-ignorables)
+      (key-validation-bindings client parameter-group argument-variable)
+    (multiple-value-bind (main-binds main-ignorables)
+        (key-parameters-bindings client (parameters parameter-group)
+                                 argument-variable)
+      (values (append validation-binds main-binds)
+              (append validation-ignorables main-ignorables)))))

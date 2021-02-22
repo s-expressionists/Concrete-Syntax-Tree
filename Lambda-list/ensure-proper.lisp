@@ -4,7 +4,7 @@
 
 (defmethod ensure-proper ((lambda-list atom-cst))
   (if (null lambda-list)
-      (make-instance 'atom-cst :raw nil)
+      lambda-list
       (list (make-instance 'atom-cst :raw '&rest)
             lambda-list)))
 
