@@ -179,6 +179,7 @@
            #:optional-parameters-bindings
            #:required-parameter-bindings
            #:required-parameters-bindings
+           #:whole-parameter-bindings
            #:parse-macro
            #:db
            #:valid-binding-p
