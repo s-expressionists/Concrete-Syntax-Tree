@@ -6,6 +6,7 @@
   :components
   ((:file "generic-functions")
    (:file "conditions")
+   (:file "whole-parameters")
    (:file "required-parameters")
    (:file "optional-parameters")
    (:file "rest-parameters")

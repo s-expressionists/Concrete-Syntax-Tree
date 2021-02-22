@@ -62,3 +62,6 @@
 ;;; Return LET* bindings for a list of required parameters.
 (defgeneric required-parameters-bindings
     (client parameters argument-variable))
+
+;;; Return LET* bindings for a &WHOLE parameter.
+(defgeneric whole-parameter-bindings (client parameter argument-variable))
