@@ -1,11 +1,10 @@
 (cl:in-package #:concrete-syntax-tree)
 
 ;;;; Generally speaking, these functions collectively take a macro
-;;;; lambda list and a variable, and return a list of LET* bindings
-;;;; that will bind the variables in that lambda list to the value
-;;;; in that variable as their first value, and a list of variables
-;;;; bound in the bindings that need to be declared IGNORABLE as a
-;;;; second value.
+;;;; lambda list or portion thereof, and a variable, and return two
+;;;; values: a list of LET* bindings that will bind the variables in
+;;;; that lambda list to the value in that variable, and a list of
+;;;; variables bound in the bindings that need to be declared IGNORABLE.
 
 ;;;; Each function handles a different part of the lambda list.
 ;;;; CLIENT is some object representing the client. ARGUMENT-VARIABLE
@@ -24,8 +23,6 @@
 
 ;;; Return LET* bindings corresponding to the parameters in the list
 ;;; of parameter groups, PARAMETER-GROUPS.
-;;; As a second variable, return a list of any variables that need
-;;; to be declared IGNORABLE.
 (defgeneric parameter-groups-bindings
     (client parameter-groups argument-variable))
 
@@ -43,6 +40,9 @@
 
 ;;; Return LET* bindings for a list of &KEY parameters.
 (defgeneric key-parameters-bindings (client parameters argument-variable))
+
+;;; Return LET* bindings for validating a &KEY parameter group.
+(defgeneric key-validation-bindings (client parameter-group argument-variable))
 
 ;;; Return LET* bindings for a &REST parameter.
 (defgeneric rest-parameter-bindings (client parameter argument-variable))
