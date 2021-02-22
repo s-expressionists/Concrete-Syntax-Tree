@@ -69,11 +69,11 @@
 
 (defmethod key-validation-bindings
     (client (parameter-group key-parameter-group) argument-variable)
-  (declare (ignore client))
   (let ((glength-check (gensym "LENGTH-CHECK-DUMMY"))
         (length-check-form
           `(unless (evenp (cl:length ,argument-variable))
-             (error "odd number of keyword parameters"))))
+             ,(odd-keywords-error client *current-lambda-list*
+                                  argument-variable *current-macro-name*))))
     (if (allow-other-keys parameter-group)
         (values `((,glength-check ,length-check-form)) `(,glength-check))
         (let* ((unknowns (gensym "UNKNOWN-KEYWORDS"))
@@ -98,7 +98,9 @@
                (unknown-check (gensym "UNKNOWN-KEYWORDS-DUMMY"))
                (unknown-check-form
                  `(unless (cl:null ,unknowns)
-                    (error "unknown keywords ~a" ,unknowns))))
+                    ,(unknown-keywords-error client *current-lambda-list*
+                                             argument-variable unknowns
+                                             *current-macro-name*))))
           (values `((,glength-check ,length-check-form)
                     (,unknowns ,unknowns-form)
                     (,unknown-check ,unknown-check-form))
