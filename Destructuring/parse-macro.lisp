@@ -37,17 +37,17 @@
                                  children)))
          (relevant-lambda-list
            (make-instance 'cst:macro-lambda-list :children relevant-children))
-	 (args-var-name (gensym))
-         (args-var (make-instance 'atom-cst :raw args-var-name :source source)))
+         (args-var
+           (make-instance 'atom-cst :raw (gensym) :source source)))
     (multiple-value-bind (bindings ignorables)
         (destructuring-lambda-list-bindings
-         client relevant-lambda-list args-var-name)
+         client relevant-lambda-list args-var source)
       (quasiquote
        source
        (lambda ((unquote final-form-var) (unquote final-env-var))
          (block (unquote name)
            (let* (((unquote args-var) (cdr (unquote final-form-var)))
-                  (unquote-splicing (cst-from-expression bindings))
+                  (unquote-splicing (cstify bindings))
                   ;; We rebind the whole and environment variables
                   ;; here, so that any user declarations for them
                   ;; are scoped, properly.
@@ -57,14 +57,13 @@
                   ;; for the args-var binding.
                   (unquote-splicing
                     (if (cl:null form-var)
-                        (make-instance 'atom-cst :raw nil :source source)
+                        (quasiquote source ())
                         (quasiquote
                          source
                          (((unquote final-form-var)
                            (unquote final-form-var))))))
                   ((unquote final-env-var) (unquote final-env-var)))
-             (declare (ignorable (unquote-splicing
-                                  (cst-from-expression ignorables)))
+             (declare (ignorable (unquote-splicing (cstify ignorables)))
                       ;; If the lambda list does not contain &environment, then
                       ;; we IGNORE the GENSYMed parameter to avoid warnings.
                       ;; If the lambda list does contain &environment, we do
@@ -74,5 +73,5 @@
                        (if (cl:null env-var)
                            (quasiquote source
                                        ((ignore (unquote final-env-var))))
-                           (make-instance 'atom-cst :raw nil :source source))))
+                           (quasiquote source ()))))
              (unquote-splicing body))))))))
