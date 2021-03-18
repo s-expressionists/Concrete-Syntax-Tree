@@ -82,19 +82,24 @@
      (? ordinary-optional-parameter-group)
      (? ordinary-rest-parameter-group))))
 
-(defparameter *whole-parameter-group*
-  '((whole-parameter-group <-
+(defparameter *ordinary-whole-parameter-group*
+  '((ordinary-whole-parameter-group <-
      keyword-whole
      simple-variable)))
 
 (defparameter *define-method-combination-lambda-list*
   '((define-method-combination-lambda-list <-
-     (? whole-parameter-group)
+     (? ordinary-whole-parameter-group)
      ordinary-required-parameter-group
      (? ordinary-optional-parameter-group)
      (? ordinary-rest-parameter-group)
      (? ordinary-key-parameter-group)
      (? aux-parameter-group))))
+
+(defparameter *destructuring-whole-parameter-group*
+  '((destructuring-whole-parameter-group <-
+     keyword-whole
+     destructuring-parameter)))
 
 (defparameter *destructuring-required-parameter-group*
   '((destructuring-required-parameter-group <-
@@ -121,7 +126,7 @@
 
 (defparameter *destructuring-lambda-list*
   `((destructuring-lambda-list <-
-     (? whole-parameter-group)
+     (? destructuring-whole-parameter-group)
      destructuring-required-parameter-group
      (? ordinary-optional-parameter-group)
      (? destructuring-rest-parameter-group)
@@ -130,7 +135,7 @@
 
 (defparameter *macro-lambda-list*
   `((macro-lambda-list <-
-     (? whole-parameter-group)
+     (? destructuring-whole-parameter-group)
      (? environment-parameter-group)
      destructuring-required-parameter-group
      (? environment-parameter-group)
@@ -158,8 +163,9 @@
 	  *environment-parameter-group*
           *defsetf-lambda-list*
           *define-modify-macro-lambda-list*
-	  *whole-parameter-group*
+	  *ordinary-whole-parameter-group*
           *define-method-combination-lambda-list*
+          *destructuring-whole-parameter-group*
           *destructuring-required-parameter-group*
           *destructuring-optional-parameter-group*
           *destructuring-key-parameter-group*

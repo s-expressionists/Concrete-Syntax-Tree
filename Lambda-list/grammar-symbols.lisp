@@ -181,6 +181,12 @@
   (declare (ignore client))
   nil)
 
+(defclass ordinary-whole-parameter-group (whole-parameter-group)
+  ())
+
+(defclass destructuring-whole-parameter-group (whole-parameter-group)
+  ())
+
 ;;; This class is the root of all classes that correspond to
 ;;; individual parameters.  Instance of (subclasses of) this class are
 ;;; handled by the scanner.
