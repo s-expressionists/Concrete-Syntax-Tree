@@ -181,6 +181,18 @@
   (declare (ignore client))
   nil)
 
+(defclass ordinary-whole-parameter-group (whole-parameter-group)
+  ())
+
+;;; CLHS is somewhat self-contradictory about whether &whole parameters
+;;; destructure. The text in 3.4.4 refers to a &whole parameter as a
+;;; "single variable", but 3.4.4.1.2 describes it as a destructuring
+;;; pattern. The ANSI tests (which are not part of the standard)
+;;; expect destructuring &whole in the destructuring-bind.20 and
+;;; macrolet.36 tests. We do support &whole destructuring.
+(defclass destructuring-whole-parameter-group (whole-parameter-group)
+  ())
+
 ;;; This class is the root of all classes that correspond to
 ;;; individual parameters.  Instance of (subclasses of) this class are
 ;;; handled by the scanner.

@@ -91,7 +91,8 @@
            #:ordinary-rest-parameter-group
            #:destructuring-rest-parameter-group
            #:environment-parameter-group
-           #:whole-parameter-group
+           #:ordinary-whole-parameter-group
+           #:destructuring-whole-parameter-group
            #:parameter
            #:parameters
            #:children
