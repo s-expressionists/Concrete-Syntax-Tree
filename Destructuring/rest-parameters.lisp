@@ -2,6 +2,7 @@
 
 (defmethod rest-parameter-bindings
     (client (parameter simple-variable) argument-variable)
+  (declare (ignore client))
   `((,(raw (name parameter)) ,argument-variable)))
 
 (defmethod rest-parameter-bindings
