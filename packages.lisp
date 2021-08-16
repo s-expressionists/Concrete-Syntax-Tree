@@ -199,4 +199,7 @@
            #:?
            #:<-
            #:lambda-list-keyword
-           #:lambda-list-type))
+           #:lambda-list-type)
+  (:export #:quasiquote #:unquote #:unquote-splicing
+           #:unquote-error
+           #:unquote-splicing-in-dotted-list #:unquote-splicing-at-top))

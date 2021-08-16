@@ -12,6 +12,7 @@
   :components ((:file "packages")
                (:file "random-expression")
                (:file "cst-from-expression")
+               (:file "quasiquotation")
                (:file "random-sources")
                (:file "reconstruct"))
   :perform (test-op (operation component)
