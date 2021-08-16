@@ -8,4 +8,5 @@
 (defun run-tests ()
   (test-cst-from-expression)
   (test-reconstruct)
-  (test-reconstruct-1))
+  (test-reconstruct-1)
+  (test-quasiquotation))
