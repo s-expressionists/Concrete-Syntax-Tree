@@ -32,7 +32,7 @@
 
 ;;; Given an ordinary proper Common Lisp list of CSTs, return a CST,
 ;;; the elements of which are the CSTs of the input.
-(defgeneric cstify (list))
+(defgeneric cstify (list &key source))
 
 ;;; Given a body in the form of a CST that may contain declarations
 ;;; but not a documentation string, return two values
