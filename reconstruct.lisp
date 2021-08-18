@@ -139,7 +139,8 @@
                                    :source default-source))))))
       (traverse expression))))
 
-(defmethod reconstruct (expression (cst cst) client &key default-source)
+(defmethod reconstruct (expression (cst cst) client
+                        &key (default-source (source cst)))
   (declare (ignore client))
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
