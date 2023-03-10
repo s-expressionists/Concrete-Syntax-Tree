@@ -58,4 +58,4 @@
 ;;; version of the raw version of the CST, create a new CST that tries
 ;;; to reuse as much as possible of the given CST, so as to preserve
 ;;; source information.
-(defgeneric reconstruct (expression cst client &key default-source))
+(defgeneric reconstruct (client expression cst &key default-source))
