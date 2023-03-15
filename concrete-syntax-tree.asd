@@ -1,7 +1,8 @@
 (defsystem "concrete-syntax-tree"
   :description "Library for parsing Common Lisp code into a concrete syntax tree."
-  :author "Robert Strandh <robert.strandh@gmail.com>"
   :license "FreeBSD" ; See file LICENSE.text.
+  :author "Robert Strandh <robert.strandh@gmail.com>"
+  :version (:read-file-form "version-string.sexp")
   :depends-on ("concrete-syntax-tree-base"
                "concrete-syntax-tree-lambda-list")
   :in-order-to ((test-op (test-op "concrete-syntax-tree/test"))))
