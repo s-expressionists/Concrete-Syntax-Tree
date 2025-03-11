@@ -189,8 +189,8 @@
            #:db
            #:valid-binding-p
            #:valid-bindings-p
-           #:canoncial-binding-p
-           #:canoncial-bindings-p
+           #:canonical-binding-p
+           #:canonical-bindings-p
            #:canonicalize-binding
            #:canonicalize-bindings
            #:binding-variables
