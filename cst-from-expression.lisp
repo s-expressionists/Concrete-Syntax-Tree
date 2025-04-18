@@ -12,7 +12,7 @@
   ;; deeply than supported by the implementation.
   (let ((stack '()))
     (declare (type cl:list stack))
-    (with-bounded-recursion (enqueue do-work worklist)
+    (with-bounded-recursion (cst-from-expression enqueue do-work worklist)
       (labels ((finalize-cons-cst (cst first rest)
                  ;; Should we make this function user-extensible or
                  ;; let the user control the class of the created CSTs
@@ -89,6 +89,8 @@
                  ;; work items.
                  (push cst stack)
                  (do-work (work-item)
+                   (format *trace-output* "~A ~30@<~V,,,'*<~>~> ~V,,,'*<~>~%"
+                           'cst-from-expression (length worklist) (length stack))
                    (if (functionp work-item)
                        (funcall work-item)
                        (push (traverse work-item 0) stack)))

@@ -31,12 +31,14 @@
 ;;;
 ;;; For typical, small inputs, the worklist will remain empty and the
 ;;; DO-WORK loop will exit without a single iteration.
-(defmacro with-bounded-recursion ((enqueue-name process-name
+(defmacro with-bounded-recursion ((name enqueue-name process-name
                                    &optional (worklist-var (gensym "WORKLIST")))
                                   &body body)
   (let ((tail (gensym "TAIL")))
     `(let ((,tail nil) (,worklist-var ()))
        (flet ((,enqueue-name (item)
+                #++ (let ((*print-level* 3))
+                      (format *trace-output* "~A Enqueue ~S~%" ',name item))
                 (let ((cell (cl:cons item nil)))
                   (if (cl:null ,worklist-var)
                       (setf ,worklist-var cell)
@@ -46,5 +48,7 @@
          (macrolet ((,process-name ((item-name) &body body)
                       `(loop until (cl:null ,',worklist-var)
                              for ,item-name = (pop ,',worklist-var)
-                             do (progn ,@body))))
+                             do #++ (let ((*print-level* 3))
+                                      (format *trace-output* "~A Process ~S~%" ',',name ,item-name))
+                                ,@body)))
            ,@body)))))

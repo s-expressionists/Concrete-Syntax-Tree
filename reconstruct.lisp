@@ -51,7 +51,7 @@
 ;;; CST we encounter.  By doing it this way, we also avoid infinite
 ;;; computations when the expression contains cycles.
 (defun cons-table (cst &optional (cons->cst (make-hash-table :test #'eq)))
-  (with-bounded-recursion (enqueue do-work worklist)
+  (with-bounded-recursion (cons-table enqueue do-work worklist)
     (labels ((traverse (cst depth)
                (declare (type (integer 0 #.+recursion-depth-limit+) depth))
                (when (consp cst)
@@ -70,6 +70,7 @@
                           (enqueue cst)))))))
       (traverse cst 0)
       (do-work (cst)
+        (format *trace-output* "~A ~V,,,'*<~>~%" 'cons-table (length worklist))
         (traverse cst 0))))
   cons->cst)
 
@@ -79,7 +80,7 @@
 (defun referenced-cons-table (expression cons->cst)
   (let ((referenced-cons->cst (make-hash-table :test #'eql))
         (seen (make-hash-table :test #'eq)))
-    (with-bounded-recursion (enqueue do-work worklist)
+    (with-bounded-recursion (referenced-cons->cst enqueue do-work worklist)
       (labels ((traverse (expression depth)
                  (declare (type (integer 0 #.+recursion-depth-limit+) depth))
                  (when (and (cl:consp expression)
@@ -113,6 +114,8 @@
                                   cst)))))))
         (traverse expression 0)
         (do-work (work-item)
+          (format *trace-output* "~A ~V,,,'*<~>~%"
+                  'referenced-cons-table (length worklist))
           (traverse work-item 0))))
     referenced-cons->cst))
 
@@ -123,7 +126,7 @@
 ;;; defined OUTSIDE one of the CONSes already in the table.
 (defun add-atoms (cst table sub-expression-count)
   (let ((seen (make-hash-table :test #'eq :size sub-expression-count)))
-    (with-bounded-recursion (enqueue do-work worklist)
+    (with-bounded-recursion (add-atoms enqueue do-work worklist)
       (labels ((traverse (cst inside-p depth)
                  (declare (type (integer 0 #.+recursion-depth-limit+) depth))
                  (cond ((consp cst)
@@ -147,6 +150,8 @@
                             (setf (gethash raw table) cst)))))))
         (traverse cst nil 0)
         (do-work (work-item)
+          (format *trace-output* "~A ~V,,,'*<~>~%"
+                  'add-atoms (length worklist))
           (traverse work-item nil 0)))))
   table)
 
