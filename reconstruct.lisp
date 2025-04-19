@@ -50,39 +50,71 @@
 ;;; is not unique.  In this case, we just pick the first corresponding
 ;;; CST we encounter.  By doing it this way, we also avoid infinite
 ;;; computations when the expression contains cycles.
-(defun cons-table (cst &optional (table (make-hash-table :test #'eq)))
-  (labels ((traverse (cst)
-             (let ((raw (raw cst)))
-               (when (and (consp cst) (cl:null (gethash raw table)))
-                 (setf (gethash raw table) cst)
-                 (traverse (first cst))
-                 (traverse (rest cst))))))
-    (traverse cst))
-  table)
+(defun cons-table (cst &optional (cons->cst (make-hash-table :test #'eq)))
+  (with-bounded-recursion (enqueue do-work worklist)
+    (labels ((traverse (cst depth)
+               (declare (type (integer 0 #.+recursion-depth-limit+) depth))
+               (when (consp cst)
+                 (let ((raw (raw cst)))
+                   (cond ((nth-value 1 (gethash raw cons->cst)))
+                         ((< depth +recursion-depth-limit+)
+                          (setf (gethash raw cons->cst) cst)
+                          (let ((depth+1 (1+ depth)))
+                            (traverse (first cst) depth+1)
+                            ;; If we could inquire about tail call
+                            ;; optimization, we could make this second
+                            ;; call without increasing the depth in
+                            ;; case of TCO.
+                            (traverse (rest cst) depth+1)))
+                         (t
+                          (enqueue cst)))))))
+      (traverse cst 0)
+      (do-work (cst)
+        (traverse cst 0))))
+  cons->cst)
 
 ;;; Given an expression E and a hash table H1 mapping CONS cells to
 ;;; CSTs, return a new EQL hash table H2 that contains the subset of
 ;;; the mappings of H1 with keys in E.
-(defun referenced-cons-table (expression cons-table)
-  (let ((table (make-hash-table :test #'eql))
+(defun referenced-cons-table (expression cons->cst)
+  (let ((referenced-cons->cst (make-hash-table :test #'eql))
         (seen (make-hash-table :test #'eq)))
-    (labels ((traverse (expression)
-               (when (and (cl:consp expression)
-                          (not (gethash expression seen)))
-                 (setf (gethash expression seen) t)
-                 (multiple-value-bind (original-cst foundp)
-                     (gethash expression cons-table)
-                   (cond ((not foundp)
-                          (traverse (car expression))
-                          (traverse (cdr expression)))
-                         ;; We don't need to key sub-conses of a cons
-                         ;; that was found in the table, since we'll
-                         ;; always use or substitute the full cons
-                         ;; when building the final cst.
-                         ((cl:null original-cst))
-                         (t (setf (gethash expression table) original-cst)))))))
-      (traverse expression))
-    table))
+    (with-bounded-recursion (enqueue do-work worklist)
+      (labels ((traverse (expression depth)
+                 (declare (type (integer 0 #.+recursion-depth-limit+) depth))
+                 (when (and (cl:consp expression)
+                            (not (gethash expression seen)))
+                   (setf (gethash expression seen) t)
+                   (multiple-value-bind (cst foundp)
+                       (gethash expression cons->cst)
+                     (cond ((not foundp)
+                            (let ((car (car expression))
+                                  (cdr (cdr expression)))
+                              (cond ((< depth +recursion-depth-limit+)
+                                     (let ((depth+1 (1+ depth)))
+                                       (traverse car depth+1)
+                                       ;; If we could inquire about
+                                       ;; tail call optimization, we
+                                       ;; could make this second call
+                                       ;; without increasing the depth
+                                       ;; in case of TCO.
+                                       (traverse cdr depth+1)))
+                                    (t
+                                     (enqueue car)
+                                     (enqueue cdr)))))
+                           ;; We found EXPRESSION in CONS->CST so we
+                           ;; don't need to traverse the
+                           ;; sub-expressions of EXPRESSION since
+                           ;; we'll always use or substitute the full
+                           ;; cons when building the final CST.
+                           ((cl:null cst))
+                           (t
+                            (setf (gethash expression referenced-cons->cst)
+                                  cst)))))))
+        (traverse expression 0)
+        (do-work (work-item)
+          (traverse work-item 0))))
+    referenced-cons->cst))
 
 ;;; Given a CST and a table containing mappings of some of the CONSes
 ;;; in the CST, add the atoms of the CST as mappings to the table.
@@ -91,54 +123,94 @@
 ;;; defined OUTSIDE one of the CONSes already in the table.
 (defun add-atoms (cst table)
   (let ((seen (make-hash-table :test #'eq)))
-    (labels ((traverse (cst inside-p)
-               (if (consp cst)
-                   (unless (gethash cst seen)
-                     (setf (gethash cst seen) t)
-                     (let ((new-inside-p (or inside-p
-                                             (gethash (raw cst) table))))
-                       (traverse (first cst) new-inside-p)
-                       (traverse (rest cst) new-inside-p)))
-                   (when (atom cst)
-                     (if inside-p
-                         (when (not (nth-value 1 (gethash (raw cst) table)))
-                           (setf (gethash (raw cst) table) cst))
-                         (setf (gethash (raw cst) table) cst))))))
-      (traverse cst nil)))
+    (with-bounded-recursion (enqueue do-work worklist)
+      (labels ((traverse (cst inside-p depth)
+                 (declare (type (integer 0 #.+recursion-depth-limit+) depth))
+                 (cond ((consp cst)
+                        (unless (gethash cst seen)
+                          (setf (gethash cst seen) t)
+                          (let ((first (first cst))
+                                (rest (rest cst)))
+                            (cond ((< depth +recursion-depth-limit+)
+                                   (let ((new-inside-p (or inside-p
+                                                           (gethash (raw cst) table)))
+                                         (depth+1 (1+ depth)))
+                                     (traverse first new-inside-p depth+1)
+                                     (traverse rest new-inside-p depth+1)))
+                                  (t
+                                   (enqueue first)
+                                   (enqueue rest))))))
+                       ((atom cst)
+                        (let ((raw (raw cst)))
+                          (when (or (not inside-p)
+                                    (not (nth-value 1 (gethash raw table))))
+                            (setf (gethash raw table) cst)))))))
+        (traverse cst nil 0)
+        (do-work (work-item)
+          (traverse work-item nil 0)))))
   table)
 
 ;;; Given an expression and a hash table mapping expressions to CSTs,
 ;;; build a CST from the expression in such a way that if an
 ;;; expression is encountered that has a mapping in the table, then
 ;;; the corresponding CST in the table is used.
-(defun build-cst (expression table default-source)
-  (let ((cons-table (make-hash-table :test #'eq)))
-    (labels ((traverse (expression)
-               (multiple-value-bind (value found-p)
-                   (gethash expression table)
-                 (cond
-                   (found-p
-                    value)
-                   ((cl:consp expression)
-                    (multiple-value-bind (existing found-p)
-                        (gethash expression cons-table)
-                      (if found-p
-                          existing
-                          (let ((cst (make-instance 'cons-cst
-                                                    :raw expression
-                                                    :source default-source)))
-                            (setf (gethash expression cons-table) cst)
-                            (let ((first (traverse (car expression)))
-                                  (rest (traverse (cdr expression))))
-                              (reinitialize-instance cst
-                                                     :first first
-                                                     :rest rest))
-                            cst))))
-                   (t
-                    (make-instance 'atom-cst
-                                   :raw expression
-                                   :source default-source))))))
-      (traverse expression))))
+(defun build-cst (expression expression->existing-cst default-source)
+  (let ((cons->new-cst (make-hash-table :test #'eq))
+        (stack '()))
+    (with-bounded-recursion (enqueue do-work worklist)
+      (labels ((make-cons-cst (expression depth)
+                 (declare (type (integer 0 #.+recursion-depth-limit+) depth))
+                 (let ((car (car expression))
+                       (cdr (cdr expression))
+                       (cst (make-instance 'cons-cst :raw expression
+                                                     :source default-source)))
+                   (setf (gethash expression cons->new-cst) cst)
+                   (cond ((< depth +recursion-depth-limit+)
+                          (let ((depth+1 (1+ depth)))
+                            (reinitialize-instance
+                             cst :first (traverse car depth+1)
+                                 :rest (traverse cdr depth+1))))
+                         (t
+                          ;; First and second work items: restart
+                          ;; recursion for CAR and CDR and push
+                          ;; results onto STACK.
+                          (enqueue car)
+                          (enqueue cdr)
+                          ;; Third work item: pop results for CDR and
+                          ;; CAR, update CST and push result onto
+                          ;; STACK.
+                          (enqueue (lambda ()
+                                     (assert (>= (length stack) 2))
+                                     (let ((rest (pop stack))
+                                           (first (pop stack)))
+                                       (reinitialize-instance cst :first first
+                                                                  :rest rest))))))
+                   cst))
+               (traverse (expression depth)
+                 (multiple-value-bind (existing-cst foundp)
+                     (gethash expression expression->existing-cst)
+                   (cond (foundp
+                          existing-cst)
+                         ((cl:consp expression)
+                          (multiple-value-bind (cst foundp)
+                              (gethash expression cons->new-cst)
+                            (if foundp
+                                cst
+                                (make-cons-cst expression depth))))
+                         (t
+                          (make-instance 'atom-cst :raw expression
+                                                   :source default-source))))))
+        (let ((cst (traverse expression 0)))
+          (cond ((cl:null worklist)
+                 cst)
+                (t
+                 (push cst stack)
+                 (do-work (work-item)
+                   (if (functionp work-item)
+                       (funcall work-item)
+                       (push (traverse work-item 0) stack)))
+                 (assert (= (length stack) 1))
+                 (cl:first stack))))))))
 
 (defmethod reconstruct ((client t) (expression t) (cst cst)
                         &key (default-source (source cst)))
