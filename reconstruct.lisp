@@ -52,10 +52,11 @@
 ;;; computations when the expression contains cycles.
 (defun cons-table (cst &optional (table (make-hash-table :test #'eq)))
   (labels ((traverse (cst)
-             (when (and (consp cst) (cl:null (gethash (raw cst) table)))
-               (setf (gethash (raw cst) table) cst)
-               (traverse (first cst))
-               (traverse (rest cst)))))
+             (let ((raw (raw cst)))
+               (when (and (consp cst) (cl:null (gethash raw table)))
+                 (setf (gethash raw table) cst)
+                 (traverse (first cst))
+                 (traverse (rest cst))))))
     (traverse cst))
   table)
 
@@ -139,16 +140,15 @@
                                    :source default-source))))))
       (traverse expression))))
 
-(defmethod reconstruct (client expression (cst cst)
+(defmethod reconstruct ((client t) (expression t) (cst cst)
                         &key (default-source (source cst)))
-  (declare (ignore client))
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (add-atoms cst referenced-cons-table)
     (build-cst expression referenced-cons-table default-source)))
 
-(defmethod reconstruct (client expression (cst cl:sequence) &key default-source)
-  (declare (ignore client))
+(defmethod reconstruct ((client t) (expression t) (cst cl:sequence)
+                        &key default-source)
   (let* ((cons-table (reduce #'cons-table cst
                              :initial-value (make-hash-table :test #'eq)
                              :from-end t))

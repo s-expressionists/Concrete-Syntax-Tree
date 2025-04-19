@@ -1,4 +1,4 @@
-(in-package #:concrete-syntax-tree)
+(cl:in-package #:concrete-syntax-tree)
 
 ;;;; The QUASIQUOTE operator allows concrete syntax trees to be constructed in
 ;;;; a manner analogous to list quasiquotation (backquote).
