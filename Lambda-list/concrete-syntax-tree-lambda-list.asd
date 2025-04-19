@@ -28,4 +28,7 @@
                              (:file "unparse")
                              (:file "test"))))
   :perform    (test-op (operation component)
-                (uiop:symbol-call '#:concrete-syntax-tree-lambda-list-test '#:run-tests)))
+                (when (and (not (uiop:symbol-call '#:concrete-syntax-tree-lambda-list-test
+                                                  '#:run-tests))
+                           (boundp 'cl-user::*result*))
+                  (setf (symbol-value 'cl-user::*result*) nil))))

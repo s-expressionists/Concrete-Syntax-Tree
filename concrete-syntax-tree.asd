@@ -40,4 +40,7 @@
                (:file "random-sources")
                (:file "reconstruct"))
   :perform    (test-op (operation component)
-                (uiop:symbol-call '#:concrete-syntax-tree-test '#:run-tests)))
+                (when (and (not (uiop:symbol-call '#:concrete-syntax-tree-test
+                                                  '#:run-tests))
+                           (boundp 'cl-user::*result*))
+                  (setf (symbol-value 'cl-user::*result*) nil))))
