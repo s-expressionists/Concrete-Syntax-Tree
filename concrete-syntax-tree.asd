@@ -29,7 +29,8 @@
   :in-order-to ((test-op (test-op "concrete-syntax-tree/test"))))
 
 (defsystem "concrete-syntax-tree/test"
-  :depends-on ("concrete-syntax-tree")
+  :depends-on ("fiveam"
+               "concrete-syntax-tree")
   :pathname   "Test"
   :serial     t
   :components ((:file "packages")

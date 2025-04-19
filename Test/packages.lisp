@@ -1,12 +1,20 @@
 (cl:defpackage #:concrete-syntax-tree-test
-  (:use #:common-lisp)
+  (:use
+   #:common-lisp)
+
+  (:import-from #:fiveam
+   #:def-suite
+   #:def-suite*
+   #:test
+   #:is
+   #:is-true)
+
   (:export
    #:run-tests))
 
 (cl:in-package #:concrete-syntax-tree-test)
 
+(def-suite :concrete-syntax-tree)
+
 (defun run-tests ()
-  (test-cst-from-expression)
-  (test-reconstruct)
-  (test-reconstruct-1)
-  (test-quasiquotation))
+  (fiveam:run! :concrete-syntax-tree))

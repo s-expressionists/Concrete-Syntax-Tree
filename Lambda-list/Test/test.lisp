@@ -1,8 +1,10 @@
 (cl:in-package #:concrete-syntax-tree-lambda-list-test)
 
+(in-suite :concrete-syntax-tree-lambda-list)
+
 (defun assert-success (parser)
   (let ((item (cst::find-final-item parser)))
-    (assert (not (null item)))
+    (is-true (not (null item)))
     (car (cst::parse-trees item))))
 
 (defun test-ordinary (lambda-list)
@@ -99,46 +101,22 @@
       (compare-parse-trees
        result (parse-macro-lambda-list lambda-list)))))
 
-(defun test-ordinary-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-ordinary (random-ordinary-lambda-list)))))
+(macrolet ((define (name)
+             (let ((test-name (intern (format nil "~A-LAMBDA-LIST" name) *package*))
+                   (checker (intern (format nil "TEST-~A" name) *package*))
+                   (generator (intern (format nil "RANDOM-~A-LAMBDA-LIST" name)
+                                      *package*)))
+               `(test ,test-name
+                  (let ((fiveam:*test-dribble* nil)) ; too much output otherwise
+                    (loop repeat 10000
+                          do (assert (,checker (,generator)))))))))
 
-(defun test-generic-function-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-generic-function (random-generic-function-lambda-list)))))
 
-(defun test-specialized-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-specialized (random-specialized-lambda-list)))))
-
-(defun test-defsetf-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-defsetf (random-defsetf-lambda-list)))))
-
-(defun test-define-modify-macro-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-define-modify-macro
-                    (random-define-modify-macro-lambda-list)))))
-
-(defun test-define-method-combination-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-define-method-combination
-                    (random-define-method-combination-lambda-list)))))
-
-(defun test-destructuring-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-destructuring (random-destructuring-lambda-list)))))
-
-(defun test-macro-lambda-lists ()
-  (loop repeat 10000
-        do (assert (test-macro (random-macro-lambda-list)))))
-
-(defun test ()
-  (test-ordinary-lambda-lists)
-  (test-generic-function-lambda-lists)
-  (test-specialized-lambda-lists)
-  (test-defsetf-lambda-lists)
-  (test-define-modify-macro-lambda-lists)
-  (test-define-method-combination-lambda-lists)
-  (test-destructuring-lambda-lists)
-  (test-macro-lambda-lists))
+  (define #:ordinary)
+  (define #:generic-function)
+  (define #:specialized)
+  (define #:defsetf)
+  (define #:define-modify-macro)
+  (define #:define-method-combination)
+  (define #:destructuring)
+  (define #:macro))

@@ -17,7 +17,8 @@
   :in-order-to ((test-op (test-op "concrete-syntax-tree-lambda-list/test"))))
 
 (defsystem "concrete-syntax-tree-lambda-list/test"
-  :depends-on ("concrete-syntax-tree-lambda-list")
+  :depends-on ("fiveam"
+               "concrete-syntax-tree-lambda-list")
   :components ((:module     "Test"
                 :serial     t
                 :components ((:file "packages")
@@ -27,4 +28,4 @@
                              (:file "unparse")
                              (:file "test"))))
   :perform    (test-op (operation component)
-                (uiop:symbol-call '#:concrete-syntax-tree-lambda-list-test '#:test)))
+                (uiop:symbol-call '#:concrete-syntax-tree-lambda-list-test '#:run-tests)))
