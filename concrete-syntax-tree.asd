@@ -1,6 +1,6 @@
 (defsystem "concrete-syntax-tree"
   :description "Library for parsing Common Lisp code into a concrete syntax tree."
-  :license "FreeBSD" ; See file LICENSE.text.
+  :license "BSD" ; See LICENSE file for details
   :author "Robert Strandh <robert.strandh@gmail.com>"
   :version (:read-file-form "version-string.sexp")
   :depends-on ("concrete-syntax-tree-base"
