@@ -19,3 +19,10 @@
           for expression = (random-expression)
           for cst = (cst:cst-from-expression expression)
           do (assert-equality cst expression))))
+
+(test cst-from-expression.circular
+  (let* ((expression '#1=(1 #1#))
+         (cst (cst:cst-from-expression expression)))
+    (is (eq expression (cst:raw cst)))
+    (is (eq (first expression) (cst:raw (cst:first cst))))
+    (is (eq cst (cst:second cst)))))
