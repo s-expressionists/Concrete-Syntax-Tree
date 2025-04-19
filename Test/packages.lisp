@@ -7,7 +7,8 @@
    #:def-suite*
    #:test
    #:is
-   #:is-true)
+   #:is-true
+   #:fail)
 
   (:export
    #:run-tests))
