@@ -151,6 +151,17 @@
              result))
      (pop groups)))
 
+(defmacro do-destructuring-optional-parameter-group ()
+  `(when (and (not (null groups))
+              (cst::lambda-list-keyword-p (caar groups) '&optional))
+     (push (make-instance 'cst:destructuring-optional-parameter-group
+                          :children (cl:cons (make-instance 'cst::keyword-optional
+                                                            :name (caar groups))
+                                             (mapcar #'cst::parse-ordinary-optional-parameter
+                                                     (cdar groups))))
+           result)
+     (pop groups)))
+
 (defmacro do-destructuring-rest-parameter-group ()
   `(when (and (not (null groups))
               (or (cst::lambda-list-keyword-p (caar groups) '&rest)
@@ -161,6 +172,26 @@
                           :name (caar groups))
                         (parse-destructuring-parameter (cadar groups))))
            result)
+     (pop groups)))
+
+(defmacro do-destructuring-key-parameter-group ()
+  `(when (and (not (null groups))
+              (cst::lambda-list-keyword-p (caar groups) '&key))
+     (let ((parameters (mapcar #'cst::parse-ordinary-key-parameter (cdar groups)))
+           (keyword (make-instance 'cst::keyword-key :name (caar groups))))
+       (push (make-instance 'cst:destructuring-key-parameter-group
+                            :children (append
+                                       (cl:list keyword)
+                                       parameters
+                                       (if (or (cl:null (cdr groups))
+                                               (not (cst::lambda-list-keyword-p (caadr groups) '&allow-other-keys)))
+                                           '()
+                                           (prog1
+                                               (cl:list
+                                                (make-instance 'cst::keyword-allow-other-keys
+                                                               :name (caadr groups)))
+                                             (pop groups)))))
+             result))
      (pop groups)))
 
 (defmacro do-whole-parameter-group ()
@@ -268,7 +299,7 @@
                (keyword (make-instance 'cst::keyword-whole :name keyword-name))
                (variable-name (cst:cst-from-expression (cadr lambda-list)))
                (variable (cst::make-simple-variable variable-name))
-               (whole-group (make-instance 'cst::whole-parameter-group
+               (whole-group (make-instance 'cst:ordinary-whole-parameter-group
                               :children (cl:list keyword variable))))
           (push whole-group result)
           (setf groups (split-lambda-list (cddr lambda-list))))
@@ -282,7 +313,7 @@
       :children (reverse result))))
 
 (defun parse-destructuring-parameter (parameter)
-  (if (symbolp (cst:raw parameter))
+  (if (typep (cst:raw parameter) '(and symbol (not null)))
       (parse-simple-variable parameter)
       (parse-destructuring-lambda-list (cst:raw parameter))))
 
@@ -295,7 +326,7 @@
                (keyword (make-instance 'cst::keyword-whole :name keyword-name))
                (variable-name (cst:cst-from-expression (cadr lambda-list)))
                (variable (cst::make-simple-variable variable-name))
-               (whole-group (make-instance 'cst::whole-parameter-group
+               (whole-group (make-instance 'cst:destructuring-whole-parameter-group
                               :children (cl:list keyword variable))))
           (push whole-group result)
           (setf groups (split-lambda-list (cddr lambda-list))))
@@ -317,7 +348,7 @@
         (groups (split-macro-lambda-list lambda-list)))
     (when (and (not (null groups))
                (cst::lambda-list-keyword-p (caar groups) '&whole))
-      (push (make-instance 'cst::whole-parameter-group
+      (push (make-instance 'cst:destructuring-whole-parameter-group
               :children (cl:list
                          (make-instance 'cst::keyword-whole
                            :name (caar groups))
@@ -341,11 +372,11 @@
             result)
       (pop groups)
       (do-environment)
-      (do-ordinary-optional-parameter-group)
+      (do-destructuring-optional-parameter-group)
       (do-environment)
       (do-destructuring-rest-parameter-group)
       (do-environment)
-      (do-ordinary-key-parameter-group)
+      (do-destructuring-key-parameter-group)
       (do-environment)
       (do-aux-parameter-group)
       (do-environment)
