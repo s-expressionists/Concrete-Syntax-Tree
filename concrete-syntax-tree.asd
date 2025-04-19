@@ -12,6 +12,7 @@
                  :components ((:file "packages")
                               (:file "generic-functions")
                               (:file "conditions")
+                              (:file "utilities")
                               (:file "cst")
                               (:file "cons-cst")
                               (:file "listify")
