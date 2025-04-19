@@ -43,3 +43,8 @@
     (is (eq expression (cst:raw cst)))
     (is (eq (first expression) (cst:raw (cst:first cst))))
     (is (eq cst (cst:second cst)))))
+
+(test cst-from-expression.long-list
+  (let* ((expression (make-long-list))
+         (cst (cst:cst-from-expression expression)))
+    (assert-equality cst expression)))

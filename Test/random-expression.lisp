@@ -17,4 +17,12 @@
                     (make-array 2)))))
     (aux 0.9 0.2)))
 
-                    
+(defun make-long-list (&key (length 100000) (depth 3))
+  (labels ((iota (length)
+             (loop for i below length collect i))
+           (make-expression (depth)
+             (if (zerop depth)
+                 (cons (reverse (iota length)) (iota length))
+                 (cons (make-expression (1- depth))
+                       (make-expression (1- depth))))))
+    (make-expression depth)))
