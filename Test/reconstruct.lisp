@@ -18,3 +18,16 @@
                    (cst:reconstruct nil '#1=(#1#) circular))))
     (is-true (typep result 'cst:cst))
     (is (eq result (cst:first result)))))
+
+(test reconstruct.long-list.1
+  (let* ((expression (make-long-list))
+         (cst (cst:cst-from-expression expression))
+         (result (cst:reconstruct nil expression cst)))
+    (assert-equality result expression)))
+
+(test reconstruct.long-list.2
+  (let* ((expression (make-long-list))
+         (unrelated-expression (make-long-list))
+         (cst (cst:cst-from-expression expression))
+         (result (cst:reconstruct nil unrelated-expression cst)))
+    (assert-equality result unrelated-expression)))
