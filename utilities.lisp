@@ -38,7 +38,7 @@
     `(let ((,tail nil) (,worklist-var ()))
        (flet ((,enqueue-name (item)
                 (let ((cell (cl:cons item nil)))
-                  (if (cl:null ,tail)
+                  (if (cl:null ,worklist-var)
                       (setf ,worklist-var cell)
                       (setf (cdr ,tail) cell))
                   (setf ,tail cell))))
