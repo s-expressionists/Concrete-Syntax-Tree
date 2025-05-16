@@ -150,74 +150,13 @@
           (traverse work-item nil 0)))))
   table)
 
-;;; Given an expression and a hash table mapping expressions to CSTs,
-;;; build a CST from the expression in such a way that if an
-;;; expression is encountered that has a mapping in the table, then
-;;; the corresponding CST in the table is used.
-(defun build-cst (expression expression->existing-cst default-source)
-  (let ((cons->new-cst (make-hash-table :test #'eq))
-        (stack '()))
-    (with-bounded-recursion (enqueue do-work worklist)
-      (labels ((make-cons-cst (expression depth)
-                 (declare (type (integer 0 #.+recursion-depth-limit+) depth))
-                 (let ((car (car expression))
-                       (cdr (cdr expression))
-                       (cst (make-instance 'cons-cst :raw expression
-                                                     :source default-source)))
-                   (setf (gethash expression cons->new-cst) cst)
-                   (cond ((< depth +recursion-depth-limit+)
-                          (let ((depth+1 (1+ depth)))
-                            (reinitialize-instance
-                             cst :first (traverse car depth+1)
-                                 :rest (traverse cdr depth+1))))
-                         (t
-                          ;; First and second work items: restart
-                          ;; recursion for CAR and CDR and push
-                          ;; results onto STACK.
-                          (enqueue car)
-                          (enqueue cdr)
-                          ;; Third work item: pop results for CDR and
-                          ;; CAR, update CST and push result onto
-                          ;; STACK.
-                          (enqueue (lambda ()
-                                     (assert (>= (length stack) 2))
-                                     (let ((rest (pop stack))
-                                           (first (pop stack)))
-                                       (reinitialize-instance cst :first first
-                                                                  :rest rest))))))
-                   cst))
-               (traverse (expression depth)
-                 (multiple-value-bind (existing-cst foundp)
-                     (gethash expression expression->existing-cst)
-                   (cond (foundp
-                          existing-cst)
-                         ((cl:consp expression)
-                          (multiple-value-bind (cst foundp)
-                              (gethash expression cons->new-cst)
-                            (if foundp
-                                cst
-                                (make-cons-cst expression depth))))
-                         (t
-                          (make-instance 'atom-cst :raw expression
-                                                   :source default-source))))))
-        (let ((cst (traverse expression 0)))
-          (cond ((cl:null worklist)
-                 cst)
-                (t
-                 (push cst stack)
-                 (do-work (work-item)
-                   (if (functionp work-item)
-                       (funcall work-item)
-                       (push (traverse work-item 0) stack)))
-                 (assert (= (length stack) 1))
-                 (cl:first stack))))))))
-
 (defmethod reconstruct ((client t) (expression t) (cst cst)
                         &key (default-source (source cst)))
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (add-atoms cst referenced-cons-table)
-    (build-cst expression referenced-cons-table default-source)))
+    (cst-from-expression expression :source default-source
+                                    :expression->cst referenced-cons-table)))
 
 (defmethod reconstruct ((client t) (expression t) (cst cl:sequence)
                         &key default-source)
@@ -226,4 +165,5 @@
                              :from-end t))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
     (reduce #'add-atoms cst :initial-value referenced-cons-table :from-end t)
-    (build-cst expression referenced-cons-table default-source)))
+    (cst-from-expression expression :source default-source
+                                    :expression->cst referenced-cons-table)))
