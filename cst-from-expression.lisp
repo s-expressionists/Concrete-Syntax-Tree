@@ -1,17 +1,22 @@
 (cl:in-package #:concrete-syntax-tree)
 
-(defun cst-from-expression (expression &key source)
+;;; Given EXPRESSION and a (possibly empty) hash-table mapping
+;;; expressions to CSTs, build a CST from EXPRESSION in such a way
+;;; that if a (sub-)expression is encountered that has a mapping in
+;;; the table, then the corresponding CST in the table is used.
+(defun cst-from-expression (expression &key source
+                                            (expression->cst
+                                             (make-hash-table :test #'eq)))
   ;; This function uses WITH-BOUNDED-RECURSION since, depending on the
   ;; structure of EXPRESSION, TRAVERSE calls could otherwise nest more
   ;; deeply than supported by the implementation.
-  (let ((seen (make-hash-table :test #'eq))
-        (stack '()))
+  (let ((stack '()))
     (declare (type cl:list stack))
     (with-bounded-recursion (enqueue do-work worklist)
       (labels ((traverse (expression depth)
                  (declare (type (integer 0 #.+recursion-depth-limit+) depth))
                  (multiple-value-bind (existing-cst foundp)
-                     (gethash expression seen)
+                     (gethash expression expression->cst)
                    (cond (foundp
                           existing-cst)
                          ((cl:atom expression)
@@ -22,7 +27,7 @@
                                 (cdr (cdr expression))
                                 (cst (make-instance 'cons-cst :raw expression
                                                               :source source)))
-                            (setf (gethash expression seen) cst)
+                            (setf (gethash expression expression->cst) cst)
                             (cond ((< depth +recursion-depth-limit+)
                                    (let* ((depth+1 (1+ depth))
                                           (first (traverse car depth+1))
