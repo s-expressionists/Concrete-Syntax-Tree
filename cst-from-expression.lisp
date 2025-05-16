@@ -13,7 +13,21 @@
   (let ((stack '()))
     (declare (type cl:list stack))
     (with-bounded-recursion (enqueue do-work worklist)
-      (labels ((make-cons-cst (expression depth)
+      (labels ((finalize-cons-cst (cst first rest)
+                 ;; Should we make this function user-extensible or
+                 ;; let the user control the class of the created CSTs
+                 ;; in some way, we would probably need something like
+                 ;;
+                 ;;   (reinitialize-instance cst :first (traverse car depth+1)
+                 ;;                              :rest (traverse cdr depth+1))
+                 ;;
+                 ;; But setting the slots directly reduces the
+                 ;; overall(!) runtime of a semi-realistic benchmark
+                 ;; to around 30 %.
+                 (setf (slot-value cst '%first) first
+                       (slot-value cst '%rest) rest)
+                 cst)
+               (make-cons-cst (expression depth)
                  (declare (type (integer 0 #.+recursion-depth-limit+) depth))
                  (let ((car (car expression))
                        (cdr (cdr expression))
@@ -22,9 +36,8 @@
                    (setf (gethash expression expression->cst) cst)
                    (cond ((< depth +recursion-depth-limit+)
                           (let ((depth+1 (1+ depth)))
-                            (reinitialize-instance
-                             cst :first (traverse car depth+1)
-                                 :rest (traverse cdr depth+1))))
+                            (finalize-cons-cst
+                             cst (traverse car depth+1) (traverse cdr depth+1))))
                          (t
                           ;; First and second work items: restart
                           ;; recursion for CAR and CDR and push
@@ -39,8 +52,7 @@
                              (assert (>= (length stack) 2))
                              (let ((rest (pop stack))
                                    (first (pop stack)))
-                               (reinitialize-instance cst :first first
-                                                          :rest rest))))))
+                               (finalize-cons-cst cst first rest))))))
                    ;; Return CST now so it can be added to its parent
                    ;; even though there may be a work item to update
                    ;; CST later.
@@ -64,6 +76,7 @@
                                                        symbol))
                                 cst
                                 (setf (gethash expression expression->cst) cst))))))))
+        (declare (inline finalize-cons-cst))
         (let ((cst (traverse expression 0)))
           (cond ((cl:null worklist)
                  ;; For small inputs, WORKLIST is not populated and
