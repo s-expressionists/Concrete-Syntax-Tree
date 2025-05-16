@@ -79,15 +79,19 @@ no relation to the original expression"
     (is (not (eq (cst:third result) (cst:fourth result))))
     (is (eq (cst:fifth result) (cst:sixth result)))))
 
-(test reconstruct.long-list.1
-  (let* ((expression (make-long-list))
-         (cst (cst:cst-from-expression expression))
-         (result (cst:reconstruct nil expression cst)))
-    (assert-equality result expression)))
-
-(test reconstruct.long-list.2
+(test reconstruct.long-list.same-structure
+  "Test `reconstruct' on a long list with a CST that has the same
+structure as the original expression."
   (let* ((expression (make-long-list))
          (unrelated-expression (make-long-list))
          (cst (cst:cst-from-expression expression))
          (result (cst:reconstruct nil unrelated-expression cst)))
     (assert-equality result unrelated-expression)))
+
+(test reconstruct.long-list.unrelated
+  "Test `reconstruct' on a long list with a CST that has no relation to
+the original expression."
+  (let* ((expression (make-long-list))
+         (cst (cst:cst-from-expression expression))
+         (result (cst:reconstruct nil expression cst)))
+    (assert-equality result expression)))
