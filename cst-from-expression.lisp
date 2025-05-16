@@ -13,47 +13,57 @@
   (let ((stack '()))
     (declare (type cl:list stack))
     (with-bounded-recursion (enqueue do-work worklist)
-      (labels ((traverse (expression depth)
+      (labels ((make-cons-cst (expression depth)
                  (declare (type (integer 0 #.+recursion-depth-limit+) depth))
+                 (let ((car (car expression))
+                       (cdr (cdr expression))
+                       (cst (make-instance 'cons-cst :raw expression
+                                                     :source source)))
+                   (setf (gethash expression expression->cst) cst)
+                   (cond ((< depth +recursion-depth-limit+)
+                          (let ((depth+1 (1+ depth)))
+                            (reinitialize-instance
+                             cst :first (traverse car depth+1)
+                                 :rest (traverse cdr depth+1))))
+                         (t
+                          ;; First and second work items: restart
+                          ;; recursion for CAR and CDR and push
+                          ;; results onto STACK.
+                          (enqueue car)
+                          (enqueue cdr)
+                          ;; Third work item: pop results for CDR and
+                          ;; CAR, update CST and push result onto
+                          ;; STACK.
+                          (enqueue
+                           (lambda ()
+                             (assert (>= (length stack) 2))
+                             (let ((rest (pop stack))
+                                   (first (pop stack)))
+                               (reinitialize-instance cst :first first
+                                                          :rest rest))))))
+                   ;; Return CST now so it can be added to its parent
+                   ;; even though there may be a work item to update
+                   ;; CST later.
+                   cst))
+               (traverse (expression depth)
                  (multiple-value-bind (existing-cst foundp)
                      (gethash expression expression->cst)
                    (cond (foundp
                           existing-cst)
-                         ((cl:atom expression)
-                          (make-instance 'atom-cst :raw expression
-                                                   :source source))
+                         ((cl:consp expression)
+                          (make-cons-cst expression depth))
                          (t
-                          (let ((car (car expression))
-                                (cdr (cdr expression))
-                                (cst (make-instance 'cons-cst :raw expression
+                          ;; The was no existing CST for EXPRESSION,
+                          ;; so create one.  But enter the new CST
+                          ;; into EXPRESSION->CST only if its identity
+                          ;; matters.
+                          (let ((cst (make-instance 'atom-cst :raw expression
                                                               :source source)))
-                            (setf (gethash expression expression->cst) cst)
-                            (cond ((< depth +recursion-depth-limit+)
-                                   (let* ((depth+1 (1+ depth))
-                                          (first (traverse car depth+1))
-                                          (rest (traverse cdr depth+1)))
-                                     (reinitialize-instance cst :first first
-                                                                :rest rest)))
-                                  (t
-                                   ;; First and second work items:
-                                   ;; restart recursion for CAR and
-                                   ;; CDR and push results onto STACK.
-                                   (enqueue car)
-                                   (enqueue cdr)
-                                   ;; Third work item: pop results for
-                                   ;; CDR and CAR, update CST and push
-                                   ;; result onto STACK.
-                                   (enqueue
-                                    (lambda ()
-                                      (assert (>= (length stack) 2))
-                                      (let ((rest (pop stack))
-                                            (first (pop stack)))
-                                        (reinitialize-instance
-                                         cst :first first :rest rest))))))
-                            ;; Return CST now so it can be added to
-                            ;; its parent even though there may be a
-                            ;; work item to update CST later.
-                            cst))))))
+                            (if (typep expression '(or number
+                                                       character
+                                                       symbol))
+                                cst
+                                (setf (gethash expression expression->cst) cst))))))))
         (let ((cst (traverse expression 0)))
           (cond ((cl:null worklist)
                  ;; For small inputs, WORKLIST is not populated and

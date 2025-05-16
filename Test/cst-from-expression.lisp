@@ -3,6 +3,38 @@
 (def-suite* :concrete-syntax-tree.cst-from-expression
   :in :concrete-syntax-tree)
 
+(test cst-from-expression.atoms-without-identity
+  "Test that `cst-from-expression' always creates fresh CSTs for atoms
+that behave like values without identity."
+  (flet ((test-atoms (atom)
+           (let* ((expression `(,atom ,atom))
+                  (cst        (cst:cst-from-expression expression)))
+             (is (not (eq (cst:first cst) (cst:second cst)))))))
+    (test-atoms 1)
+    (test-atoms #\c)
+    ;; Symbols are different from numbers and characters, of course,
+    ;; but distinct occurrences of a given symbol either in code or in
+    ;; an s-expression are not typically treated as the same syntactic
+    ;; object.
+    (test-atoms :fo)))
+
+(defstruct atom-test-struct)
+
+(defclass atom-test-class () ())
+
+(test cst-from-expression.atoms-with-identity
+  "Test that `cst-from-expression' creates fresh CSTs or uses shared CSTs
+for atoms that have meaningful identities."
+  (flet ((test-atoms (atom1 atom2)
+           (let* ((expression `(,atom1 ,atom2 ,atom1))
+                  (cst        (cst:cst-from-expression expression)))
+             (is (not (eq (cst:first cst) (cst:second cst))))
+             (is      (eq (cst:first cst) (cst:third cst))))))
+    (test-atoms #P"foo" #P"bar")
+    (test-atoms (make-atom-test-struct) (make-atom-test-struct))
+    (test-atoms (make-instance 'atom-test-class)
+                (make-instance 'atom-test-class))))
+
 (defun assert-equality (cst-root expression-root)
   (loop with tail = (list (cons cst-root expression-root))
         for worklist = tail then (rest worklist)
