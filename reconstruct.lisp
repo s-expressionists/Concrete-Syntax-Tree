@@ -121,8 +121,8 @@
 ;;; Mappings are added so that, when there are two or more EQL atoms
 ;;; in the CST, then priority is given to one of the atoms that is
 ;;; defined OUTSIDE one of the CONSes already in the table.
-(defun add-atoms (cst table)
-  (let ((seen (make-hash-table :test #'eq)))
+(defun add-atoms (cst table sub-expression-count)
+  (let ((seen (make-hash-table :test #'eq :size sub-expression-count)))
     (with-bounded-recursion (enqueue do-work worklist)
       (labels ((traverse (cst inside-p depth)
                  (declare (type (integer 0 #.+recursion-depth-limit+) depth))
@@ -154,7 +154,7 @@
                         &key (default-source (source cst)))
   (let* ((cons-table (cons-table cst))
          (referenced-cons-table (referenced-cons-table expression cons-table)))
-    (add-atoms cst referenced-cons-table)
+    (add-atoms cst referenced-cons-table (hash-table-size cons-table))
     (cst-from-expression expression :source default-source
                                     :expression->cst referenced-cons-table)))
 
@@ -163,7 +163,10 @@
   (let* ((cons-table (reduce #'cons-table cst
                              :initial-value (make-hash-table :test #'eq)
                              :from-end t))
-         (referenced-cons-table (referenced-cons-table expression cons-table)))
-    (reduce #'add-atoms cst :initial-value referenced-cons-table :from-end t)
+         (referenced-cons-table (referenced-cons-table expression cons-table))
+         (sub-expression-count (hash-table-count cons-table)))
+    (reduce (lambda (cst table)
+              (add-atoms cst table sub-expression-count))
+            cst :initial-value referenced-cons-table :from-end t)
     (cst-from-expression expression :source default-source
                                     :expression->cst referenced-cons-table)))
