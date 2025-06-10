@@ -45,6 +45,6 @@
          (declare (dynamic-extent (function ,enqueue-name)))
          (macrolet ((,process-name ((item-name) &body body)
                       `(loop until (cl:null ,',worklist-var)
-                             for ,item-name = (pop ,',worklist-var)
-                             do (progn ,@body))))
+                             do (let ((,item-name (pop ,',worklist-var)))
+                                  ,@body))))
            ,@body)))))
