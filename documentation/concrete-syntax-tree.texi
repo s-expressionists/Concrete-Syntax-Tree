@@ -67,6 +67,6 @@ Copyright @copyright{} 2025 Jan Moringen
 @c TODO \bibliography{concrete-syntax-tree}{}
 @c \bibliographystyle{alpha}
 
-@c @include generated-chapter-changelog.texi
+@include generated-chapter-changelog.texi
 
 @bye

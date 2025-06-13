@@ -10,7 +10,11 @@
   (:item
    (:paragraph
     "The" "manual" "has" "been" "converted" "from" "LaTeX" "to" "texinfo"
-    ".")))
+    "."))
+  (:item
+   (:paragraph
+    "An" "automatically" "generated" "Changelog" "section" "has" "been" "added"
+    "to" "manual" ".")))
 
  (:release "0.2" "2025-06-07"
   (:item

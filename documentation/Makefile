@@ -6,8 +6,8 @@ NAME = concrete-syntax-tree
 
 SOURCES = $(NAME).texi $(wildcard chapter-*.texi)
 
-GENERATED = generated-version.texi
-#            generated-chapter-changelog.texi
+GENERATED = generated-version.texi           \
+            generated-chapter-changelog.texi
 
 INPUTS = $(SOURCES) $(GENERATED)
 
@@ -27,18 +27,18 @@ all : $(NAME).info $(NAME).pdf $(NAME).html
 
 generated-version.texi: ../data/version-string.sexp
 	$(SBCL) --noinform --disable-debugger --no-sysinit --no-userinit                        \
-	     --eval '(require :asdf)'                                                           \
-	     --eval '(format t "@macro sysversion~%~A~%@end macro" (uiop:read-file-form "$<"))' \
-	     --quit                                                                             \
-	  > $@
+             --eval '(require :asdf)'                                                           \
+             --eval '(format t "@macro sysversion~%~A~%@end macro" (uiop:read-file-form "$<"))' \
+             --quit                                                                             \
+          > $@
 
-# generated-chapter-changelog.texi: ../data/changes.sexp          \
-#                                   ../tools/texinfo.lisp         \
-#                                   ../tools/write-changelog.lisp
-#       $(SBCL) --noinform                                     \
-#               --load ../tools/read-changes.lisp              \
-#               --load ../tools/texinfo.lisp                   \
-#               --script ../tools/write-changelog.lisp $< > $@
+generated-chapter-changelog.texi: ../data/changes.sexp          \
+                                  ../tools/texinfo.lisp         \
+                                  ../tools/write-changelog.lisp
+	$(SBCL) --noinform                                     \
+                --load ../tools/read-changes.lisp              \
+                --load ../tools/texinfo.lisp                   \
+                --script ../tools/write-changelog.lisp $< > $@
 
 $(NAME).info: $(INPUTS) $(IMAGES)
 	makeinfo --output $@ $(NAME).texi
