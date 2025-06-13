@@ -1,0 +1,64 @@
+name: publish-documentation
+
+on: [push]
+
+jobs:
+
+  # Build documentation and create artifact
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Prepare runner
+        run: |
+          DEBIAN_FRONTEND=noninteractive sudo apt-get -qq update \
+              && DEBIAN_FRONTEND=noninteractive sudo apt-get -qq --assume-yes install \
+                   sbcl texlive texlive-latex-extra librsvg2-bin
+
+      - uses: actions/checkout@v4
+
+      - name: Install quicklisp
+        run: |
+          wget https://beta.quicklisp.org/quicklisp.lisp
+          sbcl --noinform                           \
+            --load quicklisp.lisp                   \
+            --eval '(quicklisp-quickstart:install)' \
+            --quit
+
+      - name: Build documentation
+        run: |
+          cd documentation
+          make
+          mkdir -p build build/{pdf,info}
+          cp index.html build/
+          # cp *.png      build/
+          cp concrete-syntax-tree.html build/
+          cp concrete-syntax-tree.pdf  build/pdf/
+          cp concrete-syntax-tree.info build/info/
+
+      - name: Create artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: documentation/build
+
+  # Deploy to GitHub pages if main branch
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages
+    # deployment
+    permissions:
+      pages: write    # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
