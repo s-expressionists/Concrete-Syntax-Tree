@@ -2,6 +2,7 @@
   :description "Library for parsing Common Lisp code into a concrete syntax tree."
   :license     "BSD" ; See LICENSE file for details
   :author      "Robert Strandh <robert.strandh@gmail.com>"
+  :maintainer  "Jan Moringen <jan.moringen@posteo.de>"
 
   :version     (:read-file-form "version-string.sexp")
   :depends-on  ("acclimation")
