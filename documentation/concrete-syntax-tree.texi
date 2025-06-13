@@ -1,0 +1,72 @@
+\input texinfo
+
+@include macros.texi
+@include generated-version.texi
+
+@documentencoding UTF-8
+@documentlanguage en
+
+@syncodeindex vr fn
+@syncodeindex tp fn
+
+@paragraphindent 0
+
+@settitle @sysname{} User's Manual
+
+@copying
+This manual is for @sysname{} version @sysversion{}.
+
+Copyright @copyright{} 2017 Robert Strandh
+
+Copyright @copyright{} 2025 Jan Moringen
+@end copying
+
+@dircategory Common Lisp
+@direntry
+* Concrete Syntax Tree User's Manual: (concrete-syntax-tree). A source tracking concrete syntax library for Common Lisp.
+@end direntry
+
+@titlepage
+@title @sysname{}
+@subtitle A library for the manipulation of @commonlisp{} source code enhanced with information about source origin
+
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top @sysname{} User's Manual
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Introduction::
+* User manual::
+* Internals::
+* Concept index::
+* Function and macro and variable and type index::
+@end menu
+
+@include chapter-introduction.texi
+@include chapter-user-manual.texi
+@include chapter-internals.texi
+
+@node Concept index
+@unnumbered Concept index
+
+@printindex cp
+
+@node Function and macro and variable and type index
+@unnumbered Function and macro and variable and type index
+
+@printindex fn
+
+@c TODO \bibliography{concrete-syntax-tree}{}
+@c \bibliographystyle{alpha}
+
+@c @include generated-chapter-changelog.texi
+
+@bye

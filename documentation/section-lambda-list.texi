@@ -1,0 +1,1204 @@
+@node Parsing lambda lists
+@section Parsing lambda lists
+
+The @sysname{} library contains a framework for parsing lambda lists.
+This framework contains functions for parsing the types of lambda lists
+that specified in the @commonlisp{} standard, but it also contains a
+protocol that allows different implementations to specify additional
+lambda-list keywords, and to specify how lambda lists containing these
+additional keywords should be parsed.
+
+@menu
+* Classes for grammar symbols::
+* Variables::
+* Parsers for standard lambda lists::
+@end menu
+
+@node Classes for grammar symbols
+@subsection Classes for grammar symbols
+
+@defclassa{grammar-symbol,@toppackage{}}
+
+This class is the root of all grammar-symbol classes.
+@end deftp
+
+@menu
+* Classes for parameter groups::
+* Classes for individual parameters::
+* Classes for lambda-list keywords::
+* Classes for entire lambda lists::
+@end menu
+
+@node Classes for parameter groups
+@subsubsection Classes for parameter groups
+
+@defclassa{parameter-group,@toppackage{}}
+
+This class is the root class of all classes that represent parameter
+groups.  It is a subclass of the class @t{grammar-symbol}.
+@end deftp
+
+@definitarga{children}
+
+This initialization argument can be used with all subclasses of the
+class named @t{parameter-group}.  For parameter groups that have
+no lambda-list keywords, such as all the parameter groups
+corresponding to required parameters, the value of the argument is a
+(possibly empty) list of parameters.  For parameter groups that have
+associated lambda-list keywords, the value of the argument includes
+those lambda-list keywords in addition to the parameters themselves.
+@end defvr
+
+@defclassa{singleton-parameter-group-mixin,@toppackage{}}
+
+This class is used as a superclass of all classes representing
+parameter groups with a keyword followed by a single parameter.
+@end deftp
+
+@definitarga{parameter}
+
+This initialization argument can be used with subclasses of the class
+named @t{singleton-parameter-group-mixin}, but the parser does
+not use it.  Instead, it passes the @t{:children} initialization
+argument.  An appropriate @t{:after} method on
+@t{initialize-instance} splits the children into the lambda-list
+keyword itself and the single following parameter.
+@end defvr
+
+@defgena{parameter,@toppackage{}} singleton-parameter-group-mixin
+
+This generic function returns a concrete syntax tree representing the
+single parameter of its argument.
+@end deffn
+
+@defclassa{multi-parameter-group-mixin,@toppackage{}}
+
+This class is used as a superclass of all classes representing parameter
+groups with or without a keyword followed by a (possibly empty) list of
+parameters.
+@end deftp
+
+@definitarga{parameters}
+
+This initialization argument can be used with subclasses of the class
+named @t{multi-parameter-group-mixin}, but the parser does not use it.
+Instead, it passes the @t{:children} initialization argument.  An
+appropriate @t{:after} method on @t{initialize-instance} computes this
+initialization argument from the children.
+@end defvr
+
+@defgena{parameters,@toppackage{}} multi-parameter-group-mixin
+
+This generic function returns a list of concrete syntax trees
+representing the parameters of its argument.
+@end deffn
+
+@defclassa{implicit-parameter-group,@toppackage{}}
+
+This class is the root class of all classes that represent parameter
+groups that are @emph{not} introduced by a lambda-list keyword, which is
+all the different classes representing required parameter groups.
+
+This class is a subclass of the class named @t{parameter-group} and the
+class named @t{multi-parameter-group-mixin}.
+@end deftp
+
+@defclassa{explicit-parameter-group,@toppackage{}}
+
+This class is the root class of all classes that represent parameter
+groups that @emph{are} introduced by a lambda-list keyword.
+
+This class is a subclass of the class @t{parameter-group}.
+@end deftp
+
+@definitarga{keyword}
+
+This initialization argument can be used with subclasses of the class
+named @t{explicit-parameter-group}, but the parser does not use it.
+Instead, it passes the @t{:children} initialization argument.  An
+appropriate @t{:after} method on @t{initialize-instance} computes this
+initialization argument from the children.
+@end defvr
+
+@defgena{keyword,@toppackage{}} explicit-parameter-group
+
+This generic function returns the lambda-list keyword of its argument.
+@end deffn
+
+@defclassa{explicit-multi-parameter-group,@toppackage{}}
+
+This class is the root class of all classes that represent parameter
+groups that are introduced by a lambda-list keyword, and that can take
+an arbitrary number of parameters.
+
+This class is a subclass of the class named @t{explicit-parameter-group}
+and of the class named @t{multi-parameter-group-mixin}
+@end deftp
+
+@defclassa{ordinary-required-parameter-group,@toppackage{}}
+
+This class represents the list of required parameters in all lambda
+lists that only allow a simple variables to represent a required
+parameter.
+
+This class is a subclass of the class @t{implicit-parameter-group}.
+@end deftp
+
+@defclassa{optional-parameter-group,@toppackage{}}
+
+This class is the root class of all classes representing optional
+parameter groups.
+
+It is a subclass of the class @t{explicit-multi-parameter-group}.
+@end deftp
+
+@defclassa{ordinary-optional-parameter-group,@toppackage{}}
+
+This class represents the list of optional parameters in all lambda
+lists that allow for an optional parameter to have a form representing
+the default value and a @t{supplied-p} parameter.
+
+This class is a subclass of the class @t{optional-parameter-group}.
+@end deftp
+
+@defclassa{key-parameter-group,@toppackage{}}
+
+This class is the root class of all parameter groups that are
+introduced by the lambda-list keyword @pkey{}.
+
+This class is a subclass of the class @t{explicit-multi-parameter-group}.
+@end deftp
+
+@defgena{allow-other-keys,@toppackage{}} key-parameter-group
+
+This function can be called on any instance of the class
+@t{key-parameter-group}.  If the lambda-list keyword
+@t{\&allow-other-keys} is present in this key parameter group,
+then @t{allow-other-keys} returns a concrete syntax
+tree for that lambda-list keyword.  If the lambda-list keyword
+@t{\&allow-other-keys} is @emph{not} present, this function
+returns @t{nil}.
+@end deffn
+
+@defclassa{ordinary-key-parameter-group,@toppackage{}}
+
+This class represents the list of @pkey{} parameters in all
+lambda lists that allow for the parameter to have a form representing
+the default value and a @t{supplied-p} parameter.
+
+This class is a subclass of the class @t{key-parameter-group}.
+@end deftp
+
+@defclassa{generic-function-key-parameter-group,@toppackage{}}
+
+This class represents the list of @pkey{} parameters in a
+generic-function lambda list.  This type of lambda list only allows
+for the parameter to have a variable name and a keyword.
+
+This class is a subclass of the class @t{key-parameter-group}.
+@end deftp
+
+@defclassa{aux-parameter-group,@toppackage{}}
+
+This class represent the list of @paux{} parameters in all
+lambda lists that allow for such parameters.
+
+This class is a subclass of the class @t{explicit-multi-parameter-group}.
+@end deftp
+
+@defclassa{generic-function-optional-parameter-group,@toppackage{}}
+
+This class represents the list of optional parameters in a
+generic-function lambda list.  This type of lambda list only allows
+for the parameter to have a variable name.
+
+This class is a subclass of the class @t{optional-parameter-group}.
+@end deftp
+
+@defclassa{specialized-required-parameter-group,@toppackage{}}
+
+This class represents the list of required parameters in a specialized
+lambda list, i.e., the type of lambda list that can be present in a
+@t{defmethod} definition.  In this type of lambda list, a
+required parameter may optionally have a @emph{specializer} associated
+with it.
+
+This class is a subclass of the class @t{implicit-parameter-group}.
+@end deftp
+
+@defclassa{destructuring-required-parameter-group,@toppackage{}}
+
+This class represents the list of required parameters in a destructuring
+lambda list, i.e. the kind of lambda list that can be present in a
+@t{defmacro} definition, both as the top-level lambda list and as
+a nested lambda list where this is allowed.
+
+This class is a subclass of the class @t{implicit-parameter-group}.
+@end deftp
+
+@defclassa{singleton-parameter-group,@toppackage{}}
+
+This class is the root class of all parameter groups that consist of a
+lambda-list keyword followed by a single parameter.  It is a subclass
+of the class @t{explicit-parameter-group}.
+
+This class is a subclass of the class named @t{explicit-parameter-group}
+and of the class named @t{singleton-parameter-group-mixin}.
+@end deftp
+
+@defclassa{ordinary-rest-parameter-group,@toppackage{}}
+
+This class represents parameter groups that have either the
+lambda-list keyword @t{\&rest} or the lambda-list keyword
+@t{\&body} followed by a simple-variable.
+
+This class is a subclass of the class @t{singleton-parameter-group}.
+@end deftp
+
+@defclassa{destructuring-rest-parameter-group,@toppackage{}}
+
+This class represents parameter groups that have either the
+lambda-list keyword @t{\&rest} or the lambda-list keyword
+@t{\&body} followed by a destructuring parameter.
+
+This class is a subclass of the class @t{singleton-parameter-group}.
+@end deftp
+
+@defclassa{environment-parameter-group,@toppackage{}}
+
+This class represents parameter groups that have the lambda-list
+keyword @t{\&environment} followed by a simple-variable.
+
+This class is a subclass of the class @t{singleton-parameter-group}.
+@end deftp
+
+@defclassa{whole-parameter-group,@toppackage{}}
+
+This class represents parameter groups that have the lambda-list
+keyword @t{\&whole} followed by a simple-variable.
+
+This class is a subclass of the class @t{singleton-parameter-group}.
+@end deftp
+
+@node Classes for individual parameters
+@subsubsection Classes for individual parameters
+
+@defgena{name,@toppackage{}} parameter
+@end deffn
+
+@defclassa{parameter,@toppackage{}}
+
+This class is the root class of all classes that represent individual
+lambda-list parameters.
+
+This class is a subclass of the class @t{grammar-symbol}.
+@end deftp
+
+@defclassa{form-mixin,@toppackage{}}
+
+This mixin class is a superclass of subclasses of @t{parameter}
+that allow for an optional form to be supplied, which will be
+evaluated to supply a value for a parameter that is not explicitly
+passed as an argument.
+@end deftp
+
+@definitarga{form}
+
+This initialization argument can be used when an instance of
+(a subclass of) the class @t{form-mixin} is created.  The value
+of this initialization argument is either a concrete syntax tree
+representing the form that was supplied in the lambda list, or
+@t{nil}, indicating that no form was supplied.
+@end defvr
+
+@defgena{form,@toppackage{}} form-mixin
+
+This generic function can be applied to instances of all subclasses of
+the class @t{form-mixin}.  It returns the value that was supplied
+using the @t{:form} initialization argument when the instance was
+created.
+@end deffn
+
+@defclassa{supplied-p-mixin,@toppackage{}}
+
+This mixin class is a superclass of subclasses of @t{parameter}
+that allow for an optional supplied-p parameter to be supplied.  At
+run-time, the value of this parameter indicates whether an explicit
+argument was supplied that provides a value for the parameter.
+@end deftp
+
+@definitarga{supplied-p}
+
+This initialization argument can be used when an instance of (a
+subclass of) the class @t{supplied-p-mixin} is created.  The
+value of this initialization argument is either a concrete syntax tree
+representing the supplied-p parameter that was given in the lambda
+list, or @t{nil}, indicating that no supplied-p parameter was
+given.
+@end defvr
+
+@defgena{supplied-p,@toppackage{}} supplied-p-mixin
+
+This generic function can be applied to instances of all subclasses of
+the class @t{supplied-p-mixin}.  It returns the value that was provided
+using the @t{:supplied-p} initialization argument when the instance was
+created.
+@end deffn
+
+@defclassa{keyword-mixin,@toppackage{}}
+
+This mixin class is a superclass of subclasses of @t{parameter}
+that allow for an optional keyword parameter to be supplied.
+@end deftp
+
+@definitarga{keyword [keyword-mixin]}
+
+This initialization argument can be used when an instance of (a
+subclass of) the class @t{keyword-mixin} is created.  The
+value of this initialization argument is either a concrete syntax tree
+representing the keyword parameter that was given in the lambda
+list, or @t{nil}, indicating that no keyword parameter was
+given.
+@end defvr
+
+The generic function @ref{Generic-Function @toppackage{}|keyword,keyword}
+can be applied to instances of all subclasses of the class
+@t{keyword-mixin}.  It returns the value that was provided using the
+@t{:keyword} initialization argument when the instance was created.
+
+@defclassa{simple-variable,@toppackage{}}
+
+This class represents lambda-list parameters that must be simple
+variables, for example the required parameters in an ordinary lambda
+list, or the parameter following the @t{\&environment}
+lambda-list keyword.
+
+This class is a subclass of the class @t{parameter}.
+@end deftp
+
+@defclassa{ordinary-optional-parameter,@toppackage{}}
+
+This class represents an optional parameter of the form that is
+allowed in an ordinary lambda list, i.e., a parameter that, in
+addition to the parameter name, can have a form representing the
+default value and an associated @t{supplied-p} parameter.
+
+This class is a subclass of the class named @t{parameter}, the
+class named @t{form-mixin}, and the class named
+@t{supplied-p-mixin}.
+@end deftp
+
+@defclassa{ordinary-key-parameter,@toppackage{}}
+
+This class represents a @pkey{} parameter of the form that is
+allowed in an ordinary lambda list, i.e., a parameter that, in
+addition to the parameter name, can have a keyword, a form
+representing the default value, and an associated @t{supplied-p}
+parameter.
+
+This class is a subclass of the class named @t{parameter}, the
+class named @t{form-mixin}, the class named
+@t{supplied-p-mixin}, and the class named @t{keyword-mixin}.
+@end deftp
+
+@defclassa{generic-function-key-parameter,@toppackage{}}
+
+This class represents a @pkey{} parameter of the form that is
+allowed in a generic-function lambda list, i.e., a parameter that, in
+addition to the parameter name, can have a keyword, but no form
+representing the default value, and no associated @t{supplied-p}
+parameter.
+
+This class is a subclass of the class named @t{parameter}, and
+the class named @t{keyword-mixin}.
+@end deftp
+
+@defclassa{aux-parameter,@toppackage{}}
+
+This class represents an @paux{} parameter, i.e., a parameter
+that, in addition to the parameter name, can have a form representing
+the default value.
+
+This class is a subclass of the classes @t{parameter} and
+@t{form-mixin}.
+@end deftp
+
+@defclassa{generic-function-optional-parameter,@toppackage{}}
+
+This class represents an optional parameter of the form that is
+allowed in an ordinary lambda list, i.e., a parameter that can only
+have a name, but that name can optionally be the element of a
+singleton list, which is why it is distinct from a parameter of type
+@t{simple-variable}.
+
+This class is a subclass of the class @t{parameter}.
+@end deftp
+
+@defclassa{specialized-required-parameter,@toppackage{}}
+
+This class represents the kind of required parameter that can appear
+in a specialized lambda list, i.e. a lambda list in a
+@t{defmethod} form.  A parameter of this type may optionally have
+a @emph{specializer} in the form of a class name or an @t{eql}
+specializer associated with it.
+
+This class is a subclass of the class @t{parameter}.
+@end deftp
+
+@defclassa{destructuring-parameter,@toppackage{}}
+
+This class represents all parameters that can be either simple
+variables or a pattern in the form of a (possibly dotted) list, or
+even a destructuring lambda list.
+
+This class is a subclass of the class @t{grammar-symbol}.
+@end deftp
+
+@node Classes for lambda-list keywords
+@subsubsection Classes for lambda-list keywords
+
+@defclassa{lambda-list-keyword,@toppackage{}}
+
+This class is the root class of all classes representing lambda-list
+keywords.
+
+This class is a subclass of the class @t{grammar-symbol}.
+@end deftp
+
+The generic function @ref{Generic-Function @toppackage{}|name,name} is
+applicable to every instantiable subclass of the class
+@t{lambda-list-keyword}.  It returns the concrete syntax tree
+corresponding to the lambda-list keyword in the original lambda list.
+
+
+@defclassa{keyword-optional,@toppackage{}}
+
+This class represents the lambda-list keyword @t{\&optional}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @t{\&optional}, an instance of
+this class always represents the lambda-list keyword
+@t{\&optional}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-rest,@toppackage{}}
+
+This class represents the lambda-list keyword @t{\&rest}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @t{\&rest}, an instance of
+this class always represents the lambda-list keyword
+@t{\&rest}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-body,@toppackage{}}
+
+This class represents the lambda-list keyword @t{\&body}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @t{\&body}, an instance of
+this class always represents the lambda-list keyword
+@t{\&body}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-key,@toppackage{}}
+
+This class represents the lambda-list keyword @pkey{}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @pkey{}, an instance of
+this class always represents the lambda-list keyword
+@pkey{}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-allow-other-keys,@toppackage{}}
+
+This class represents the lambda-list keyword @t{\&allow-other-keys}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @t{\&allow-other-keys}, an instance of
+this class always represents the lambda-list keyword
+@t{\&allow-other-keys}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-aux,@toppackage{}}
+
+This class represents the lambda-list keyword @paux{}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @paux{}, an instance of
+this class always represents the lambda-list keyword
+@paux{}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-environment,@toppackage{}}
+
+This class represents the lambda-list keyword @t{\&environment}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @t{\&environment}, an instance of
+this class always represents the lambda-list keyword
+@t{\&environment}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@defclassa{keyword-whole,@toppackage{}}
+
+This class represents the lambda-list keyword @t{\&whole}.
+Unless client code has defined some additional lambda-list keyword
+that is used in the same way as @t{\&whole}, an instance of
+this class always represents the lambda-list keyword
+@t{\&whole}.
+
+This class is a subclass of the class @t{lambda-list-keyword}.
+@end deftp
+
+@node Classes for entire lambda lists
+@subsubsection Classes for entire lambda lists
+
+Notice that there is no class for the boa lambda list, since it is
+syntactically equivalent to an ordinary lambda list.  Similarly, there
+is no @t{deftype} lambda list because it is syntactically
+equivalent to a macro lambda list.
+
+@defclassa{lambda-list-type,@toppackage{}}
+
+This class is a subclass of the class @t{grammar-symbol}.
+@end deftp
+
+@defgena{children,@toppackage{}} lambda-list-type
+
+This generic function returns a (possibly empty) list of instances of
+(some subclass of) the class @t{parameter-group} as described in
+@ref{Classes for parameter groups}.
+@end deffn
+
+@defclassa{ordinary-lambda-list,@toppackage{}}
+
+Applying the function @t{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+@enumerate
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{ordinary-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{aux-parameter-group}.
+
+@end enumerate
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{generic-function-lambda-list,@toppackage{}}
+
+Applying the function @t{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+@enumerate
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{ordinary-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{generic-function-optional-parameter-group},
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{generic-function-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{aux-parameter-group}.
+
+@end enumerate
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{specialized-lambda-list,@toppackage{}}
+
+Applying the function @t{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+@enumerate
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{specialized-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{aux-parameter-group}.
+
+@end enumerate
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{defsetf-lambda-list,@toppackage{}}
+
+Applying the function @t{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+@enumerate
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{ordinary-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{t-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{environment-parameter-group}.
+
+@end enumerate
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{define-modify-macro-lambda-list,@toppackage{}}
+
+Applying the function @t{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+@enumerate
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{ordinary-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-rest-parameter-group}.
+
+@end enumerate
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{define-method-combination-lambda-list,@toppackage{}}
+
+Applying the function @t{children} to an instance of this class
+returns a list with the following elements (in that order):
+
+@enumerate
+
+@item
+An optional instance of the grammar-symbol class named
+@t{whole-parameter-group}.
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{ordinary-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{aux-parameter-group}.
+
+@end enumerate
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{macro-lambda-list,@toppackage{}}
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{destructuring-lambda-list,@toppackage{}}
+
+This class is a subclass of the class @t{lambda-list-type}.
+@end deftp
+
+@defclassa{target,@toppackage{}}
+
+This class is a subclass of the class @t{grammar-symbol}.
+@end deftp
+
+@node Variables
+@subsection Variables
+
+@menu
+* Parameter groups::
+* Lambda-list types::
+* Full grammars::
+@end menu
+
+@node Parameter groups
+@subsubsection Parameter groups
+
+@defvara{*ordinary-required-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{ordinary-required-parameter-group}.  This rule defines
+an ordinary required parameter group as a (possibly empty) sequence of
+instances of the class @t{simple-variable}.
+@end defvar
+
+@defvara{*ordinary-optional-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{ordinary-optional-parameter-group}.  This rule defines
+an ordinary optional parameter group as the lambda list keyword
+@t{\&optional}, followed by a (possibly empty) sequence of
+instances of the class @t{ordinary-optional-parameter}.
+@end defvar
+
+@defvara{*ordinary-rest-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{ordinary-rest-parameter-group}.  This rule defines an
+ordinary rest parameter group as the lambda list keyword
+@t{\&rest}, followed by an instances of the class
+@t{simple-variable}.
+@end defvar
+
+@defvara{*ordinary-key-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{ordinary-key-parameter-group}.  This rule defines
+an ordinary key parameter group as the lambda list keyword
+@pkey{}, followed by a (possibly empty) sequence of
+instances of the class @t{ordinary-key-parameter}, optionally
+followed by the lambda-list keyword @t{\&allow-other-keys}.
+@end defvar
+
+@defvara{*aux-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{aux-parameter-group}.  This rule defines an aux
+parameter group as the lambda list keyword @paux{}, followed by
+a (possibly empty) sequence of instances of the class
+@t{aux-parameter}.
+@end defvar
+
+@defvara{*generic-function-optional-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{generic-function-optional-parameter-group}.  This rule defines a
+generic-function optional parameter group as the lambda list keyword
+@t{\&optional}, followed by a (possibly empty) sequence of instances of
+the class named @t{generic-function-optional-parameter}.
+@end defvar
+
+@defvara{*generic-function-key-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{generic-function-key-parameter-group}.  This rule defines an
+generic-function key parameter group as the lambda list keyword
+@pkey{}, followed by a (possibly empty) sequence of instances of the
+class @t{generic-function-key-parameter}, optionally followed by the
+lambda-list keyword @t{\&allow-other-keys}.
+@end defvar
+
+@defvara{*specialized-required-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{specialized-required-parameter-group}.  This rule defines an
+specialized required parameter group as a (possibly empty) sequence of
+instances of the class @t{specialized-required-parameter}.
+@end defvar
+
+@defvara{*environment-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{environment-parameter-group}.  This rule defines an environment
+parameter group as the lambda list keyword @t{\&environment}, followed
+by an instances of the class @t{simple-variable}.
+@end defvar
+
+@defvara{*whole-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{whole-parameter-group}.  This rule defines a whole parameter group as
+the lambda list keyword @t{\&whole}, followed by an instances of the
+class @t{simple-variable}.
+@end defvar
+
+@defvar{*destructuring-required-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{destructuring-required-parameter-group}.  This rule defines an
+destructuring required parameter group as a (possibly empty) sequence of
+instances of the class @t{destructuring-parameter}.
+@end defvar
+
+@defvar{*destructuring-rest-parameter-group*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{destructuring-rest-parameter-group}.  This rule defines a
+destructuring rest parameter group as the lambda list keyword
+@t{\&rest}, followed by an instances of the class
+@t{destructuring-parameter}.
+@end defvar
+
+@node Lambda-list types
+@subsubsection Lambda-list types
+
+@defvara{*ordinary-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{ordinary-lambda-list}.  It has the following definition:
+
+@lisp
+(defparameter *ordinary-lambda-list*
+  '((ordinary-lambda-list <-
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+@end lisp
+@end defvar
+
+@defvar{*generic-function-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class named
+@t{generic-function-lambda-list}.  It has the following definition:
+
+@lisp
+(defparameter *generic-function-lambda-list*
+  '((generic-function-lambda-list <-
+     ordinary-required-parameter-group
+     (? generic-function-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? generic-function-key-parameter-group))))
+@end lisp
+@end defvar
+
+@defvara{*specialized-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{specialized-lambda-list}.  It has the following
+definition:
+
+@lisp
+(defparameter *specialized-lambda-list*
+  '((specialized-lambda-list <-
+     specialized-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+@end lisp
+@end defvar
+
+@defvara{*defsetf-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{defsetf-lambda-list}.  It has the following
+definition:
+
+@lisp
+(defparameter *defsetf-lambda-list*
+  '((defsetf-lambda-list <-
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? environment-parameter-group))))
+@end lisp
+@end defvar
+
+@defvar{*define-modify-macro-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{define-modify-macro-lambda-list}.  It has the following
+definition:
+
+@lisp
+(defparameter *define-modify-macro-lambda-list*
+  '((define-modify-macro-lambda-list <-
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group))))
+@end lisp
+@end defvar
+
+@defvara{*define-method-combination-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{define-method-combination-lambda-list}.  It has the
+following definition:
+
+@lisp
+(defparameter *define-method-combination-lambda-list*
+  '((define-method-combination-lambda-list <-
+     (? whole-parameter-group)
+     ordinary-required-parameter-group
+     (? ordinary-optional-parameter-group)
+     (? ordinary-rest-parameter-group)
+     (? ordinary-key-parameter-group)
+     (? aux-parameter-group))))
+@end lisp
+@end defvar
+
+@defvara{*destructuring-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{destructuring-lambda-list}.
+
+This rule defines a destructuring lambda list as sequence of the
+following items:
+
+@enumerate
+
+@item
+An optional instance of the grammar-symbol class named
+@t{whole-parameter-group}.
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{destructuring-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{destructuring-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{aux-parameter-group}.
+
+@end enumerate
+@end defvar
+
+@defvara{*macro-lambda-list*,@toppackage{}}
+
+This variable defines a grammar rule for the grammar-symbol class
+named @t{macro-lambda-list}.
+
+This rule defines a macro lambda list as sequence of the
+following items:
+
+@enumerate
+
+@item
+An optional instance of the grammar-symbol class named
+@t{whole-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{environment-parameter-group}.
+
+@item
+A mandatory instance of the grammar-symbol class named
+@t{destructuring-required-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{environment-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-optional-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{environment-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{destructuring-rest-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{environment-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{ordinary-key-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+  @t{environment-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{aux-parameter-group}.
+
+@item
+An optional instance of the grammar-symbol class named
+@t{environment-parameter-group}.
+
+@end enumerate
+
+Notice that this definition allows for there to be several occurrences
+of the grammar symbol @t{environment-parameter-group}, whereas the
+@commonlisp{} standard allows for at most one such occurrence.  The
+top-level parser for this type of lambda list checks that at most one
+such occurrence is present after parsing is complete.
+@end defvar
+
+@node Full grammars
+@subsubsection Full grammars
+
+In order to have a grammar that is possible to use for parsing a
+lambda list, in addition to the rules for all the lambda list types
+and its components, a target rule is required to initialize a grammar
+object with @t{generate-grammar}, which the parser ultimately
+uses. The target is in accordance to the particular lambda-list type
+that is desired.
+
+@defvara{*standard-grammar*,@toppackage{}}
+
+This variable contains all the standard grammar rules in description
+form.
+@end defvar
+
+@defvara{*ordinary-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{ordinary-lambda-list-grammar}.
+@end defvar
+
+@defvara{*generic-function-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{generic-function-lambda-list}.
+@end defvar
+
+@defvara{*specialized-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{specialized-lambda-list}.
+@end defvar
+
+@defvara{*defsetf-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{defsetf-lambda-list}.
+@end defvar
+
+@defvara{*define-modify-macro-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{define-modify-macro-lambda-list}.
+@end defvar
+
+@defvara{*define-method-combination-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{define-method-combination-lambda-list}.
+@end defvar
+
+@defvara{*destructuring-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{destructuring-lambda-list}.
+@end defvar
+
+@defvara{*macro-lambda-list-grammar*,@toppackage{}}
+
+This variable contains a grammar object with all the standard grammar
+rules, with target @t{macro-lambda-list}.
+@end defvar
+
+@node Parsers for standard lambda lists
+@subsection Parsers for standard lambda lists
+
+@defgena {parse-ordinary-lambda-list,@toppackage{}} client lambda-list @
+  @key{} (error-p t)
+@end deffn
+
+@defgena{parse-generic-function-lambda-list,@toppackage{}} client @
+  lambda-list @key{} (error-p t)
+@end deffn
+
+@defgena{parse-specialized-lambda-list,@toppackage{}} client lambda-list @
+  @key{} (error-p t)
+@end deffn
+
+@defgena{parse-defsetf-lambda-list,@toppackage{}} client lambda-list @
+  @key{} (error-p t)
+@end deffn
+
+@defgena{parse-define-modify-macro-lambda-list,@toppackage{}} client @
+  lambda-list @key{} (error-p t)
+@end deffn
+
+@defgena{parse-define-method-combination-lambda-list,@toppackage{}} @
+  client lambda-list @key{} (error-p t)
+@end deffn
+
+@defgena{parse-destructuring-lambda-list,@toppackage{}} client @
+  lambda-list @key{} (error-p t)
+@end deffn
+
+@defgena{parse-macro-lambda-list,@toppackage{}} client lambda-list @
+  @key{} (error-p t)
+@end deffn

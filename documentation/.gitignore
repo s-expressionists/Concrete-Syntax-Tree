@@ -1,0 +1,16 @@
+*.aux
+*.cp
+*.cps
+*.fn
+*.fns
+*.log
+*.toc
+
+*tex4ht_tex.*
+
+*.html
+*.info
+*.pdf
+*.png
+
+generated-*.texi

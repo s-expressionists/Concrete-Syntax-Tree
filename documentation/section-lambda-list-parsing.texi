@@ -1,0 +1,7 @@
+@node Lambda-list Parsing
+@section Lambda-list Parsing
+
+For parsing lambda lists, we use a technique invented by Jay Earley in
+1970
+(@cite{Earley, J. (1970). An Efficient Context-free Parsing Algorithm. Commun. ACM, 13(2), 94–102.},
+@cite{Earley, J. (1983). An Efficient Context-free Parsing Algorithm. Commun. ACM, 26(1), 57–61.}).

@@ -1,0 +1,125 @@
+@node Basic Use
+@section Basic Use
+
+In this chapter, we describe the basic functionality that @sysname{}
+provides for manipulating concrete syntax trees.
+
+@menu
+* Protocol::
+* Additional API functions::
+@end menu
+
+@node Protocol
+@subsection Protocol
+
+@defclassa{cst,@toppackage{}}
+
+This class is the base class for all concrete syntax trees.
+@end deftp
+
+@definitarga{raw}
+
+The value of this initialization argument is the raw @commonlisp{}
+expression that this concrete syntax tree represents.
+@end defvr
+
+@defgena{raw,@toppackage{}} cst
+
+This generic function returns the raw @commonlisp{} expression that is
+represented by @var{cst} as provide by the initialization argument
+@t{:raw} when @var{cst} was created.
+@end deffn
+
+@definitarga{source}
+
+This initialization argument is accepted by all subclasses of concrete
+syntax trees.  The value of this initialization argument is a
+client-specific object that indicates the origin of the source code
+represented by this concrete syntax tree.  A value of @t{nil} indicates
+that the origin of the source code represented by this concrete syntax
+tree is unknown.  The default value (if this initialization argument is
+not provided) is @t{nil}.
+@end defvr
+
+@defgena{source,@toppackage{}} cst
+
+This generic function returns the origin information of @var{cst} as
+provide by the initialization argument @t{:source} when @var{cst} was
+created.
+@end deffn
+
+@defgena{null,@toppackage{}} cst
+
+This generic function returns @emph{true} if and only if @var{cst} is an
+instance of the class @t{atom-cst} that has @t{nil} as its raw value.
+Otherwise, it returns @emph{false}.
+@end deffn
+
+@defclassa{cons-cst,@toppackage{}}
+
+This class is a subclass of the class @t{cst}.
+@end deftp
+
+@definitarga{first}
+
+The value of this initialization argument is the concrete syntax tree
+that represents the @t{car} of the raw @commonlisp{} expression
+represented by this concrete syntax tree.
+@end defvr
+
+@definitarga{rest}
+
+The value of this initialization argument is the concrete syntax tree
+that represents the @t{cdr} of the raw @commonlisp{} expression
+represented by this concrete syntax tree.
+@end defvr
+
+@defgena{first,@toppackage{}} cons-cst
+
+This generic function returns the concrete syntax tree that represents
+the @t{car} of the raw @commonlisp{} expression represented by
+@var{cons-cst}.
+@end deffn
+
+@defgena{rest,@toppackage{}} cons-cst
+
+This generic function returns the concrete syntax tree that represents
+the @t{cdr} of the raw @commonlisp{} expression represented by
+@var{cons-cst}.
+@end deffn
+
+@defgena{consp,@toppackage{}} cst
+
+This generic function returns @emph{true} if and only if @var{cst} is an
+instance of the class @t{cons-cst}.  Otherwise, it returns @emph{false}.
+@end deffn
+
+@node Additional API functions
+@subsection Additional API functions
+
+@defgena{second,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{third,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{fourth,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{fifth,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{sixth,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{seventh,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{eighth,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{ninth,@toppackage{}} cons-cst
+@end deffn
+
+@defgena{tenth,@toppackage{}} cons-cst
+@end deffn

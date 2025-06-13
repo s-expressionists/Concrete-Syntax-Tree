@@ -1,0 +1,14 @@
+@node User manual
+@chapter User manual
+
+@menu
+* Basic Use::
+* Parsing lambda lists::
+* Destructuring lambda lists::
+* Future additions to this library::
+@end menu
+
+@include section-basic-use.texi
+@include section-lambda-list.texi
+@include section-destructuring-lambda-lists.texi
+@include section-future.texi
