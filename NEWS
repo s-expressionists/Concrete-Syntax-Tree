@@ -1,0 +1,45 @@
+Release 0.3 (not yet released)
+
+* A malformed LOOP in the internal macro
+  CONCRETE-SYNTAX-TREE:WITH-BOUNDED-RECURSION has been fixed. Most
+  implementations accepted the malformed loop and evaluated it with the
+  intended semantics but Clasp is more strict and therefore required this fix.
+
+Release 0.2 (2025-06-07)
+
+* concrete-syntax-tree now uses the fiveam system for its unit tests.
+
+* CONCRETE-SYNTAX-TREE:CST-FROM-EXPRESSION can now handle arbitrary nesting
+  depths and list lengths.
+
+* CONCRETE-SYNTAX-TREE:RECONSTRUCT can now handle arbitrary nesting depths and
+  list lengths.
+
+* CONCRETE-SYNTAX-TREE:CST-FROM-EXPRESSION now creates distinct CSTs for
+  certain atoms that occur multiple times in the source expression, namely
+  numbers, characters and symbols. For other atoms such as pathnames or
+  instances of standard classes, EQ occurrences in the source expression are
+  represented by multiple occurrences of a single CST.
+
+  For example, the source expression (1 1 :foo :foo #1=#P"foo" #1#) was
+  represented before this change as a CST with the following properties
+
+    (eq (cst:first result) (cst:second result))
+    (eq (cst:third result) (cst:fourth result))
+    (eq (cst:fifth result) (cst:sixth result))
+
+  but is now represented as a CST with the following properties
+
+    (not (eq (cst:first result) (cst:second result)))
+    (not (eq (cst:third result) (cst:fourth result)))
+    (eq (cst:fourth result) (cst:sixth result))
+
+* CONCRETE-SYNTAX-TREE:CST-FROM-EXPRESSION and CONCRETE-SYNTAX-TREE:RECONSTRUCT
+  are now slightly more efficient.
+
+Release 0.1 (2023-03-16)
+
+* Initial version with CST classes, CONCRETE-SYNTAX-TREE:CST-FROM-EXPRESSION,
+  CONCRETE-SYNTAX-TREE:RECONSTRUCT, lambda list parsing, and a LaTeX-based
+  manual.
+
