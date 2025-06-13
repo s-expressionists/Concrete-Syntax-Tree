@@ -5,6 +5,8 @@ Release 0.3 (not yet released)
   implementations accepted the malformed loop and evaluated it with the
   intended semantics but Clasp is more strict and therefore required this fix.
 
+* The manual has been converted from LaTeX to texinfo.
+
 Release 0.2 (2025-06-07)
 
 * concrete-syntax-tree now uses the fiveam system for its unit tests.

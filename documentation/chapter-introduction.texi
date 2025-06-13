@@ -2,62 +2,55 @@
 @chapter Introduction
 @c TODO: @pagenumbering{arabic}%
 
-@menu
-* Purpose::
-@end menu
-
-@node Purpose
-@section Purpose
-
 @sysname{} is a library for manipulating @commonlisp{} source code
 enhanced with information about the origin of the source.  It is
-intended to solve a general problem that occurs in particular in
-@commonlisp{} file compilers.  If a file compiler compiles the file by
-first calling the @commonlisp{} @t{read} function on every top-level
-expression in the file, then the information about the origin of those
-expressions is lost.  This loss of information has a serious negative
-impact on compiler messages, because the application programmer does not
-get direct information about the origin of the code that the compiler
+intended to solve a problem that occurs in programs which process
+@commonlisp{} source code such as file compilers or sophisticated
+editors.  If such a program processes source code by first calling the
+@commonlisp{} @t{read} function on every top-level expression in a file
+or buffer, then the information about the origin of those expressions is
+lost.  This loss of information has a serious negative impact on
+diagnostic messages from the program, because the user does not get
+direct information about the origin of the code that the respective
 message refers to.  The solution to this problem involves what is called
 @dfn{source tracking}, which basically means that we need to keep track
-of this origin information from the initial file, throughout the
-compilation process, all the way to the executable code.
+of this origin information, throughout the processing steps.  In case of
+a compiler, source tracking should cover processing steps all the way
+from source code to executable code.
 
 One requirement for improved source tracking is that the source code
-must be read by an improved version of the @t{read} function.  A typical
-solution would be to make @t{read} keep a hash table that associates the
-expressions being read to the location in the file.  But this solution
-only works for freshly allocated @commonlisp{} objects.  It will not
-work for code elements such as numbers, characters, or symbols, simply
-because there may be several occurrences of similar code elements in the
-source.
-
-The solution provided by this library is to manipulate @commonlisp{}
-source code in the form of a @dfn{concrete syntax tree}, or CST for
-short.  A concrete syntax tree is simply a wrapper (in the form of a
-standard instance) around a @commonlisp{} expression, providing the
+must be read by an improved version of the @t{read}
+function@footnote{The
+@uref{https://github.com/s-expressionists/Eclector,Eclector library}
+provides such a @t{read} function.}.  A typical solution would be to
+make @t{read} keep a hash table that associates the expressions being
+read to the location in the file.  But this solution only works for
+freshly allocated @commonlisp{} objects.  It will not work for code
+elements such as numbers, characters, or symbols, simply because there
+may be several occurrences of similar code elements in the source.  The
+solution provided by this library is to manipulate @commonlisp{} source
+code in the form of a @dfn{concrete syntax tree}, or CST for short.  A
+CST is simply a wrapper (in the form of a standard instance) around a
+@commonlisp{} expression, which makes the representation of every source
+sub-expression distinct and also provides a place for attaching the
 additional information required for source tracking.  In order to make
-the manipulation of concrete syntax trees as painless as possible for
-client code, this library provides a set of functions that mimic the
-ones that would be used on raw @commonlisp{} code, such as @t{first},
-@t{rest}, @t{consp}, @t{null}, etc.
+the manipulation of CSTs as painless as possible for client code, this
+library provides a set of functions that mimic the ones that would be
+used on raw @commonlisp{} code, such as @t{first}, @t{rest}, @t{consp},
+@t{null}, etc.
 
-Since the exact nature of the origin information in a CST depends on the
-@commonlisp{} implementation and the purpose of wanting to track that
-origin, we do not impose a particular structure of this information.
-Instead, we just propagate this information as much as possible through
-the functions in this library that manipulate the source code in the
-form of CSTs.
-
-For example, we provide code utilities for canonicalizing
-declarations, parsing lambda lists, separating declarations and
-documentation strings and code bodies, checking whether a form is a
-proper list, etc.  All these utilities manipulate the code in the form
-of a CST, and provide CSTs as a result of the manipulation that
-propagates the origin information as much as possible.
-
-In particular, we provide an ``intelligent macroexpander''.  This
-function takes an original CST and the result of macroexpanding the RAW
-code version of that CST, and returns a new CST representing the
-expanded code in such a way that as much as possible of the origin
-information is preserved.
+The exact nature of the origin information in a CST is left to the
+client.  @sysname{} just propagates this information as much as possible
+through the functions in the library that manipulate the source code in
+the form of CSTs.  For example, @sysname{} provides code utilities for
+canonicalizing declarations, parsing lambda lists, separating
+declarations and documentation strings and code bodies, checking whether
+a form is a proper list, etc.  All these utilities manipulate the code
+in the form of a CST, and provide CSTs as a result of the manipulation
+that propagates the origin information as much as possible.  In
+particular, @sysname{} provide a helper function for an ``intelligent
+macroexpander'': The @t{@toppackage{}:reconstruct} function takes an
+original CST and the result of macroexpanding the @emph{raw} code
+version of that CST, and returns a new CST representing the expanded
+code in such a way that as much as possible of the origin information is
+preserved.

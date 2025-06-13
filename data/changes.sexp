@@ -6,7 +6,11 @@
     (:symbol "concrete-syntax-tree:with-bounded-recursion") "has" "been"
     "fixed" "." "Most" "implementations" "accepted" "the" "malformed" "loop"
     "and" "evaluated" "it" "with" "the" "intended" "semantics" "but" "Clasp"
-    "is" "more" "strict" "and" "therefore" "required" "this" "fix" ".")))
+    "is" "more" "strict" "and" "therefore" "required" "this" "fix" "."))
+  (:item
+   (:paragraph
+    "The" "manual" "has" "been" "converted" "from" "LaTeX" "to" "texinfo"
+    ".")))
 
  (:release "0.2" "2025-06-07"
   (:item
