@@ -4,7 +4,7 @@
   :author      "Robert Strandh <robert.strandh@gmail.com>"
   :maintainer  "Jan Moringen <jan.moringen@posteo.de>"
 
-  :version     (:read-file-form "version-string.sexp")
+  :version     (:read-file-form "data/version-string.sexp")
   :depends-on  ("acclimation")
 
   :components  ((:module     "base"
