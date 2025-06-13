@@ -1,5 +1,5 @@
 (:changes
- (:release "0.3" nil
+ (:release "0.3" "2025-06-13"
   (:item
    (:paragraph
     "A" "malformed" (:symbol "LOOP") "in" "the" "internal" "macro"

@@ -1,4 +1,4 @@
-Release 0.3 (not yet released)
+Release 0.3 (2025-06-13)
 
 * A malformed LOOP in the internal macro
   CONCRETE-SYNTAX-TREE:WITH-BOUNDED-RECURSION has been fixed. Most
