@@ -48,6 +48,7 @@ Copyright @copyright{} 2025 Jan Moringen
 * Internals::
 * Concept index::
 * Function and macro and variable and type index::
+* Changelog::
 @end menu
 
 @include chapter-introduction.texi
