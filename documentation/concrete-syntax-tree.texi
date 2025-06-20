@@ -28,7 +28,7 @@ Copyright @copyright{} 2025 Jan Moringen
 
 @titlepage
 @title @sysname{}
-@subtitle A library for the manipulation of @commonlisp{} source code enhanced with information about source origin
+@subtitle A source tracking concrete syntax library for @commonlisp{}
 
 @insertcopying
 @end titlepage
