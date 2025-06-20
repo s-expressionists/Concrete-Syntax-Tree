@@ -1,0 +1,145 @@
+#+TITLE:    Concrete Syntax Tree README
+#+AUTHOR:   Jan Moringen
+#+LANGUAGE: en
+
+* Introduction
+
+  This library addresses the issue of attaching source information to
+  s-expressions, and in particular Common Lisp source code. Source
+  information refers the place an s-expression came from such as the
+  line and a range of columns in a file or editor buffer. The issue
+  arises because when Common Lisp code is processed, for example by
+  macros, the code is represented as Common Lisp objects which do a
+  provide a way of attaching source information (and as a consequence,
+  the objects returned by functions like ~cl:read~ cannot contain any
+  source information).
+
+  The solution offered by this library is based on a Concrete Syntax
+  Tree (or CST for short) data structure which is an alternative
+  representation of a Common Lisp expression such that source
+  information can be associated with object in the expression. Since
+  clients have different requirements and capabilities, this library
+  does not provide or specify the nature of the source information
+  that is attached to CST nodes.
+
+  Besides the core protocols and data structures for CSTs, this
+  library provides:
+
+  + A CST "reconstruction" function helps with macroexpansion which,
+    given an input CST, requires taking the raw expression out of the
+    input CST, apply the macro expander to the raw expression, turning
+    the expansion from a raw expression back into a CST. The
+    "reconstruction" aspect comes from the fact that the function
+    reuses parts of the input CST in the resulting CST, when possible,
+    so that identity and source information are preserved.
+
+  + For Common Lisp code that is represented a CST, this library
+    provides utilities for canonicalizing declarations, parsing lambda
+    lists, separating declarations and documentation strings and code
+    bodies, checking whether a form is a proper list, etc. All these
+    utilities accept CSTs as their arguments and produce CSTs as their
+    results. Whenever possible, these utilities propagate any source
+    information from their arguments to their results.
+
+
+  This document only gives a very brief overview and highlights some
+  features. Proper documentation can be found in the
+  [[file:documentation]] directory.
+
+* Usage Overview
+
+** CST from Source Code
+
+   Possibly the most common way of producing CSTs with source
+   information is ~read~ ing Common Lisp code (or arbitrary
+   s-expressions). This library does not provide any functionality for
+   reading the character-based representation of s-expressions into
+   CSTs. Instead, the [[https://github.com/s-expressionists/Eclector][Eclector library]] and in particular the
+   ~eclector-concrete-syntax-tree~ system within that library can be
+   used.
+
+** CST from Expression
+
+   It is sometimes useful to produce CSTs from expressions that are
+   Common Lisp objects (as opposed to Common Lisp source code). For
+   such cases, this library provides the function
+   ~concrete-syntax-tree:cst-from-expression~:
+
+   #+begin_src lisp :results value :exports both
+     (let* ((expression '(1 #\a))
+            (cst (concrete-syntax-tree:cst-from-expression expression))
+            (raw (concrete-syntax-tree:raw cst))
+            (source (concrete-syntax-tree:source cst)))
+       (values cst raw source))
+   #+end_src
+
+   #+RESULTS:
+   #+begin_src lisp
+     #<CONCRETE-SYNTAX-TREE:CONS-CST raw: (1 #\a) {1006C7AD53}>
+     (1 #\a)
+     NIL
+   #+end_src
+
+   Note how the resulting CST does not have any source information
+   attached to it (unless the client explicitly provides source
+   information).
+
+** CST Reconstruction after Macro Expansion
+
+   Expanding macros is a typical activity in programs which process
+   Common Lisp source code. When the source code is represented as
+   CSTs, macro expansion should accept a CST (with source information)
+   and produce a CST (with source information where possible).
+   However, a complication arises from the fact that macro expanders
+   are functions which accept and produce s-expressions, not CSTs.
+
+   Given a CST and a macro expander, the only solution is a to
+
+   1. take the "raw" s-expression from the CST before macro expansion
+
+   2. apply the macro expander to the s-expression
+
+   3. somehow turn the expansion (again an s-expression) into a new
+      CST so that source information from the original CST carries
+      over where possible
+
+   The function ~concrete-syntax-tree:reconstruct~ performs step 3.
+
+   The following example illustrates the whole process, starting from
+   an "input" CST and with an "output" CST as the result:
+
+   #+begin_src lisp :results output :exports both
+     (let* ((input-when-cst (concrete-syntax-tree:cst-from-expression
+                       'when :source "when-source"))
+            (input-test-cst (concrete-syntax-tree:cst-from-expression
+                       '(test x 1 #\y) :source "test-source"))
+            (input-then-cst (concrete-syntax-tree:cst-from-expression
+                       'a :source "a-source"))
+            (input-cst (concrete-syntax-tree:list
+                        input-when-cst input-test-cst input-then-cst))
+            (input-raw (concrete-syntax-tree:raw input-cst))
+            (expansion (macroexpand-1 input-raw))
+            (output-cst (concrete-syntax-tree:reconstruct
+                         nil expansion input-cst))
+            (output-if-cst (cst:first output-cst))
+            (output-test-cst (cst:second output-cst))
+            (output-then-cst (cst:third output-cst)))
+       (let ((*print-pretty* nil))
+         (format t "~A -> ~A~2%" input-raw expansion)
+         (flet ((show (cst)
+                  (format t "~52A -> ~A~%" cst (cst:source cst))))
+           (show output-cst)
+           (show output-if-cst)
+           (show output-test-cst)
+           (show output-then-cst))))
+   #+end_src
+
+   #+RESULTS:
+   #+begin_src lisp
+     (WHEN (TEST X 1 y) A) -> (IF (TEST X 1 y) A)
+
+     #<CONS-CST raw: (IF (TEST X 1 #\y) A) {1004C75DA3}>  -> NIL
+     #<ATOM-CST raw: IF {1004C75F03}>                     -> NIL
+     #<CONS-CST raw: (TEST X 1 #\y) {1004C757D3}>         -> test-source
+     #<ATOM-CST raw: A {1004C75A63}>                      -> a-source
+   #+end_src
