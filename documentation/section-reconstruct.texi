@@ -1,0 +1,64 @@
+@node Reconstructing CSTs from s-expressions
+@section Reconstructing CSTs from s-expressions
+
+This section describes the protocol that allows clients to reconstruct a
+concrete syntax tree from an ordinary s-expression, for example after
+macroexpansion.  The typical scenario is as follows: Let @math{T} be
+some expression concrete syntax tree, and let @math{R} be the raw
+version of it.  Let @math{E} be a @commonlisp{} expression obtained by
+macroexpanding @math{R}.  We want to construct an expression concrete
+syntax tree @math{T'} with @math{E} as its raw version in such a way
+that when @math{E} contains a subexpression @math{S} that is also in
+@math{R}, then we want the corresponding concrete syntax tree for
+@math{S} in @math{E} to be identical to the concrete syntax tree for
+@math{S} in @math{T} as much as possible.
+
+@example
+   CST    T                   T'
+          │                   ▲
+          │ raw               │ reconstruct
+          ▼                   │
+   s-expr R ───macroexpand──▶ E
+          │                   │
+          │ subexpression     │ subexpression
+          ▼                   ▼
+   s-expr S                   S
+@end example
+
+Clearly what we want to accomplish can not always be precise.  It can
+only be precise when @math{S} is a @t{cl:cons} and @math{E} contains the
+identical (in the sense of @t{cl:eq}) @t{cl:cons}.  For atoms, we just
+have to guess.
+
+The following generic function implements the above functionality:
+
+@defgena{reconstruct,@toppackage{}} client expression cst
+
+Produce and return a @classref{cst,@toppackage{}} from @var{expression},
+reusing where possible @var{cst} or subtrees of it.
+
+@var{expression} is an arbitrary s-expression, for example the result
+macroexpansion.  However, applying the reconstruction process only makes
+sense if @var{expression} can be expected to contain subexpressions
+which are identical to certain raw values in subtrees of @var{cst}.
+
+Note that the reconstruction process is approximate: For example, if
+@var{expression} contains fresh conses which in turn contain atoms, it
+is generally impossible to determine whether those atoms correspond to
+certain raw values of nodes in @var{cst} or not.
+
+There are two default methods:
+@itemize
+
+@item
+The first method is specialized to @var{cst} being a
+@classref{cst,@toppackage{}} instance and uses @var{cst} and its
+subtrees for the reconstruction process.
+
+@item
+The second method is specialized to @var{cst} being a @t{cl:sequence}
+which must contain @classref{cst,@toppackage{}} instances as its
+elements. Each element and its subtrees are considered for the
+reconstruction process.
+@end itemize
+@end deffn

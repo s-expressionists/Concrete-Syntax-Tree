@@ -3,12 +3,14 @@
 
 @menu
 * Basic Use::
+* Reconstructing CSTs from s-expressions::
 * Parsing lambda lists::
 * Destructuring lambda lists::
 * Future additions to this library::
 @end menu
 
 @include section-basic-use.texi
+@include section-reconstruct.texi
 @include section-lambda-list.texi
 @include section-destructuring-lambda-lists.texi
 @include section-future.texi

@@ -49,8 +49,8 @@ a form is a proper list, etc.  All these utilities manipulate the code
 in the form of a CST, and provide CSTs as a result of the manipulation
 that propagates the origin information as much as possible.  In
 particular, @sysname{} provide a helper function for an ``intelligent
-macroexpander'': The @t{@toppackage{}:reconstruct} function takes an
-original CST and the result of macroexpanding the @emph{raw} code
+macroexpander'': The @genref{reconstruct,@toppackage{}} function takes
+an original CST and the result of macroexpanding the @emph{raw} code
 version of that CST, and returns a new CST representing the expanded
 code in such a way that as much as possible of the origin information is
 preserved.
