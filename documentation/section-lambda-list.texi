@@ -1172,33 +1172,33 @@ rules, with target @t{macro-lambda-list}.
 @subsection Parsers for standard lambda lists
 
 @defgena {parse-ordinary-lambda-list,@toppackage{}} client lambda-list @
-  @key{} (error-p t)
+  @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-generic-function-lambda-list,@toppackage{}} client @
-  lambda-list @key{} (error-p t)
+  lambda-list @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-specialized-lambda-list,@toppackage{}} client lambda-list @
-  @key{} (error-p t)
+  @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-defsetf-lambda-list,@toppackage{}} client lambda-list @
-  @key{} (error-p t)
+  @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-define-modify-macro-lambda-list,@toppackage{}} client @
-  lambda-list @key{} (error-p t)
+  lambda-list @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-define-method-combination-lambda-list,@toppackage{}} @
-  client lambda-list @key{} (error-p t)
+  client lambda-list @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-destructuring-lambda-list,@toppackage{}} client @
-  lambda-list @key{} (error-p t)
+  lambda-list @pkey{} (error-p t)
 @end deffn
 
 @defgena{parse-macro-lambda-list,@toppackage{}} client lambda-list @
-  @key{} (error-p t)
+  @pkey{} (error-p t)
 @end deffn
