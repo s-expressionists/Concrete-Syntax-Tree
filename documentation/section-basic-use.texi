@@ -51,13 +51,18 @@ created.
 @defgena{null,@toppackage{}} cst
 
 This generic function returns @emph{true} if and only if @var{cst} is an
-instance of the class @t{atom-cst} that has @t{nil} as its raw value.
-Otherwise, it returns @emph{false}.
+instance of the class @classref{atom-cst,@toppackage{}} that has @t{nil}
+as its raw value.  Otherwise, it returns @emph{false}.
 @end deffn
+
+@defclassa{atom-cst,@toppackage{}}
+
+This class is a subclass of the class @classref{cst,@toppackage{}}.
+@end deftp
 
 @defclassa{cons-cst,@toppackage{}}
 
-This class is a subclass of the class @t{cst}.
+This class is a subclass of the class @classref{cst,@toppackage{}}.
 @end deftp
 
 @definitarga{first}
@@ -91,7 +96,8 @@ the @t{cdr} of the raw @commonlisp{} expression represented by
 @defgena{consp,@toppackage{}} cst
 
 This generic function returns @emph{true} if and only if @var{cst} is an
-instance of the class @t{cons-cst}.  Otherwise, it returns @emph{false}.
+instance of the class @classref{cons-cst,@toppackage{}}.  Otherwise, it
+returns @emph{false}.
 @end deffn
 
 @node Additional API functions

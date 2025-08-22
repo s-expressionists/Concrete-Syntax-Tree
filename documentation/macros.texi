@@ -57,10 +57,16 @@ concrete-syntax-tree
 @anchor{Function \PACKAGE\|\NAME\}
 @deffn {Function} {@symbol{\NAME\,\PACKAGE\}}
 @end macro
+@macro funref{NAME,PACKAGE}
+@ref{Function \PACKAGE\|\NAME\,\PACKAGE\:\NAME\}
+@end macro
 
 @macro defgena{NAME,PACKAGE}
 @anchor{Generic-Function \PACKAGE\|\NAME\}
 @deffn {Generic Function} {@symbol{\NAME\,\PACKAGE\}}
+@end macro
+@macro genref{NAME,PACKAGE}
+@ref{Generic-Function \PACKAGE\|\NAME\,\PACKAGE\:\NAME\}
 @end macro
 
 @macro defmaca{NAME,PACKAGE}
@@ -71,6 +77,9 @@ concrete-syntax-tree
 @macro defclassa{NAME,PACKAGE}
 @anchor{Class \PACKAGE\|\NAME\}
 @deftp {Class} {@symbol{\NAME\,\PACKAGE\}}
+@end macro
+@macro classref{NAME,PACKAGE}
+@ref{Class \PACKAGE\|\NAME\,\PACKAGE\:\NAME\}
 @end macro
 
 @macro definitarga{NAME}
