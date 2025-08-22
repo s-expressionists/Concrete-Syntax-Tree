@@ -4,7 +4,7 @@ ASDF_SOURCE_REGISTRY ?= (quote (:source-registry (:directory "'$$(pwd)/..'") :ig
 
 NAME = concrete-syntax-tree
 
-SOURCES = $(NAME).texi $(wildcard chapter-*.texi)
+SOURCES = $(NAME).texi $(wildcard chapter-*.texi) $(wildcard section-*.texi)
 
 GENERATED = generated-version.texi           \
             generated-chapter-changelog.texi
